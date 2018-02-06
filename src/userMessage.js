@@ -39,7 +39,7 @@ const userMessage = (req, res) => {
         res.send(data);
       });
     } else {
-      data.options = payload.options ? [...payload.options] : [];
+      data.options = payload.options ? [...payload.options] : data.options;
       res.send(data);
     }
   });
