@@ -16,6 +16,6 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 }
 
-app.post('/usermessage', userMessage)
+app.post('/usermessage', userMessage);
 
 module.exports = app;
