@@ -13,24 +13,35 @@ const userMessage = (req, res) => {
 
   requestdf.on("response", function(response) {
     const lookup = {
-      DivorceIndia: "A:A",
-      DivorcePakistan: "B:B",
-      DivorceItaly: "C:C",
-      DivorceUK: "D:D"
+      DivorceIndia: "A2:B",
+      DivorcePakistan: "C2:D",
+      DivorceItaly: "E2:F",
+      DivorceUK: "G2:H"
     };
 
     const { messages } = response.result.fulfillment;
+    const data = {
+      speech: messages[0].speech,
+      options: [],
+      resources: []
+    };
 
-    const resources = messages[1] ? messages[1].payload : null;
-    if (resources) {
-      const cellRef = lookup[resources];
+    const payload = messages[1] ? messages[1].payload : null;
+    if (payload.resources) {
+      const cellRef = lookup[payload.resources];
       const url = GOOGLE_API_1 + cellRef + GOOGLE_API_2;
-      request(url, (err, res, body) => {
-        console.log(body);
+      request(url, (err, gsres, body) => {
+        const resourceArray = JSON.parse(body).values.map(resource => ({
+          text: resource[0],
+          href: resource[1]
+        }));
+        data.resources = [...resourceArray];
+        res.send(data);
       });
+    } else {
+      data.options = payload.options ? [...payload.options] : [];
+      res.send(data);
     }
-
-    res.send(messages);
   });
 
   requestdf.on("error", function(error) {
