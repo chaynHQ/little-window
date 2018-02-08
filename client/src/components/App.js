@@ -7,10 +7,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: [
-        { question: "Can I get a divorce?" },
-        { question: "Yes, I want to find out about divorce" }
-      ]
+      messages: []
     };
   }
 
@@ -22,7 +19,13 @@ export default class App extends React.Component {
     });
   };
 
-  refresh = () => {};
+  refresh = () => {
+    this.setState({
+      messages: [
+
+      ]
+    })
+  };
 
   newMessage = () => {};
 

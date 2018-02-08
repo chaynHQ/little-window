@@ -6,6 +6,12 @@ export class Input extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    this.sendMessage({
+      question: 'Little window welcome'
+    })
+  }
+
   sendMessage(data) {
     this.sendToServer(data)
       .then(res => res.json())
