@@ -15,7 +15,13 @@ export class Input extends React.Component {
           this.sendMessage({
             question: resData.retrigger
           });
-        } else console.log(resData);
+        }
+        const botMessage = {
+          isUser: false,
+          isWaiting: false,
+          question: resData.speech
+        };
+        this.props.addMessage(botMessage);
       });
   }
 
@@ -41,7 +47,8 @@ export class Input extends React.Component {
       data[pair[0]] = pair[1];
     }
     this.sendMessage(data);
-    this.props.userInput(data);
+    console.log(this.props);
+    this.props.addMessage(data);
   }
 
   render() {

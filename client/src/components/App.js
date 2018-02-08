@@ -14,7 +14,7 @@ export default class App extends React.Component {
     };
   }
 
-  userInput = message => {
+  addMessage = message => {
     this.setState((prevState, props) => {
       return {
         messages: [...prevState.messages, message]
@@ -31,7 +31,7 @@ export default class App extends React.Component {
       <div>
         <Header />
         <Conversation messages={this.state.messages} />
-        <Input userInput={this.userInput} />
+        <Input addMessage={this.addMessage} />
       </div>
     );
   }
