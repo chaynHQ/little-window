@@ -1,17 +1,22 @@
-import React, { Component } from "react";
+import React from "react";
+import "./style.scss";
 
-class App extends Component {
+export class Input extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   sendMessage(data) {
     this.sendToServer(data)
       .then(res => res.json())
       .then(resData => {
         if (resData.retrigger) {
-          console.log(resData)
+          console.log(resData);
           this.sendMessage({
             question: resData.retrigger
-          })
+          });
         } else console.log(resData);
-      })
+      });
   }
 
   sendToServer(data) {
@@ -20,18 +25,23 @@ class App extends Component {
       headers: new Headers({ "Content-Type": "application/json" }),
       credentials: "same-origin",
       body: JSON.stringify(data)
-    })
+    });
   }
 
   handleSubmit(e) {
+    // console.log(this.props, "handlesubmit props");
     e.preventDefault();
 
-    const data = {};
+    const data = {
+      isUser: true,
+      isWaiting: true
+    };
 
     for (const pair of new FormData(e.target).entries()) {
       data[pair[0]] = pair[1];
     }
     this.sendMessage(data);
+    this.props.userInput(data);
   }
 
   render() {
@@ -45,5 +55,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;

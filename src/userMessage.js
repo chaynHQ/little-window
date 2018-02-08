@@ -6,7 +6,7 @@ const app = apiai(DF_KEY);
 
 const userMessage = (req, res) => {
   const { question } = req.body;
-  apiaiCall(res, question)
+  apiaiCall(res, question);
 };
 
 const apiaiCall = (res, question) => {
@@ -14,7 +14,7 @@ const apiaiCall = (res, question) => {
     sessionId: "1"
   });
 
-  requestdf.on("response", function (response) {
+  requestdf.on("response", function(response) {
     const lookup = {
       DivorceIndia: "A2:B",
       DivorcePakistan: "C2:D",
@@ -22,7 +22,7 @@ const apiaiCall = (res, question) => {
       DivorceUK: "G2:H",
       DivorceGlobal: "I2:J"
     };
-
+    console.log(response.result);
     const { messages } = response.result.fulfillment;
     const data = {
       speech: messages[0].speech,
@@ -33,7 +33,7 @@ const apiaiCall = (res, question) => {
 
     const payload = messages[1] ? messages[1].payload : null;
     if (payload.retrigger) {
-      data.retrigger = payload.retrigger
+      data.retrigger = payload.retrigger;
     }
 
     if (payload.resources) {
@@ -53,10 +53,10 @@ const apiaiCall = (res, question) => {
     }
   });
 
-  requestdf.on("error", function (error) {
+  requestdf.on("error", function(error) {
     console.log(error);
   });
   requestdf.end();
-}
+};
 
 module.exports = userMessage;
