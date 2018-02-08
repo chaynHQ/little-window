@@ -16,12 +16,11 @@ export class Input extends React.Component {
             question: resData.retrigger
           });
         }
-        const botMessage = {
-          isUser: false,
-          isWaiting: false,
-          question: resData.speech
-        };
-        this.props.addMessage(botMessage);
+
+        resData.isUser = false;
+        resData.isWaiting = false;
+
+        this.props.addMessage(resData);
       });
   }
 

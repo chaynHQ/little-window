@@ -1,5 +1,5 @@
 import React from "react";
-// import { Message } from "../message";
+import { Message } from "../message";
 import "./style.scss";
 
 export class Conversation extends React.Component {
@@ -8,8 +8,8 @@ export class Conversation extends React.Component {
   }
 
   render() {
-    return this.props.messages.map((message, index) => {
-      return <p key={index}>{message.question}</p>;
+    return this.props.messages.map((messageObj, index) => {
+      return <Message messageObj={messageObj} index={index} />;
     });
   }
 }
