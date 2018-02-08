@@ -8,8 +8,8 @@ export class Conversation extends React.Component {
   }
 
   render() {
-    return this.props.messages.map(message => {
-      return <p key={message.question}>{message.question}</p>;
+    return this.props.messages.map((message, index) => {
+      return <p key={index}>{message.question}</p>;
     });
   }
 }

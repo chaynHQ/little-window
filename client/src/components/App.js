@@ -17,7 +17,7 @@ export default class App extends React.Component {
   userInput = message => {
     this.setState((prevState, props) => {
       return {
-        messages: [...prevState.messages.concat(message)]
+        messages: [...prevState.messages, message]
       };
     });
   };

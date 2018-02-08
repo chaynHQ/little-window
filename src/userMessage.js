@@ -6,7 +6,10 @@ const app = apiai(DF_KEY);
 
 const userMessage = (req, res) => {
   const { question } = req.body;
+  apiaiCall(res, question);
+};
 
+const apiaiCall = (res, question) => {
   const requestdf = app.textRequest(question, {
     sessionId: "1"
   });
@@ -16,17 +19,23 @@ const userMessage = (req, res) => {
       DivorceIndia: "A2:B",
       DivorcePakistan: "C2:D",
       DivorceItaly: "E2:F",
-      DivorceUK: "G2:H"
+      DivorceUK: "G2:H",
+      DivorceGlobal: "I2:J"
     };
-
+    console.log(response.result);
     const { messages } = response.result.fulfillment;
     const data = {
       speech: messages[0].speech,
       options: [],
-      resources: []
+      resources: [],
+      retrigger: ""
     };
 
     const payload = messages[1] ? messages[1].payload : null;
+    if (payload.retrigger) {
+      data.retrigger = payload.retrigger;
+    }
+
     if (payload.resources) {
       const cellRef = lookup[payload.resources];
       const url = GOOGLE_API_1 + cellRef + GOOGLE_API_2;
@@ -47,7 +56,6 @@ const userMessage = (req, res) => {
   requestdf.on("error", function(error) {
     console.log(error);
   });
-
   requestdf.end();
 };
 
