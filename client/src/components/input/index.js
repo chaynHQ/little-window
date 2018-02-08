@@ -1,14 +1,25 @@
-import React, { Component } from "react";
+import React from "react";
+import "./style.scss";
 
-class App extends Component {
+export class Input extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   handleSubmit(e) {
+    console.log(this.props, "handlesbutmit props");
     e.preventDefault();
 
-    const data = {};
+    const data = {
+      isUser: true,
+      isWaiting: true
+    };
 
     for (const pair of new FormData(e.target).entries()) {
       data[pair[0]] = pair[1];
     }
+
+    this.props.userInput(data);
 
     fetch("/usermessage", {
       method: "POST",
@@ -22,14 +33,10 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" name="question" />
-          <input type="submit" value="Submit" />
-        </form>
-      </div>
+      <form onSubmit={this.handleSubmit}>
+        <input type="text" name="question" />
+        <input type="submit" value="Submit" />
+      </form>
     );
   }
 }
-
-export default App;
