@@ -5,12 +5,12 @@ const request = require("request");
 const app = apiai(DF_KEY);
 
 const userMessage = (req, res) => {
-  const { question } = req.body;
-  apiaiCall(res, question);
+  const { speech } = req.body;
+  apiaiCall(res, speech);
 };
 
-const apiaiCall = (res, question) => {
-  const requestdf = app.textRequest(question, {
+const apiaiCall = (res, speech) => {
+  const requestdf = app.textRequest(speech, {
     sessionId: "1"
   });
 

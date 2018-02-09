@@ -8,18 +8,18 @@ export class Message extends React.Component {
     super(props);
   }
 
-  state = {
-    options: this.props.messageObj.options,
-    resources: this.props.messageObj.resources
-  };
+  // state = {
+  //   options: this.props.messageObj.options,
+  //   resources: this.props.messageObj.resources
+  // };
 
   render() {
     console.log(this.props);
     return (
-      <div key={this.props.index}>
-        <p>{this.props.messageObj.question}</p>
-        {/* <Buttons options={this.state.options} /> */}
-        {/* <Resources options={this.state.options} /> */}
+      <div>
+        <p>{this.props.messageObj.speech}</p>
+        {/* <Buttons options={this.props.messageObj.options} />
+        <Resources resources={this.props.messageObj.resources} /> */}
       </div>
     );
   }

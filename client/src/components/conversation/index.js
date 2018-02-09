@@ -9,7 +9,7 @@ export class Conversation extends React.Component {
 
   render() {
     return this.props.messages.map((messageObj, index) => {
-      return <Message messageObj={messageObj} index={index} />;
+      return <Message messageObj={messageObj} key={index} />;
     });
   }
 }
