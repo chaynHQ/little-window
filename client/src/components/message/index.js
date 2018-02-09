@@ -8,11 +8,6 @@ export class Message extends React.Component {
     super(props);
   }
 
-  // state = {
-  //   options: this.props.messageObj.options,
-  //   resources: this.props.messageObj.resources
-  // };
-
   render() {
     console.log(this.props);
     return (
