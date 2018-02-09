@@ -8,8 +8,8 @@ export class Input extends React.Component {
 
   componentDidMount() {
     this.sendMessage({
-      question: 'Little window welcome'
-    })
+      speech: "Little window welcome"
+    });
   }
 
   sendMessage(data) {
@@ -19,9 +19,14 @@ export class Input extends React.Component {
         if (resData.retrigger) {
           console.log(resData);
           this.sendMessage({
-            question: resData.retrigger
+            speech: resData.retrigger
           });
-        } else console.log(resData);
+        }
+
+        resData.isUser = false;
+        resData.isWaiting = false;
+        console.log(resData, "resData here");
+        this.props.addMessage(resData);
       });
   }
 
@@ -47,14 +52,15 @@ export class Input extends React.Component {
       data[pair[0]] = pair[1];
     }
     this.sendMessage(data);
-    this.props.userInput(data);
+    console.log(this.props);
+    this.props.addMessage(data);
   }
 
   render() {
     return (
       <div>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <input type="text" name="question" />
+          <input type="text" name="speech" />
           <input type="submit" value="Submit" />
         </form>
       </div>
