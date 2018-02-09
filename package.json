@@ -5,6 +5,7 @@
   "main": "config.js",
   "scripts": {
     "start": "node ./src/server.js",
+    "postinstall": "cd client && npm install",
     "test": "tape ./src/test/test.js | tap-spec",
     "server": "nodemon ./src/server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
