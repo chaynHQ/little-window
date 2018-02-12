@@ -36,7 +36,6 @@ export class Input extends React.Component {
   }
 
   render() {
-    console.log(this.props.inputStatus, "input");
     return (
       <div>
         <form onSubmit={this.handleSubmit.bind(this)}>
