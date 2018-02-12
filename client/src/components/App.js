@@ -30,7 +30,7 @@ export default class App extends React.Component {
               speech: resData.retrigger
             });
           }
-          console.log(resData.options, "options here")
+        
           if (resData.options.length === 0) {
             this.setState({inputStatus: false})
           } else {
@@ -39,7 +39,7 @@ export default class App extends React.Component {
 
           resData.isUser = false;
           resData.isWaiting = false;
-          console.log(resData, "resData here");
+       
           this.addMessage(resData);
         });
     }
