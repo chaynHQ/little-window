@@ -6,6 +6,7 @@ const app = apiai(DF_KEY);
 
 const userMessage = (req, res) => {
   const { speech } = req.body;
+  console.log("speech", speech);
   apiaiCall(res, speech);
 };
 
@@ -22,7 +23,6 @@ const apiaiCall = (res, speech) => {
       DivorceUK: "G2:H",
       DivorceGlobal: "I2:J"
     };
-    console.log(response.result);
     const { messages } = response.result.fulfillment;
     const data = {
       speech: messages[0].speech,
@@ -48,6 +48,7 @@ const apiaiCall = (res, speech) => {
         res.send(data);
       });
     } else {
+      console.log(data);
       data.options = payload.options ? [...payload.options] : data.options;
       res.send(data);
     }

@@ -19,6 +19,33 @@ export default class App extends React.Component {
     });
   };
 
+    sendMessage(data) {
+      this.sendToServer(data)
+        .then(res => res.json())
+        .then(resData => {
+          if (resData.retrigger) {
+            console.log(resData);
+            this.sendMessage({
+              speech: resData.retrigger
+            });
+          }
+
+          resData.isUser = false;
+          resData.isWaiting = false;
+          console.log(resData, "resData here");
+          this.addMessage(resData);
+        });
+    }
+
+    sendToServer(data) {
+      return fetch("/usermessage", {
+        method: "POST",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        credentials: "same-origin",
+        body: JSON.stringify(data)
+      });
+    }
+
   refresh = () => {
     this.setState({
       messages: [
@@ -27,14 +54,12 @@ export default class App extends React.Component {
     })
   };
 
-  newMessage = () => {};
-
   render() {
     return (
       <div>
         <Header />
-        <Conversation messages={this.state.messages} addMessage={this.addMessage.bind(this)} />
-        <Input addMessage={this.addMessage} />
+        <Conversation messages={this.state.messages} addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)}/>
+        <Input addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)}/>
       </div>
     );
   }

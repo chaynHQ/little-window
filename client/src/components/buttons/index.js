@@ -12,11 +12,12 @@ export default class Button extends React.Component {
       isWaiting: true,
       speech
     }
-    this.props.addMessage(data)
+    console.log("postback", postback);
+    this.props.addMessage(data);
+    this.props.sendMessage({speech: postback});
   }
 
   render() {
-    console.log("buttons", this.props);
     if(!this.props.options){
       return null;
     }

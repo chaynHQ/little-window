@@ -7,35 +7,8 @@ export class Input extends React.Component {
   }
 
   componentDidMount() {
-    this.sendMessage({
+    this.props.sendMessage({
       speech: "Little window welcome"
-    });
-  }
-
-  sendMessage(data) {
-    this.sendToServer(data)
-      .then(res => res.json())
-      .then(resData => {
-        if (resData.retrigger) {
-          console.log(resData);
-          this.sendMessage({
-            speech: resData.retrigger
-          });
-        }
-
-        resData.isUser = false;
-        resData.isWaiting = false;
-        console.log(resData, "resData here");
-        this.props.addMessage(resData);
-      });
-  }
-
-  sendToServer(data) {
-    return fetch("/usermessage", {
-      method: "POST",
-      headers: new Headers({ "Content-Type": "application/json" }),
-      credentials: "same-origin",
-      body: JSON.stringify(data)
     });
   }
 
@@ -51,7 +24,7 @@ export class Input extends React.Component {
     for (const pair of new FormData(e.target).entries()) {
       data[pair[0]] = pair[1];
     }
-    this.sendMessage(data);
+    this.props.sendMessage(data);
     console.log(this.props);
     this.props.addMessage(data);
   }
