@@ -9,12 +9,11 @@ export class Message extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div>
         <p>{this.props.messageObj.speech}</p>
-        {/* <Buttons options={this.props.messageObj.options} />
-        <Resources resources={this.props.messageObj.resources} /> */}
+        <Buttons options={this.props.messageObj.options} addMessage={this.props.addMessage} sendMessage={this.props.sendMessage}/>
+        <Resources resources={this.props.messageObj.resources} />
       </div>
     );
   }
