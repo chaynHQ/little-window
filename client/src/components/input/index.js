@@ -4,6 +4,7 @@ import "./style.scss";
 export class Input extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { term: "" };
   }
 
   componentDidMount() {
@@ -13,7 +14,6 @@ export class Input extends React.Component {
   }
 
   handleSubmit(e) {
-    // console.log(this.props, "handlesubmit props");
     e.preventDefault();
 
     const data = {
@@ -27,13 +27,24 @@ export class Input extends React.Component {
     this.props.sendMessage(data);
     console.log(this.props);
     this.props.addMessage(data);
+    this.setState({ term: "" });
+  }
+
+  onInputChange(term) {
+    console.log(term);
+    this.setState({ term });
   }
 
   render() {
     return (
       <div>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <input type="text" name="speech" />
+          <input
+            type="text"
+            name="speech"
+            value={this.state.term}
+            onChange={event => this.onInputChange(event.target.value)}
+          />
           <input type="submit" value="Submit" />
         </form>
       </div>

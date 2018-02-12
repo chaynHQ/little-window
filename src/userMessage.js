@@ -6,7 +6,7 @@ const app = apiai(DF_KEY);
 
 const userMessage = (req, res) => {
   const { speech } = req.body;
-  console.log("speech", speech);
+  console.log(speech);
   apiaiCall(res, speech);
 };
 
