@@ -7,28 +7,33 @@ export default class Button extends React.Component {
     this.state = { disabled: false };
   }
 
-  clickHandler(speech, postback){
+  clickHandler(speech, postback) {
     const data = {
       isUser: true,
       isWaiting: true,
       speech
-    }
+    };
+    const buttonDots = {
+      speech: "..."
+    };
     this.props.addMessage(data);
-    this.props.sendMessage({speech: postback});
+    this.props.addMessage(buttonDots);
+    this.props.sendMessage({ speech: postback });
     this.setState({ disabled: true });
   }
 
   render() {
-    if(!this.props.options) return null;
+    if (!this.props.options)
+      return null;
 
     return (
       <div>
-      {
-        this.props.options.map((option, index) =>
-        <button value={option.postback} key={index} onClick={()=> this.clickHandler(option.text, option.postback)} disabled={this.state.disabled}>
-        {option.text}</button>)
-      }
+        {
+          this.props.options.map((option, index) =>
+            <button value={option.postback} key={index} onClick={() => this.clickHandler(option.text, option.postback)} disabled={this.state.disabled}>
+              {option.text}</button>)
+        }
       </div>
     );
-  }
+  };
 }

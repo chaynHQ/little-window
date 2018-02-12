@@ -15,17 +15,20 @@ export class Input extends React.Component {
       isWaiting: true
     };
 
+    const dots = {
+      speech: "..."
+    };
+
     for (const pair of new FormData(e.target).entries()) {
       data[pair[0]] = pair[1];
     }
     this.props.sendMessage(data);
-    console.log(this.props);
     this.props.addMessage(data);
+    this.props.addMessage(dots);
     this.setState({ term: "" });
   }
 
   onInputChange(term) {
-    console.log(term);
     this.setState({ term });
   }
 
