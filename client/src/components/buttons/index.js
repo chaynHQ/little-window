@@ -4,6 +4,7 @@ import "./style.scss";
 export default class Button extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { disabled: false };
   }
 
   clickHandler(speech, postback){
@@ -12,20 +13,21 @@ export default class Button extends React.Component {
       isWaiting: true,
       speech
     }
-    console.log("postback", postback);
     this.props.addMessage(data);
     this.props.sendMessage({speech: postback});
+    this.setState({ disabled: true });
   }
 
   render() {
-    if(!this.props.options){
-      return null;
-    }
+    if(!this.props.options) return null;
+
     return (
       <div>
-      {this.props.options.map((option, index) => {
-        return <button value={option.postback} key={index} onClick={()=> this.clickHandler(option.text, option.postback)}>
-        {option.text}</button>})}
+      {
+        this.props.options.map((option, index) =>
+        <button value={option.postback} key={index} onClick={()=> this.clickHandler(option.text, option.postback)} disabled={this.state.disabled}>
+        {option.text}</button>)
+      }
       </div>
     );
   }
