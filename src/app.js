@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 // const routes = require('./controllers/routes');
 const userMessage = require('./userMessage');
+const saveChatLog = require('./saveChatLog');
 
 const bodyParser = require('body-parser');
 
@@ -17,5 +18,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.post('/usermessage', userMessage);
+app.post('/savechatlog', saveChatLog);
 
 module.exports = app;
