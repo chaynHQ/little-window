@@ -12,18 +12,17 @@ export default class App extends React.Component {
     };
   }
 
-  addMessage = (message, replaceDots) => {
+  addMessage = (message) => {
     if (message.isUser === false) {
       setTimeout(() => {
         this.setState((prevState, props) => {
           return {
             messages: [...prevState.messages, message]
           };
-        }),
-          this.replaceDots;
+        })
       }, 3000);
     } else {
-      this.setState((prevState, props, replaceDots) => {
+      this.setState((prevState, props) => {
         return {
           messages: [...prevState.messages, message]
         };
@@ -31,15 +30,14 @@ export default class App extends React.Component {
     }
   };
 
-  replaceDots = message => {
-    this.setState((prevState, props) => {
-      if (prevState.messages[prevState.messages.length - 1].speech === "...") {
-        return {
-          message: [...prevState.messages.slice(0, -1), message]
-        };
-      }
-    });
-  };
+  componentDidUpdate(prevProps, prevState, message) {
+    prevState.messages.pop();
+    if (prevProps.speech === "...") {
+      return {
+        message: [...prevState.messages.slice(0, -1), message]
+      };
+    };
+  }
 
   sendMessage(data) {
     this.sendToServer(data)
