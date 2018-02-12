@@ -5,13 +5,7 @@ export class Input extends React.Component {
   constructor(props) {
     super(props);
     this.state = { term: "" };
-  }
-
-  componentDidMount() {
-    this.props.sendMessage({
-      speech: "Little window welcome"
-    });
-  }
+  }  
 
   handleSubmit(e) {
     e.preventDefault();

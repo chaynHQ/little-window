@@ -39,6 +39,12 @@ export default class App extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.sendMessage({
+      speech: "Little window welcome"
+    });
+  }
+
   sendMessage(data) {
     this.sendToServer(data)
       .then(res => res.json())
@@ -50,14 +56,12 @@ export default class App extends React.Component {
         }
 
         if (resData.options.length === 0) {
-          this.setState({ inputStatus: false });
+          this.setState({ inputStatus: false })
         } else {
-          this.setState({ inputStatus: true });
+          this.setState({ inputStatus: true })
         }
-
         resData.isUser = false;
         resData.isWaiting = false;
-
         this.addMessage(resData);
       });
   }
@@ -71,26 +75,37 @@ export default class App extends React.Component {
     });
   }
 
+  saveChatLog() {
+    console.log('Saving Chatlog!');
+    const data = {
+      messages: this.state.messages
+    }
+
+    fetch("/savechatlog", {
+      method: "POST",
+      headers: new Headers({ "Content-Type": "application/json" }),
+      credentials: "same-origin",
+      body: JSON.stringify(data)
+    });
+  }
+
   refresh = () => {
+    this.saveChatLog();
     this.setState({
       messages: []
+    });
+
+    this.sendMessage({
+      speech: "Little window welcome"
     });
   };
 
   render() {
     return (
       <div>
-        <Header />
-        <Conversation
-          messages={this.state.messages}
-          addMessage={this.addMessage.bind(this)}
-          sendMessage={this.sendMessage.bind(this)}
-        />
-        <Input
-          addMessage={this.addMessage.bind(this)}
-          sendMessage={this.sendMessage.bind(this)}
-          inputStatus={this.state.inputStatus}
-        />
+        <Header refresh={this.refresh.bind(this)} />
+        <Conversation messages={this.state.messages} addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)} />
+        <Input addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)} inputStatus={this.state.inputStatus} />
       </div>
     );
   }

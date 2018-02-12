@@ -1,7 +1,7 @@
 const db = require('./db_connections');
 
-const addChatLog = (chatObj) => {
-    return db.query(`INSERT INTO chatlog (chat) VALUES ($1)`, [chatObj]);
+const addChatLog = (chatJSON) => {
+    return db.query(`INSERT INTO chatlog (chat) VALUES ($1)`, [chatJSON]);
 }
 
-module.exports = addChatLog;
+module.exports = { addChatLog };
