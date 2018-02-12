@@ -33,7 +33,7 @@ export default class App extends React.Component {
     return (
       <div>
         <Header />
-        <Conversation messages={this.state.messages} />
+        <Conversation messages={this.state.messages} addMessage={this.addMessage.bind(this)} />
         <Input addMessage={this.addMessage} />
       </div>
     );
