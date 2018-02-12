@@ -7,7 +7,8 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: []
+      messages: [],
+      inputStatus: false
     };
   }
 
@@ -29,10 +30,16 @@ export default class App extends React.Component {
               speech: resData.retrigger
             });
           }
+        
+          if (resData.options.length === 0) {
+            this.setState({inputStatus: false})
+          } else {
+            this.setState({inputStatus: true})
+          }
 
           resData.isUser = false;
           resData.isWaiting = false;
-          console.log(resData, "resData here");
+       
           this.addMessage(resData);
         });
     }
@@ -59,7 +66,7 @@ export default class App extends React.Component {
       <div>
         <Header />
         <Conversation messages={this.state.messages} addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)}/>
-        <Input addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)}/>
+        <Input addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)} inputStatus={this.state.inputStatus} />
       </div>
     );
   }

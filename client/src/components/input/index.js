@@ -44,6 +44,7 @@ export class Input extends React.Component {
             name="speech"
             value={this.state.term}
             onChange={event => this.onInputChange(event.target.value)}
+            disabled={this.props.inputStatus}
           />
           <input type="submit" value="Submit" />
         </form>
