@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   height: 60%;
-  overflow-y: hidden;
+  overflow-y: scroll;
   background: #F8F5F1;
 `;
 
