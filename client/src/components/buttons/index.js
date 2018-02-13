@@ -33,11 +33,13 @@ export default class Button extends React.Component {
     if (!this.props.options)
       return null;
 
+    if(this.state.disabled) return null;
+
     return (
       <Botbuttons>
         {
           this.props.options.map((option, index) =>
-            <button value={option.postback} key={index} onClick={() => this.clickHandler(option.text, option.postback)} disabled={this.state.disabled} >
+            <button value={option.postback} key={index} onClick={() => this.clickHandler(option.text, option.postback)} >
               {option.text}</button>)
         }
       </Botbuttons>
