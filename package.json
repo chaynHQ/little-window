@@ -30,7 +30,8 @@
     "googleapis": "^25.0.0",
     "nodemon": "^1.14.12",
     "pg-promise": "^7.4.1",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
