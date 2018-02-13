@@ -40,8 +40,10 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props.uniqueId);
     this.sendMessage({
-      speech: "Little window welcome"
+      speech: "Little window welcome",
+      uniqueId: this.props.uniqueId
     });
   }
 
@@ -51,7 +53,8 @@ export default class App extends React.Component {
       .then(resData => {
         if (resData.retrigger) {
           this.sendMessage({
-            speech: resData.retrigger
+            speech: resData.retrigger,
+            uniqueId: this.props.uniqueId
           });
         }
 
@@ -104,8 +107,8 @@ export default class App extends React.Component {
     return (
       <div>
         <Header refresh={this.refresh.bind(this)} />
-        <Conversation messages={this.state.messages} addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)} />
-        <Input addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)} inputStatus={this.state.inputStatus} />
+        <Conversation messages={this.state.messages} addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)} uniqueId={this.props.uniqueId} />
+        <Input addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)} inputStatus={this.state.inputStatus} uniqueId={this.props.uniqueId}/>
       </div>
     );
   }

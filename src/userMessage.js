@@ -5,6 +5,7 @@ const request = require("request");
 const app = apiai(DF_KEY);
 
 const userMessage = (req, res) => {
+  console.log(req.body.uniqueId);
   const { speech } = req.body;
   apiaiCall(res, speech);
 };
@@ -46,7 +47,7 @@ const apiaiCall = (res, speech) => {
         data.resources = [...resourceArray];
         res.send(data);
       });
-    } else {      
+    } else {
       data.options = payload.options ? [...payload.options] : data.options;
       res.send(data);
     }

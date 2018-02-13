@@ -5,14 +5,15 @@ export class Input extends React.Component {
   constructor(props) {
     super(props);
     this.state = { term: "" };
-  }  
+  }
 
   handleSubmit(e) {
     e.preventDefault();
 
     const data = {
       isUser: true,
-      isWaiting: true
+      isWaiting: true,
+      uniqueId: this.props.uniqueId
     };
 
     const dots = {
