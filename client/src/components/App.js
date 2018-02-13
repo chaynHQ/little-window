@@ -7,6 +7,7 @@ import styled from 'styled-components';
 const Container = styled.div`
   width: 500px;
   height: 500px;
+  box-sizing: border-box;
   border: 1px solid black;
   font-family: 'Source Code Pro', monospace;
 `;
@@ -107,12 +108,14 @@ export default class App extends React.Component {
           sendMessage={this.sendMessage.bind(this)}
           uniqueId={this.props.uniqueId}
         />
-        <Input
-          addMessage={this.addMessage.bind(this)}
-          sendMessage={this.sendMessage.bind(this)}
-          inputStatus={this.state.inputStatus}
-          uniqueId={this.props.uniqueId}
-        />
+
+          <Input
+            addMessage={this.addMessage.bind(this)}
+            sendMessage={this.sendMessage.bind(this)}
+            inputStatus={this.state.inputStatus}
+            uniqueId={this.props.uniqueId}
+          />
+
       </Container>
     );
   }
