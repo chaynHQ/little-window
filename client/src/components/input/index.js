@@ -1,5 +1,10 @@
 import React from "react";
-import "./style.scss";
+import styled from 'styled-components';
+
+const Container = styled.div`
+  height: 20%;
+  border: 1px solid black;
+`;
 
 export class Input extends React.Component {
   constructor(props) {
@@ -35,7 +40,7 @@ export class Input extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <input
             type="text"
@@ -46,7 +51,7 @@ export class Input extends React.Component {
           />
           <input type="submit" value="Submit" />
         </form>
-      </div>
+      </Container>
     );
   }
 }

@@ -1,6 +1,11 @@
 import React from "react";
 import { Message } from "../message";
-import "./style.scss";
+import styled from 'styled-components';
+
+const Container = styled.div`
+  height: 60%;
+  overflow-y: hidden;
+`
 
 export class Conversation extends React.Component {
   constructor(props) {
@@ -8,8 +13,18 @@ export class Conversation extends React.Component {
   }
 
   render() {
-    return this.props.messages.map((messageObj, index) => {
-      return <Message messageObj={messageObj} key={index} addMessage={this.props.addMessage} sendMessage={this.props.sendMessage} uniqueId={this.props.uniqueId}/>;
-    });
+    return (
+      <Container>
+        {this.props.messages.map((messageObj, index) =>
+          <Message
+            messageObj={messageObj}
+            key={index}
+            addMessage={this.props.addMessage}
+            sendMessage={this.props.sendMessage}
+            uniqueId={this.props.uniqueId}
+          />
+        )}
+      </Container>
+    );
   }
 }
