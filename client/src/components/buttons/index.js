@@ -19,6 +19,14 @@ padding-bottom: 4px;
 width: 5rem;
 `
 
+const Countrybutton = styled.button`
+border: 2px #B0B0B0 solid;
+color: #B0B0B0;
+margin: 1%;
+border-radius: 15px;
+font-size: 1rem;
+`
+
 export default class Button extends React.Component {
   constructor(props) {
     super(props);
@@ -47,6 +55,17 @@ export default class Button extends React.Component {
 
     if (this.state.disabled) return null;
 
+    if (this.props.options.length > 2) {
+      return (
+        <Botbuttons>
+          {
+            this.props.options.map((option, index) =>
+              <Countrybutton value={option.postback} key={index} onClick={() => this.clickHandler(option.text, option.postback)} >
+                {option.text}</Countrybutton>)
+          }
+        </Botbuttons>
+      );
+    }
     return (
       <Botbuttons>
         {
