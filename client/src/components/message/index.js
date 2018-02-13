@@ -9,13 +9,13 @@ const Botmessage = styled.p`
   margin-left: 4%;
   margin-right: 20%;
   background-color: #D3D3D3;
-  border-radius: 3%;
+  border-radius: 15px;
   padding: 10px;
 `
 const Usermessage = styled.p`
   float: right;
   background-color: #FFBDBD;
-  border-radius: 3%;
+  border-radius: 15px;
   padding: 10px;
   margin-right: 4%;
 `
@@ -31,7 +31,7 @@ export class Message extends React.Component {
     return (
       <div>
         {speaker}
-        <Buttons options={this.props.messageObj.options} addMessage={this.props.addMessage} sendMessage={this.props.sendMessage} uniqueId={this.props.uniqueId}/>
+        <Buttons options={this.props.messageObj.options} addMessage={this.props.addMessage} sendMessage={this.props.sendMessage} uniqueId={this.props.uniqueId} />
         <Resources resources={this.props.messageObj.resources} />
       </div>
     );

@@ -5,6 +5,18 @@ import styled from 'styled-components';
 const Botbuttons = styled.div`
   float: left;
   margin-left: 5%;
+  display: flex;
+  flex-direction: row;
+`
+const Styledbutton = styled.button`
+border: 2px #B0B0B0 solid;
+color: #B0B0B0;
+margin: 5%;
+border-radius: 15px;
+font-size: 1rem;
+padding-top: 3px;
+padding-bottom: 4px;
+width: 5rem;
 `
 
 export default class Button extends React.Component {
@@ -37,8 +49,8 @@ export default class Button extends React.Component {
       <Botbuttons>
         {
           this.props.options.map((option, index) =>
-            <button value={option.postback} key={index} onClick={() => this.clickHandler(option.text, option.postback)} disabled={this.state.disabled} >
-              {option.text}</button>)
+            <Styledbutton value={option.postback} key={index} onClick={() => this.clickHandler(option.text, option.postback)} disabled={this.state.disabled} >
+              {option.text}</Styledbutton>)
         }
       </Botbuttons>
     );
