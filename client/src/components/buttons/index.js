@@ -50,10 +50,7 @@ export default class Button extends React.Component {
   }
 
   render() {
-    if (!this.props.options)
-      return null;
-
-    if (this.state.disabled) return null;
+    if (!this.props.options || this.state.disabled) return null;
 
     if (this.props.options.length > 2) {
       return (
