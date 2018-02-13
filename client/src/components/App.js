@@ -2,6 +2,14 @@ import React from "react";
 import { Header } from "./header";
 import { Conversation } from "./conversation";
 import { Input } from "./input";
+import styled from 'styled-components';
+
+const Container = styled.div`
+  width: 500px;
+  height: 500px;
+  border: 1px solid black;
+  font-family: 'Source Code Pro', monospace;
+`;
 
 export default class App extends React.Component {
   constructor(props) {
@@ -105,11 +113,11 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <Header refresh={this.refresh.bind(this)} />
         <Conversation messages={this.state.messages} addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)} uniqueId={this.props.uniqueId} />
         <Input addMessage={this.addMessage.bind(this)} sendMessage={this.sendMessage.bind(this)} inputStatus={this.state.inputStatus} uniqueId={this.props.uniqueId}/>
-      </div>
+      </Container>
     );
   }
 }
