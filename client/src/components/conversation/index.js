@@ -5,6 +5,8 @@ import styled from 'styled-components';
 const Container = styled.div`
   height: 60%;
   overflow-y: hidden;
+  background: #F8F5F1;
+
 `
 
 export class Conversation extends React.Component {

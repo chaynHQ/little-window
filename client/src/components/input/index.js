@@ -3,7 +3,45 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   height: 20%;
-  border: 1px solid black;
+
+`;
+
+const StyledInput = styled.input`
+  width: 75%;
+  height: 100%;
+  border: none;
+  padding: 0;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 16px;
+  box-sizing: content-box;
+  padding-left: 5%;
+
+
+  &:disabled {
+
+  }
+
+  &::placeholder {
+
+  }
+`;
+
+const StyledSubmitInput = styled.input`
+  width: 20%;
+  height: 100%;
+  border: none;
+  border-left: 1px solid black;
+  box-sizing: border-box;
+  padding: 0;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 16px;
+
+`
+
+const Form = styled.form`
+  height: 100%;
+  border-top: 1px solid black;
+  box-sizing: border-box;
 `;
 
 export class Input extends React.Component {
@@ -41,16 +79,17 @@ export class Input extends React.Component {
   render() {
     return (
       <Container>
-        <form onSubmit={this.handleSubmit.bind(this)}>
-          <input
+        <Form onSubmit={this.handleSubmit.bind(this)}>
+          <StyledInput
             type="text"
             name="speech"
+            placeholder={this.props.inputStatus ? 'Choose a button...' : 'Type here...'}
             value={this.state.term}
             onChange={event => this.onInputChange(event.target.value)}
             disabled={this.props.inputStatus}
           />
-          <input type="submit" value="Submit" />
-        </form>
+          {this.props.inputStatus ? null : <StyledSubmitInput type="submit" value="Submit" />}
+        </Form>
       </Container>
     );
   }
