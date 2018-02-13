@@ -1,18 +1,19 @@
 const { DF_KEY, GOOGLE_API_1, GOOGLE_API_2 } = require("../config");
 const apiai = require("apiai");
 const request = require("request");
+const saveConversation = require("./database/queries/save_conversation");
 
 const app = apiai(DF_KEY);
 
 const userMessage = (req, res) => {
-  console.log(req.body.uniqueId);
   const { speech } = req.body;
-  apiaiCall(res, speech);
+  apiaiCall(req, res, speech);
+  saveConversation(req.body.uniqueId);
 };
 
-const apiaiCall = (res, speech) => {
+const apiaiCall = (req, res, speech) => {
   const requestdf = app.textRequest(speech, {
-    sessionId: "1"
+    sessionId: req.body.uniqueId
   });
 
   requestdf.on("response", function(response) {
