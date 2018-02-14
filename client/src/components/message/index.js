@@ -25,7 +25,7 @@ const Botmessage = styled.p`
         width: 0px;
       }
 
-      margin-right: 80%;
+
 
       @keyframes ellipsis {
         to {
@@ -48,7 +48,7 @@ const Usermessage = styled.p`
   background-color: #ffbdbd;
   border-radius: 15px;
   padding: 10px;
-  margin-right: 4%;  
+  margin-right: 4%;
   max-width: 60%;
 `;
 
@@ -60,7 +60,8 @@ margin-left: 2%;
 `
 
 const StyledKittyContainer = styled.div`
-display: flex;
+  display: flex;
+  width: 100%;
 `
 
 export class Message extends React.Component {
