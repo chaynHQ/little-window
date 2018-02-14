@@ -9,33 +9,30 @@ const Botmessage = styled.p`
     props.dotty &&
     css`
       &:after {
-        content: ".";
-        animation: dots 1s steps(5, end) infinite;
+        overflow: hidden;
+        display: inline-block;
+        vertical-align: bottom;
+        -webkit-animation: ellipsis steps(4, end) 1000ms infinite;
+        animation: ellipsis steps(4, end) 1000ms infinite;
+        content: "...";
+        width: 0px;
       }
 
-      @keyframes dots {
-        0%,
-        20% {
-          color: rgba(0, 0, 0, 0);
-          text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
+      @keyframes ellipsis {
+        to {
+          width: 3em;
         }
-        40% {
-          color: white;
-          text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
-        }
-        60% {
-          text-shadow: 0.25em 0 0 white, 0.5em 0 0 rgba(0, 0, 0, 0);
-        }
-        80%,
-        100% {
-          text-shadow: 0.25em 0 0 white, 0.5em 0 0 white;
+      }
+
+      @-webkit-keyframes ellipsis {
+        to {
+          width: 3em;
         }
       }
     `} float: left;
   margin-left: 4%;
   margin-right: 20%;
-  background-color: #d3d3d3;
-  border-radius: 3%;
+  ${"" /* background-color: #d3d3d3; */} border-radius: 3%;
   padding: 10px;
 `;
 const Usermessage = styled.p`
@@ -55,7 +52,7 @@ export class Message extends React.Component {
     const speaker = this.props.messageObj.isUser ? (
       <Usermessage>{this.props.messageObj.speech}</Usermessage>
     ) : (
-      <Botmessage dotty={this.props.messageObj.speech === "..." ? "dotty" : ""}>
+      <Botmessage dotty={this.props.messageObj.speech === "" ? "dotty" : ""}>
         {this.props.messageObj.speech}
       </Botmessage>
     );
