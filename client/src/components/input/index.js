@@ -1,9 +1,8 @@
 import React from "react";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Container = styled.div`
   height: 20%;
-
 `;
 
 const StyledInput = styled.input`
@@ -11,18 +10,15 @@ const StyledInput = styled.input`
   height: 100%;
   border: none;
   padding: 0;
-  font-family: 'Source Code Pro', monospace;
+  font-family: "Source Code Pro", monospace;
   font-size: 16px;
   box-sizing: content-box;
   padding-left: 5%;
 
-
   &:disabled {
-
   }
 
   &::placeholder {
-
   }
 `;
 
@@ -33,10 +29,9 @@ const StyledSubmitInput = styled.input`
   border-left: 1px solid black;
   box-sizing: border-box;
   padding: 0;
-  font-family: 'Source Code Pro', monospace;
+  font-family: "Source Code Pro", monospace;
   font-size: 16px;
-
-`
+`;
 
 const Form = styled.form`
   height: 100%;
@@ -60,7 +55,7 @@ export class Input extends React.Component {
     };
 
     const dots = {
-      speech: "..."
+      speech: ""
     };
 
     for (const pair of new FormData(e.target).entries()) {
@@ -83,12 +78,16 @@ export class Input extends React.Component {
           <StyledInput
             type="text"
             name="speech"
-            placeholder={this.props.inputStatus ? 'Choose a button...' : 'Type here...'}
+            placeholder={
+              this.props.inputStatus ? "Choose a button..." : "Type here..."
+            }
             value={this.state.term}
             onChange={event => this.onInputChange(event.target.value)}
             disabled={this.props.inputStatus}
           />
-          {this.props.inputStatus ? null : <StyledSubmitInput type="submit" value="Submit" />}
+          {this.props.inputStatus ? null : (
+            <StyledSubmitInput type="submit" value="Submit" />
+          )}
         </Form>
       </Container>
     );
