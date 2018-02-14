@@ -1,15 +1,18 @@
 const pgp = require('pg-promise')();
 const url = require('url');
-const { DATABASE_URL, HOST, DB_PORT, USERNAME, PASSWORD, DBNAME } = require('../../config');
+const { DATABASE_URL } = require('../../config');
+
+const params = url.parse(DB_URL);
+const [username, password] = params.auth.split(':');
 
 const options = {
-    host: HOST,
-    port: DB_PORT,
-    database: DBNAME,
-    max: process.env.DB_MAX_CONNECTIONS || 2,
-    user: USERNAME,
-    password: PASSWORD,
-    ssl: HOST !== 'localhost'
+  host: params.hostname,
+  port: params.port,
+  database: params.pathname.split('/')[1],
+  max: process.env.DB_MAX_CONNECTIONS || 2,
+  user: username,
+  password,
+  ssl: params.hostname !== 'localhost',
 };
 
 module.exports = pgp(options);
