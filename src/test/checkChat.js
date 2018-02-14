@@ -1,7 +1,8 @@
-const db = require('../database/db_connections');
+const db = require("../database/db_connections");
 
 const checkChat = () => {
-    return db.query(`SELECT * FROM chatlog`)
+  console.log("checking chat");
+  return db.query(`SELECT * FROM conversation`);
 };
 
 module.exports = checkChat;
