@@ -42,15 +42,6 @@ export default class App extends React.Component {
     }
   };
 
-  // componentDidUpdate(prevProps, prevState, message) {
-  //   console.log('prevProps = ', prevProps);
-  //   console.log('prevState = ', prevState);
-  //   console.log('message = ', message);
-  //
-  //
-  //
-  // }
-
   removeWaitingDots() {
     if(this.state.messages.length > 0) {
       if (this.state.messages[this.state.messages.length - 1].speech === "") {
