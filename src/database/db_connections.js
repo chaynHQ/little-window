@@ -2,7 +2,7 @@ const pgp = require('pg-promise')();
 const url = require('url');
 const { DATABASE_URL } = require('../../config');
 
-const params = url.parse(DB_URL);
+const params = url.parse(DATABASE_URL);
 const [username, password] = params.auth.split(':');
 
 const options = {
