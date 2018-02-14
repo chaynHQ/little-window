@@ -1,9 +1,9 @@
 import React from "react";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StyledHeader = styled.div`
   height: 20%;
-  background: #FFBDBD;
+  background: #ffbdbd;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -22,15 +22,13 @@ const RefreshButton = styled.button`
 
   margin-top: 3px;
   margin-right: 3px;
-
 `;
 
-const Icon = styled.i`
-
-`;
+const Icon = styled.i``;
 
 const HeadingText = styled.div`
   text-align: center;
+  padding-top: 3%;
 `;
 
 const Styledh1 = styled.h1`
@@ -42,14 +40,11 @@ export class Header extends React.Component {
   render() {
     return (
       <StyledHeader>
-        <RefreshButton
-          onClick={this.props.refresh}>
-
+        <RefreshButton onClick={this.props.refresh}>
           <Icon className="fas fa-sync-alt" />
         </RefreshButton>
         <HeadingText>
           <Styledh1>Little Window</Styledh1>
-          <p>Don't tell us personal stuff</p>
         </HeadingText>
       </StyledHeader>
     );
