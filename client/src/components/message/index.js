@@ -32,13 +32,14 @@ const Botmessage = styled.p`
     `} float: left;
   margin-left: 4%;
   margin-right: 20%;
-  ${"" /* background-color: #d3d3d3; */} border-radius: 3%;
+  background-color: #d3d3d3;
+  border-radius: 15px;
   padding: 10px;
 `;
 const Usermessage = styled.p`
   float: right;
   background-color: #ffbdbd;
-  border-radius: 3%;
+  border-radius: 15px;
   padding: 10px;
   margin-right: 4%;
 `;

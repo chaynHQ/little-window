@@ -11,20 +11,28 @@ const Botresources = styled.div`
   flex-wrap: wrap;
 `
 
+const Singleresource = styled.a`
+padding: 0.5rem;
+margin: 5px;
+border: 2px #B0B0B0 solid;
+border-radius: 15px;
+`
+
 export default class Resources extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    if(!this.props.resources){
+    if (!this.props.resources) {
       return null;
     }
     return (
       <Botresources>
         {this.props.resources.map((resource, index) => {
-          return <a href={resource.href} key={index} target="__blank">
-          {resource.text}</a>})}
+          return <Singleresource href={resource.href} key={index} target="__blank">
+            {resource.text}</Singleresource>
+        })}
       </Botresources>
     );
   }
