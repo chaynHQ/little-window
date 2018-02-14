@@ -12,6 +12,8 @@ const Container = styled.div`
   font-family: "Source Code Pro", monospace;
 `;
 
+const timeDelay = (Math.random() * 2000) + 1000;
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -22,14 +24,15 @@ export default class App extends React.Component {
   }
 
   addMessage = message => {
-    if (message.isUser === false) {
+    if (!message.isUser && !message.isDot) {
       setTimeout(() => {
+        this.removeWaitingDots();
         this.setState((prevState, props) => {
           return {
             messages: [...prevState.messages, message]
           };
         });
-      }, 3000);
+      }, timeDelay);
     } else {
       this.setState((prevState, props) => {
         return {
@@ -39,12 +42,27 @@ export default class App extends React.Component {
     }
   };
 
-  componentDidUpdate(prevProps, prevState, message) {
-    prevState.messages.pop();
-    if (prevProps.speech === "...") {
-      return {
-        message: [...prevState.messages.slice(0, -1), message]
-      };
+  // componentDidUpdate(prevProps, prevState, message) {
+  //   console.log('prevProps = ', prevProps);
+  //   console.log('prevState = ', prevState);
+  //   console.log('message = ', message);
+  //
+  //
+  //
+  // }
+
+  removeWaitingDots() {
+    if(this.state.messages.length > 0) {
+      if (this.state.messages[this.state.messages.length - 1].speech === "") {
+
+        // return {
+        //   message: [...prevState.messages.slice(0, -1), message]
+        // };
+
+        this.setState(prevState => {
+          return {messages: [...prevState.messages.slice(0, -1)]}
+        });
+      }
     }
   }
 
@@ -61,10 +79,14 @@ export default class App extends React.Component {
       .then(res => res.json())
       .then(resData => {
         if (resData.retrigger) {
-          this.sendMessage({
-            speech: resData.retrigger,
-            uniqueId: this.props.uniqueId
-          });
+
+          setTimeout(() => {
+            this.sendMessage({
+              speech: resData.retrigger,
+              uniqueId: this.props.uniqueId
+            })
+          }, timeDelay)
+
         }
 
         if (resData.options.length === 0) {
@@ -74,6 +96,13 @@ export default class App extends React.Component {
         }
         resData.isUser = false;
         resData.isWaiting = false;
+
+        // Add dots
+        this.addMessage({
+          speech: "",
+          isUser: false,
+          isDot: true
+        })
         this.addMessage(resData);
       });
   }

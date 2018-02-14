@@ -54,16 +54,18 @@ export class Input extends React.Component {
       uniqueId: this.props.uniqueId
     };
 
-    const dots = {
-      speech: ""
-    };
+    // const dots = {
+    //   speech: "",
+    //   isUser: false,
+    //   isDot: true
+    // };
 
     for (const pair of new FormData(e.target).entries()) {
       data[pair[0]] = pair[1];
     }
     this.props.sendMessage(data);
     this.props.addMessage(data);
-    this.props.addMessage(dots);
+    // this.props.addMessage(dots);
     this.setState({ term: "" });
   }
 
