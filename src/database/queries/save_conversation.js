@@ -7,7 +7,6 @@ const saveConversation = conversationId => {
       [conversationId]
     )
     .then(res => {
-      console.log(res);
       if (res[0].case === 0) {
         return db.query(`INSERT INTO conversation (uniqueId) VALUES ($1)`, [
           conversationId
