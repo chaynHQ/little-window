@@ -35,6 +35,7 @@ const Botmessage = styled.p`
   background-color: #d3d3d3;
   border-radius: 15px;
   padding: 10px;
+  min-width: 2.2rem;
 `;
 const Usermessage = styled.p`
   float: right;
