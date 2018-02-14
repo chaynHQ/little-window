@@ -2,6 +2,7 @@ import React from "react";
 import Buttons from "../buttons";
 import Resources from "../resources";
 import styled, { css } from "styled-components";
+import catAvatar from '../../assets/catbot.png';
 
 const Botmessage = styled.p`
 
@@ -51,6 +52,17 @@ const Usermessage = styled.p`
   max-width: 60%;
 `;
 
+const StyledImg = styled.img`
+width: 12%;
+height: 12%;
+margin-top: 1rem;
+margin-left: 2%;
+`
+
+const StyledKittyContainer = styled.div`
+display: flex;
+`
+
 export class Message extends React.Component {
   constructor(props) {
     super(props);
@@ -59,11 +71,11 @@ export class Message extends React.Component {
   render() {
     const speaker = this.props.messageObj.isUser ? (
       <Usermessage>{this.props.messageObj.speech}</Usermessage>
-    ) : (
+    ) : (<StyledKittyContainer><StyledImg src={catAvatar} />
       <Botmessage dotty={this.props.messageObj.speech === "" ? "dotty" : ""}>
         {this.props.messageObj.speech}
       </Botmessage>
-    );
+    </StyledKittyContainer>);
     return (
       <div>
         {speaker}
