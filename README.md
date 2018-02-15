@@ -1,23 +1,46 @@
 # Little Window
-![logo](client/public/assets/chayn.png)
+![logo](client/src/assets/chayn.png)
 
-A chatbot featured on all Chayn websites in an iframe, which quickly directs users to Chayn’s relevant internal or external resources.
+The Little Window app is avaliable [here](https://little-window.herokuapp.com)
+
+## User Story
+‘Direct users quickly and safely to the correct resource so that users can feel informed and empowered to read further.’
+
+<br>
+
+## Our Solution
+> A chat bot to help those who have suffered from domestic abuse to access resources quickkly and safely
+
+#### The aims of the solution:
+- To provide information within a 15 minute window
+- To provide effective real-time service
+- Ensure a safer digital footprint
+- To provide accessible and engaging information
+- To raise awareness on domestic abuse
+
+### The app
+
+![LWDemo](client/src/assets/LW.gif)
+
+
+### What it will look like on the Chayn website
+
+![figma](client/src/assets/figma.png)
+
 
 ### Tech stack
-- DialogFlow
+- DialogFlow (Natural Language Processor)
+- GoogleSheets API
 - React
-- AWS
-- Node
-
-### Getting Started
-- Clone the repo
-- cd into the project
-- in the root directory run ```npm install```
-- Start chatting the bot on ```localhost:3000```
+- PostgreSQL
+- Heroku
 
 ### Software Architecture
-![architecture](client/public/assets/LW_Architecture.png)
+<br>
+
+![architecture](client/src/assets/architecture.png)
+
 ### Our Conversation Flow
 <br>
 
-![conversation](client/public/assets/decision_tree.png)
+![conversation](client/src/assets/decision_tree.png)
