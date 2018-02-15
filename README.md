@@ -18,15 +18,19 @@ The Little Window app is avaliable [here](https://little-window.herokuapp.com)
 - To provide accessible and engaging information
 - To raise awareness on domestic abuse
 
+___
+
 ### The app
 
 ![LWDemo](client/src/assets/LW.gif)
 
+___
 
 ### What it will look like on the Chayn website
 
 ![figma](client/src/assets/figma.png)
 
+___
 
 ### Tech stack
 - DialogFlow (Natural Language Processor)
@@ -35,10 +39,14 @@ The Little Window app is avaliable [here](https://little-window.herokuapp.com)
 - PostgreSQL
 - Heroku
 
+___
+
 ### Software Architecture
 <br>
 
 ![architecture](client/src/assets/architecture.png)
+
+___
 
 ### Our Conversation Flow
 <br>
