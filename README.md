@@ -16,11 +16,11 @@ Steps:
 2. Install dependencies
 `npm install`
 3. Create a `config.env` in the root directory. This will need:
-`DF_KEY = ` [Your Dialogflow client key]  
-`DATABASE_URL = ` [Your PostgreSQL prod DB]
-`HEROKU_POSTGRESQL_OLIVE_URL = ` [Your PostgreSQL test DB]
-`GOOGLE_API_1 = ` https://sheets.googleapis.com/v4/spreadsheets/{your-sheet-id}/values/
-`GOOGLE_API_2 = ` ?key={your-GSheet-apikey}
+- `DF_KEY = ` [Your Dialogflow client key]  
+- `DATABASE_URL = ` [Your PostgreSQL prod DB]
+- `HEROKU_POSTGRESQL_OLIVE_URL = ` [Your PostgreSQL test DB]
+- `GOOGLE_API_1 = ` https://sheets.googleapis.com/v4/spreadsheets/{your-sheet-id}/values/
+- `GOOGLE_API_2 = ` ?key={your-GSheet-apikey}
 4. Login  to your prod db and run `db_build.sql` 
 5. Run the app in dev mode:
 `npm run dev`
