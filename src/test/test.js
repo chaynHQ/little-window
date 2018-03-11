@@ -20,10 +20,6 @@ test('save conversation is working', (t) => {
       .then(() => checkChat())
       .then((res) => {
         t.equal(res[0].id, 1, 'saveConversation working');
-        return saveConversation('dummyID');
-      })
-      .catch((err) => {
-        t.equal(err.message, 'conversation ID already exists', 'should return correct error message');
         t.end();
       });
   });

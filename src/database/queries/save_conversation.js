@@ -9,7 +9,7 @@ const saveConversation = conversationId => db
     if (res[0].case === 0) {
       return db.query('INSERT INTO conversation (uniqueId) VALUES ($1)', [conversationId]);
     }
-    return Promise.reject(new Error('conversation ID already exists'));
+    return null;
   });
 
 module.exports = saveConversation;

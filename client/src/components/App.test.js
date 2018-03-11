@@ -3,9 +3,15 @@ import ReactDOM from 'react-dom';
 import App from './App';
 
 const testApp = new App();
-const testObj = { speech: "Hello 👋, I am Little Window - a chat bot to help you get the information you need.", options: Array(0), resources: Array(0), retrigger: "Welcome follow up", json: () => ({ speech: 'hello', uniqueId: '1234', options: [] }) }
+const testObj = {
+  speech: 'Hello 👋, I am Little Window - a chat bot to help you get the information you need.',
+  options: Array(0),
+  resources: Array(0),
+  retrigger: 'Welcome follow up',
+  json: () => ({ speech: 'hello', uniqueId: '1234', options: [] }),
+};
 
-beforeEach(function () {
+beforeEach(() => {
   global.fetch = jest.fn().mockImplementation(() => Promise.resolve(testObj));
 });
 
@@ -15,11 +21,11 @@ beforeEach(function () {
 //   ReactDOM.unmountComponentAtNode(div);
 // });
 
-it("sendToServer", async function () {
+it('sendToServer', async () => {
   const response = await testApp.sendToServer({
-    speech: "hello",
-    uniqueId: "1234"
+    speech: 'hello',
+    uniqueId: '1234',
   });
-  console.log(testApp.sendToServer, "App")
+  console.log(testApp.sendToServer, 'App');
   expect(response).toBe(testObj);
 });

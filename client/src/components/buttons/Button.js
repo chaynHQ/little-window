@@ -1,5 +1,6 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Botbuttons = styled.div`
   float: left;
@@ -27,6 +28,17 @@ const Countrybutton = styled.button`
 `;
 
 export default class Button extends React.Component {
+  static propTypes = {
+    uniqueId: PropTypes.string.isRequired,
+    options: PropTypes.arrayOf(PropTypes.object),
+    addMessage: PropTypes.func.isRequired,
+    sendMessage: PropTypes.func.isRequired,
+  }
+
+  static defaultProps = {
+    options: [],
+  }
+
   constructor(props) {
     super(props);
     this.state = { disabled: false };
@@ -37,10 +49,10 @@ export default class Button extends React.Component {
       isUser: true,
       isWaiting: true,
       speech,
-      uniqueId: this.props.uniqueId
+      uniqueId: this.props.uniqueId,
     };
     const buttonDots = {
-      speech: ""
+      speech: '',
     };
     this.props.addMessage(data);
     this.props.addMessage(buttonDots);
@@ -54,10 +66,10 @@ export default class Button extends React.Component {
     if (this.props.options.length > 2) {
       return (
         <Botbuttons>
-          {this.props.options.map((option, index) => (
+          {this.props.options.map(option => (
             <Countrybutton
               value={option.postback}
-              key={index}
+              key={option.postback}
               onClick={() => this.clickHandler(option.text, option.postback)}
             >
               {option.text}
@@ -68,10 +80,10 @@ export default class Button extends React.Component {
     }
     return (
       <Botbuttons>
-        {this.props.options.map((option, index) => (
+        {this.props.options.map(option => (
           <Styledbutton
             value={option.postback}
-            key={index}
+            key={option.postback}
             onClick={() => this.clickHandler(option.text, option.postback)}
           >
             {option.text}
