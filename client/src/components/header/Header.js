@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const StyledHeader = styled.div`
   height: 20%;
@@ -36,17 +36,15 @@ const Styledh1 = styled.h1`
   font-size: 20px;
 `;
 
-export class Header extends React.Component {
-  render() {
-    return (
-      <StyledHeader>
-        <RefreshButton onClick={this.props.refresh}>
-          <Icon className="fas fa-sync-alt" />
-        </RefreshButton>
-        <HeadingText>
-          <Styledh1>Little Window</Styledh1>
-        </HeadingText>
-      </StyledHeader>
-    );
-  }
-}
+const Header = props => (
+  <StyledHeader>
+    <RefreshButton onClick={props.refresh}>
+      <Icon className="fas fa-sync-alt" />
+    </RefreshButton>
+    <HeadingText>
+      <Styledh1>Little Window</Styledh1>
+    </HeadingText>
+  </StyledHeader>
+);
+
+export default Header;
