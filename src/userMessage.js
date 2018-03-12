@@ -31,8 +31,10 @@ const apiaiCall = (req, res, speech) => {
 
     saveMessage(data.speech, response.sessionId);
 
-    const payload = messages[1] ? messages[1].payload : null;
-    if (payload.timedelay) {
+    const payload = messages[1] ? messages[1].payload : {};
+    if (!payload.timedelay) {
+      data.timedelay = 'fast';
+    } else {
       data.timedelay = payload.timedelay;
     }
 

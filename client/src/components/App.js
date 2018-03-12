@@ -16,10 +16,10 @@ const Container = styled.div`
   font-family: 'Source Code Pro', monospace;
 `;
 
-let timedelay = Math.random() * 1000 + 1000;
-const fast = 1000;
+// let timedelay = Math.random() * 1000 + 1000;
+const fast = 1500;
 const slow = 5000;
-const superslow = 10000;
+const superslow = 8000;
 
 export default class App extends React.Component {
   static propTypes = {
@@ -30,7 +30,8 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       messages: [],
-      inputStatus: false
+      inputStatus: false,
+      timedelay: ''
     };
   }
 
@@ -48,7 +49,7 @@ export default class App extends React.Component {
         this.setState(prevState => ({
           messages: [...prevState.messages, message]
         }));
-      }, timedelay);
+      }, this.state.timedelay);
     } else {
       this.setState(prevState => ({
         messages: [...prevState.messages, message]
@@ -70,14 +71,12 @@ export default class App extends React.Component {
     this.sendToServer(data)
       .then(res => res.json())
       .then(resData => {
-        if (resData.timedelay) {
-          if (resData.timedelay === 'slow') {
-            timedelay = slow;
-          } else if (resData.timedelay === 'super-slow') {
-            timedelay = superslow;
-          }
-        } else if (resData.timedelay === '') {
-          timedelay = fast;
+        if (resData.timedelay === 'slow') {
+          this.setState({ timedelay: slow });
+        } else if (resData.timedelay === 'super-slow') {
+          this.setState({ timedelay: superslow });
+        } else {
+          this.setState({ timedelay: fast });
         }
         if (resData.retrigger) {
           setTimeout(() => {
@@ -85,7 +84,7 @@ export default class App extends React.Component {
               speech: resData.retrigger,
               uniqueId: this.props.uniqueId
             });
-          }, timedelay);
+          }, this.state.timedelay);
         }
 
         if (resData.options.length === 0) {
@@ -106,6 +105,8 @@ export default class App extends React.Component {
           isUser: false,
           isDot: true
         });
+
+        console.log('dots added from app.js line 105');
 
         this.addMessage(newMessage);
       });
@@ -131,6 +132,7 @@ export default class App extends React.Component {
   };
 
   render() {
+    console.log(this.state.messages);
     return (
       <Container>
         <Header refresh={this.refresh} />
