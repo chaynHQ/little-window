@@ -16,10 +16,11 @@ const Container = styled.div`
   font-family: 'Source Code Pro', monospace;
 `;
 
-// let timedelay = Math.random() * 1000 + 1000;
-const fast = 1500;
-const slow = 5000;
-const superslow = 8000;
+const speed = {
+  fast: 1500,
+  slow: 5000,
+  superslow: 8000
+};
 
 export default class App extends React.Component {
   static propTypes = {
@@ -71,13 +72,7 @@ export default class App extends React.Component {
     this.sendToServer(data)
       .then(res => res.json())
       .then(resData => {
-        if (resData.timedelay === 'slow') {
-          this.setState({ timedelay: slow });
-        } else if (resData.timedelay === 'super-slow') {
-          this.setState({ timedelay: superslow });
-        } else {
-          this.setState({ timedelay: fast });
-        }
+        this.setState({ timedelay: speed[resData.timedelay] });
         if (resData.retrigger) {
           setTimeout(() => {
             this.sendMessage({
