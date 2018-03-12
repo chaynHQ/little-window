@@ -12,6 +12,7 @@ const CountryOptionDiv = styled.div`
   border: 2px #b0b0b0 solid;
   color: #b0b0b0;
   background: white;
+  margin-bottom: 20px;
   margin-right: 5px;
   padding: 5px;
   border-radius: 15px;
@@ -27,6 +28,23 @@ const CountryOptionDiv = styled.div`
       background: red;
       color: white;
     `};
+`;
+
+const SubmitButton = styled.button`
+  margin: auto;
+  border: 2px #b0b0b0 solid;
+  color: white;
+  background: green;
+  display: block;
+  border-radius: 15px;
+  font-size: 1rem;
+  padding-top: 3px;
+  padding-bottom: 4px;
+  width: 5rem;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export default class SelectOptions extends Component {
@@ -68,7 +86,10 @@ export default class SelectOptions extends Component {
     if (this.props.selectOptions.length < 1) return null;
 
     return (
-      <SelectOptionsDiv>{this.renderSelectOptions()}</SelectOptionsDiv>
+      <div>
+        <SelectOptionsDiv>{this.renderSelectOptions()}</SelectOptionsDiv>
+        <SubmitButton>Submit</SubmitButton>
+      </div>
     );
   }
 }
