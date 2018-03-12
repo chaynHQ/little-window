@@ -16,39 +16,44 @@ const Container = styled.div`
   font-family: 'Source Code Pro', monospace;
 `;
 
-const timeDelay = (Math.random() * 2000) + 1000;
+const speed = {
+  fast: 1500,
+  slow: 5000,
+  superslow: 8000
+};
 
 export default class App extends React.Component {
   static propTypes = {
-    uniqueId: PropTypes.string.isRequired,
-  }
+    uniqueId: PropTypes.string.isRequired
+  };
 
   constructor(props) {
     super(props);
     this.state = {
       messages: [],
       inputStatus: false,
+      timedelay: ''
     };
   }
 
   componentDidMount = () => {
     this.sendMessage({
       speech: 'Little window welcome',
-      uniqueId: this.props.uniqueId,
+      uniqueId: this.props.uniqueId
     });
-  }
+  };
 
-  addMessage = (message) => {
+  addMessage = message => {
     if (!message.isUser && !message.isDot) {
       setTimeout(() => {
         this.removeWaitingDots();
         this.setState(prevState => ({
-          messages: [...prevState.messages, message],
+          messages: [...prevState.messages, message]
         }));
-      }, timeDelay);
+      }, this.state.timedelay);
     } else {
       this.setState(prevState => ({
-        messages: [...prevState.messages, message],
+        messages: [...prevState.messages, message]
       }));
     }
   };
@@ -56,22 +61,25 @@ export default class App extends React.Component {
   removeWaitingDots = () => {
     if (this.state.messages.length > 0) {
       if (this.state.messages[this.state.messages.length - 1].speech === '') {
-        this.setState(prevState => ({ messages: [...prevState.messages.slice(0, -1)] }));
+        this.setState(prevState => ({
+          messages: [...prevState.messages.slice(0, -1)]
+        }));
       }
     }
-  }
+  };
 
-  sendMessage = (data) => {
+  sendMessage = data => {
     this.sendToServer(data)
       .then(res => res.json())
-      .then((resData) => {
+      .then(resData => {
+        this.setState({ timedelay: speed[resData.timedelay] });
         if (resData.retrigger) {
           setTimeout(() => {
             this.sendMessage({
               speech: resData.retrigger,
-              uniqueId: this.props.uniqueId,
+              uniqueId: this.props.uniqueId
             });
-          }, timeDelay);
+          }, this.state.timedelay);
         }
 
         if (resData.options.length === 0) {
@@ -90,33 +98,36 @@ export default class App extends React.Component {
         this.addMessage({
           speech: '',
           isUser: false,
-          isDot: true,
+          isDot: true
         });
+
+        console.log('dots added from app.js line 105');
 
         this.addMessage(newMessage);
       });
-  }
+  };
 
   sendToServer = data =>
     fetch('/usermessage', {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
       credentials: 'same-origin',
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     });
 
   refresh = () => {
     this.setState({
-      messages: [],
+      messages: []
     });
 
     this.sendMessage({
       speech: 'Little window welcome',
-      uniqueId: this.props.uniqueId,
+      uniqueId: this.props.uniqueId
     });
   };
 
   render() {
+    console.log(this.state.messages);
     return (
       <Container>
         <Header refresh={this.refresh} />

@@ -32,12 +32,12 @@ export default class Button extends React.Component {
     uniqueId: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(PropTypes.object),
     addMessage: PropTypes.func.isRequired,
-    sendMessage: PropTypes.func.isRequired,
-  }
+    sendMessage: PropTypes.func.isRequired
+  };
 
   static defaultProps = {
-    options: [],
-  }
+    options: []
+  };
 
   constructor(props) {
     super(props);
@@ -49,13 +49,9 @@ export default class Button extends React.Component {
       isUser: true,
       isWaiting: true,
       speech,
-      uniqueId: this.props.uniqueId,
-    };
-    const buttonDots = {
-      speech: '',
+      uniqueId: this.props.uniqueId
     };
     this.props.addMessage(data);
-    this.props.addMessage(buttonDots);
     this.props.sendMessage({ speech: postback, uniqueId: this.props.uniqueId });
     this.setState({ disabled: true });
   }
