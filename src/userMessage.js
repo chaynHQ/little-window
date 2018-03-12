@@ -25,12 +25,13 @@ const apiaiCall = (req, res, speech) => {
       speech: messages[0].speech,
       options: [],
       resources: [],
+      selectOptions: [],
       retrigger: '',
     };
 
     saveMessage(data.speech, response.sessionId);
 
-    const payload = messages[1] ? messages[1].payload : null;
+    const payload = messages[1] ? messages[1].payload : {};
     if (payload.retrigger) {
       data.retrigger = payload.retrigger;
     }
@@ -48,6 +49,7 @@ const apiaiCall = (req, res, speech) => {
       });
     } else {
       data.options = payload.options ? [...payload.options] : data.options;
+      data.selectOptions = payload.selectOptions ? [...payload.selectOptions] : data.selectOptions;
       res.send(data);
     }
   });
