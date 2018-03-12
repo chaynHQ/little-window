@@ -56,7 +56,7 @@ export default class Input extends React.Component {
       isUser: true,
       isWaiting: true,
       uniqueId: this.props.uniqueId,
-      speech: this.state.term,
+      speech: this.state.term
     };
 
     this.props.sendMessage(data);
@@ -71,12 +71,16 @@ export default class Input extends React.Component {
           <StyledInput
             type="text"
             name="speech"
-            placeholder={this.props.inputStatus ? 'Choose a button...' : 'Type here...'}
+            placeholder={
+              this.props.inputStatus ? this.props.inputMessage : 'Type here...'
+            }
             value={this.state.term}
             onChange={event => this.onInputChange(event.target.value)}
             disabled={this.props.inputStatus}
           />
-          {this.props.inputStatus ? null : <StyledSubmitInput type="submit" value="Submit" />}
+          {this.props.inputStatus ? null : (
+            <StyledSubmitInput type="submit" value="Submit" />
+          )}
         </Form>
       </Container>
     );
