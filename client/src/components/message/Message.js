@@ -1,9 +1,15 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import Buttons from '../buttons/Button';
 import Resources from '../resources/Resources';
 import SelectOptions from '../select-buttons/SelectOptions';
 import catAvatar from '../../assets/catbot.png';
+
+const ellipsis = keyframes`
+  to {
+    width: 3em;
+  }
+`;
 
 const Botmessage = styled.p`
   float: left;
@@ -21,22 +27,9 @@ const Botmessage = styled.p`
         overflow: hidden;
         display: block;
         vertical-align: bottom;
-        -webkit-animation: ellipsis steps(4, end) 1000ms infinite;
-        animation: ellipsis steps(4, end) 1000ms infinite;
+        animation: ${ellipsis} steps(4, end) 1000ms infinite;
         content: '...';
         width: 0px;
-      }
-
-      @keyframes ellipsis {
-        to {
-          width: 3em;
-        }
-      }
-
-      @-webkit-keyframes ellipsis {
-        to {
-          width: 3em;
-        }
       }
     `};
 `;
@@ -62,17 +55,17 @@ const StyledKittyContainer = styled.div`
   width: 100%;
 `;
 
-const Message = (props) => {
-  const {
-    messageObj, addMessage, sendMessage, uniqueId,
-  } = props;
+const Message = props => {
+  const { messageObj, addMessage, sendMessage, uniqueId } = props;
 
   const speaker = messageObj.isUser ? (
     <Usermessage>{messageObj.speech}</Usermessage>
   ) : (
     <StyledKittyContainer>
       <StyledImg src={catAvatar} />
-      <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>{messageObj.speech}</Botmessage>
+      <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
+        {messageObj.speech}
+      </Botmessage>
     </StyledKittyContainer>
   );
   return (

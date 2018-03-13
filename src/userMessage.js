@@ -22,9 +22,6 @@ const getResource = (countryObj) => {
         return singleResourceArray.filter(Boolean);
       });
       return [].concat(...resourceArray);
-    })
-    .catch((err) => {
-      console.log(err);
     });
 };
 
@@ -69,7 +66,12 @@ const apiaiCall = (req, res, speech) => {
           data.resources = [].concat(...resources2dArray);
           res.send(data);
         })
-        .catch(err => console.log(err));
+        .catch(() => {
+          data.resources = [{ text: 'Chayn Website', href: 'www.chayn.co' }];
+          data.retrigger = '';
+          data.speech = "Sorry there's a problem getting the information, please check the Chayn website or try again later";
+          res.send(data);
+        });
     } else {
       data.options = payload.options ? [...payload.options] : data.options;
       data.selectOptions = payload.selectOptions ? [...payload.selectOptions] : data.selectOptions;
@@ -77,8 +79,16 @@ const apiaiCall = (req, res, speech) => {
     }
   });
 
-  requestdf.on('error', (error) => {
-    console.log(error);
+  requestdf.on('error', () => {
+    const data = {
+      options: [],
+      selectOptions: [],
+      timedelay: '',
+      resources: [{ text: 'Chayn Website', href: 'www.chayn.co' }],
+      retrigger: '',
+      speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later",
+    };
+    res.send(data);
   });
 
   requestdf.end();
