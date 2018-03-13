@@ -50,6 +50,8 @@ export default class App extends React.Component {
         if (message.options.length > 0) {
           this.setState({ inputStatus: true });
           this.setState({ inputMessage: 'Choose a button...' });
+        } else if (message.retrigger) {
+          this.setState({ inputStatus: true });
         } else {
           this.setState({ inputStatus: false });
         }
