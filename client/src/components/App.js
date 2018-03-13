@@ -19,12 +19,12 @@ const Container = styled.div`
 const speed = {
   fast: 1500,
   slow: 5000,
-  superslow: 8000
+  superslow: 8000,
 };
 
 export default class App extends React.Component {
   static propTypes = {
-    uniqueId: PropTypes.string.isRequired
+    uniqueId: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -33,24 +33,29 @@ export default class App extends React.Component {
       messages: [],
       inputStatus: false,
       inputMessage: 'Choose a button...',
-      timedelay: ''
+      timedelay: '',
     };
   }
 
   componentDidMount = () => {
     this.sendMessage({
       speech: 'Little window welcome',
-      uniqueId: this.props.uniqueId
+      uniqueId: this.props.uniqueId,
     });
   };
 
-  addMessage = message => {
+  addMessage = (message) => {
     if (!message.isUser && !message.isDot) {
       setTimeout(() => {
         if (message.options.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: 'Choose a button...'
+            inputMessage: 'Choose a button...',
+          });
+        } else if (message.selectOptions.length > 0) {
+          this.setState({
+            inputStatus: true,
+            inputMessage: 'Pick one or more options...',
           });
         } else if (message.retrigger) {
           this.setState({ inputStatus: true });
@@ -59,12 +64,12 @@ export default class App extends React.Component {
         }
         this.removeWaitingDots();
         this.setState(prevState => ({
-          messages: [...prevState.messages, message]
+          messages: [...prevState.messages, message],
         }));
       }, this.state.timedelay);
     } else {
       this.setState(prevState => ({
-        messages: [...prevState.messages, message]
+        messages: [...prevState.messages, message],
       }));
     }
   };
@@ -79,16 +84,16 @@ export default class App extends React.Component {
     }
   };
 
-  sendMessage = data => {
+  sendMessage = (data) => {
     this.sendToServer(data)
       .then(res => res.json())
-      .then(resData => {
+      .then((resData) => {
         this.setState({ timedelay: speed[resData.timedelay] });
         if (resData.retrigger) {
           setTimeout(() => {
             this.sendMessage({
               speech: resData.retrigger,
-              uniqueId: this.props.uniqueId
+              uniqueId: this.props.uniqueId,
             });
           }, this.state.timedelay);
         }
@@ -98,7 +103,7 @@ export default class App extends React.Component {
         } else {
           this.setState({
             inputStatus: true,
-            inputMessage: 'Choose a button...'
+            inputMessage: 'Choose a button...',
           });
         }
 
@@ -113,7 +118,7 @@ export default class App extends React.Component {
         this.addMessage({
           speech: '',
           isUser: false,
-          isDot: true
+          isDot: true,
         });
 
         this.addMessage(newMessage);
@@ -125,22 +130,21 @@ export default class App extends React.Component {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
       credentials: 'same-origin',
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
 
   refresh = () => {
     this.setState({
-      messages: []
+      messages: [],
     });
 
     this.sendMessage({
       speech: 'Little window welcome',
-      uniqueId: this.props.uniqueId
+      uniqueId: this.props.uniqueId,
     });
   };
 
   render() {
-    console.log(this.state.messages);
     return (
       <Container>
         <Header refresh={this.refresh} />
