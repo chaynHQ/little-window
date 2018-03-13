@@ -9,7 +9,7 @@ const app = apiai(DF_KEY);
 const apiaiCall = (req, res, speech) => {
   saveMessage(speech, req.body.uniqueId);
   const requestdf = app.textRequest(speech, {
-    sessionId: req.body.uniqueId,
+    sessionId: req.body.uniqueId
   });
 
   requestdf.on('response', (response) => {
@@ -18,7 +18,7 @@ const apiaiCall = (req, res, speech) => {
       DivorcePakistan: 'C2:D',
       DivorceItaly: 'E2:F',
       DivorceUK: 'G2:H',
-      DivorceGlobal: 'I2:J',
+      DivorceGlobal: 'I2:J'
     };
     const { messages } = response.result.fulfillment;
     const data = {
@@ -27,11 +27,18 @@ const apiaiCall = (req, res, speech) => {
       resources: [],
       selectOptions: [],
       retrigger: '',
+      timedelay: ''
     };
 
     saveMessage(data.speech, response.sessionId);
 
     const payload = messages[1] ? messages[1].payload : {};
+    if (!payload.timedelay) {
+      data.timedelay = 'fast';
+    } else {
+      data.timedelay = payload.timedelay;
+    }
+
     if (payload.retrigger) {
       data.retrigger = payload.retrigger;
     }

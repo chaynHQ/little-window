@@ -7,6 +7,7 @@ const Botbuttons = styled.div`
   margin-left: 5%;
   display: flex;
   flex-direction: row;
+  cursor: pointer;
 `;
 const Styledbutton = styled.button`
   border: 2px #b0b0b0 solid;
@@ -17,6 +18,7 @@ const Styledbutton = styled.button`
   padding-top: 3px;
   padding-bottom: 4px;
   width: 5rem;
+  cursor: pointer;
 `;
 
 const Countrybutton = styled.button`
@@ -25,6 +27,7 @@ const Countrybutton = styled.button`
   margin: 1%;
   border-radius: 15px;
   font-size: 1rem;
+  cursor: pointer;
 `;
 
 export default class Button extends React.Component {
@@ -32,12 +35,12 @@ export default class Button extends React.Component {
     uniqueId: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(PropTypes.object),
     addMessage: PropTypes.func.isRequired,
-    sendMessage: PropTypes.func.isRequired,
-  }
+    sendMessage: PropTypes.func.isRequired
+  };
 
   static defaultProps = {
-    options: [],
-  }
+    options: []
+  };
 
   constructor(props) {
     super(props);
@@ -49,13 +52,9 @@ export default class Button extends React.Component {
       isUser: true,
       isWaiting: true,
       speech,
-      uniqueId: this.props.uniqueId,
-    };
-    const buttonDots = {
-      speech: '',
+      uniqueId: this.props.uniqueId
     };
     this.props.addMessage(data);
-    this.props.addMessage(buttonDots);
     this.props.sendMessage({ speech: postback, uniqueId: this.props.uniqueId });
     this.setState({ disabled: true });
   }
