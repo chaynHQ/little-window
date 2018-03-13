@@ -32,6 +32,7 @@ export default class App extends React.Component {
     this.state = {
       messages: [],
       inputStatus: false,
+      inputMessage: 'Choose a button...',
       timedelay: ''
     };
   }
@@ -46,6 +47,16 @@ export default class App extends React.Component {
   addMessage = message => {
     if (!message.isUser && !message.isDot) {
       setTimeout(() => {
+        if (message.options.length > 0) {
+          this.setState({
+            inputStatus: true,
+            inputMessage: 'Choose a button...'
+          });
+        } else if (message.retrigger) {
+          this.setState({ inputStatus: true });
+        } else {
+          this.setState({ inputStatus: false });
+        }
         this.removeWaitingDots();
         this.setState(prevState => ({
           messages: [...prevState.messages, message]
@@ -85,7 +96,10 @@ export default class App extends React.Component {
         if (resData.options.length === 0) {
           this.setState({ inputStatus: false });
         } else {
-          this.setState({ inputStatus: true });
+          this.setState({
+            inputStatus: true,
+            inputMessage: 'Choose a button...'
+          });
         }
 
         // create copy of resData to avoid mutating it
@@ -94,14 +108,13 @@ export default class App extends React.Component {
         newMessage.isUser = false;
         newMessage.isWaiting = false;
 
+        this.setState({ inputStatus: true, inputMessage: 'typing...' });
         // Add dots
         this.addMessage({
           speech: '',
           isUser: false,
           isDot: true
         });
-
-        console.log('dots added from app.js line 105');
 
         this.addMessage(newMessage);
       });
@@ -142,6 +155,7 @@ export default class App extends React.Component {
           addMessage={this.addMessage}
           sendMessage={this.sendMessage}
           inputStatus={this.state.inputStatus}
+          inputMessage={this.state.inputMessage}
           uniqueId={this.props.uniqueId}
         />
       </Container>

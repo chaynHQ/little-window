@@ -7,6 +7,7 @@ const Botbuttons = styled.div`
   margin-left: 5%;
   display: flex;
   flex-direction: row;
+  cursor: pointer;
 `;
 const Styledbutton = styled.button`
   border: 2px #b0b0b0 solid;
@@ -17,6 +18,7 @@ const Styledbutton = styled.button`
   padding-top: 3px;
   padding-bottom: 4px;
   width: 5rem;
+  cursor: pointer;
 `;
 
 const Countrybutton = styled.button`
@@ -25,6 +27,7 @@ const Countrybutton = styled.button`
   margin: 1%;
   border-radius: 15px;
   font-size: 1rem;
+  cursor: pointer;
 `;
 
 export default class Button extends React.Component {
