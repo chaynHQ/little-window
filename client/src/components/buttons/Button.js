@@ -11,7 +11,7 @@ const Botbuttons = styled.div`
 `;
 const Styledbutton = styled.button`
   border: 2px #b0b0b0 solid;
-  color: #b0b0b0;
+  color: black;
   margin: 5%;
   border-radius: 15px;
   font-size: 1rem;
