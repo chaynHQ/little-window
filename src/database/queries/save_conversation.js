@@ -10,6 +10,9 @@ const saveConversation = conversationId => db
       return db.query('INSERT INTO conversation (uniqueId) VALUES ($1)', [conversationId]);
     }
     return null;
+  })
+  .catch((error) => {
+    console.log('saveConversation error', error)
   });
 
 module.exports = saveConversation;
