@@ -48,8 +48,10 @@ export default class App extends React.Component {
     if (!message.isUser && !message.isDot) {
       setTimeout(() => {
         if (message.options.length > 0) {
-          this.setState({ inputStatus: true });
-          this.setState({ inputMessage: 'Choose a button...' });
+          this.setState({
+            inputStatus: true,
+            inputMessage: 'Choose a button...'
+          });
         } else if (message.retrigger) {
           this.setState({ inputStatus: true });
         } else {
@@ -94,8 +96,10 @@ export default class App extends React.Component {
         if (resData.options.length === 0) {
           this.setState({ inputStatus: false });
         } else {
-          this.setState({ inputStatus: true });
-          this.setState({ inputMessage: 'Choose a button...' });
+          this.setState({
+            inputStatus: true,
+            inputMessage: 'Choose a button...'
+          });
         }
 
         // create copy of resData to avoid mutating it
@@ -104,8 +108,7 @@ export default class App extends React.Component {
         newMessage.isUser = false;
         newMessage.isWaiting = false;
 
-        this.setState({ inputStatus: true });
-        this.setState({ inputMessage: 'typing...' });
+        this.setState({ inputStatus: true, inputMessage: 'typing...' });
         // Add dots
         this.addMessage({
           speech: '',
