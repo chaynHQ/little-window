@@ -30,7 +30,8 @@ const apiaiCall = (req, res, speech) => {
       timedelay: '',
     };
 
-    saveMessage(data.speech, response.sessionId);
+// console.log error because conversation should continue even if it can't be saved to database
+    saveMessage(data.speech, response.sessionId)
 
     const payload = messages[1] ? messages[1].payload : {};
     if (!payload.timedelay) {
@@ -78,7 +79,7 @@ const apiaiCall = (req, res, speech) => {
 const userMessage = (req, res) => {
   const { speech } = req.body;
   apiaiCall(req, res, speech);
-  saveConversation(req.body.uniqueId);
+  saveConversation(req.body.uniqueId)
 };
 
 module.exports = userMessage;
