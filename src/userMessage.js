@@ -30,8 +30,8 @@ const apiaiCall = (req, res, speech) => {
       timedelay: '',
     };
 
-// console.log error because conversation should continue even if it can't be saved to database
-    saveMessage(data.speech, response.sessionId)
+    // console.log error because conversation should continue even if it can't be saved to database
+    saveMessage(data.speech, response.sessionId);
 
     const payload = messages[1] ? messages[1].payload : {};
     if (!payload.timedelay) {
@@ -69,8 +69,16 @@ const apiaiCall = (req, res, speech) => {
     }
   });
 
-  requestdf.on('error', (error) => {
-    console.log(error);
+  requestdf.on('error', () => {
+    const data = {
+      options: [],
+      selectOptions: [],
+      timedelay: '',
+      resources: [{ text: 'Chayn Website', href: 'www.chayn.co' }],
+      retrigger: '',
+      speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later",
+    };
+    res.send(data);
   });
 
   requestdf.end();
@@ -79,7 +87,7 @@ const apiaiCall = (req, res, speech) => {
 const userMessage = (req, res) => {
   const { speech } = req.body;
   apiaiCall(req, res, speech);
-  saveConversation(req.body.uniqueId)
+  saveConversation(req.body.uniqueId);
 };
 
 module.exports = userMessage;
