@@ -12,7 +12,7 @@ const apiaiCall = (req, res, speech) => {
     sessionId: req.body.uniqueId
   });
 
-  requestdf.on('response', response => {
+  requestdf.on('response', (response) => {
     const lookup = {
       DivorceIndia: 'A2:B',
       DivorcePakistan: 'C2:D',
@@ -25,6 +25,7 @@ const apiaiCall = (req, res, speech) => {
       speech: messages[0].speech,
       options: [],
       resources: [],
+      selectOptions: [],
       retrigger: '',
       timedelay: ''
     };
@@ -48,18 +49,19 @@ const apiaiCall = (req, res, speech) => {
       request(url, (err, gsres, body) => {
         const resourceArray = JSON.parse(body).values.map(resource => ({
           text: resource[0],
-          href: resource[1]
+          href: resource[1],
         }));
         data.resources = [...resourceArray];
         res.send(data);
       });
     } else {
       data.options = payload.options ? [...payload.options] : data.options;
+      data.selectOptions = payload.selectOptions ? [...payload.selectOptions] : data.selectOptions;
       res.send(data);
     }
   });
 
-  requestdf.on('error', error => {
+  requestdf.on('error', (error) => {
     console.log(error);
   });
 

@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import Buttons from '../buttons/Button';
 import Resources from '../resources/Resources';
+import SelectOptions from '../select-buttons/SelectOptions';
 import catAvatar from '../../assets/catbot.png';
 
 const ellipsis = keyframes`
@@ -77,6 +78,11 @@ const Message = props => {
         uniqueId={uniqueId}
       />
       <Resources resources={messageObj.resources} />
+
+      <SelectOptions
+        selectOptions={messageObj.selectOptions}
+      />
+
     </div>
   );
 };
