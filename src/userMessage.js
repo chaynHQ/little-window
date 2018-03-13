@@ -1,48 +1,48 @@
 const { DF_KEY, GOOGLE_API_1, GOOGLE_API_2 } = require('../config');
 const apiai = require('apiai');
-const request = require('request');
+const request = require('request-promise');
 const saveConversation = require('./database/queries/save_conversation');
 const saveMessage = require('./database/queries/save_message');
+const gSheetLookup = require('./googleSheetRef');
 
 const app = apiai(DF_KEY);
 
-const gSheetLookup = {
-  India: {
-    start: 'A2',
-    end: 'B',
-  },
-  Pakistan: {
-    start: 'C2',
-    end: 'D',
-  },
-  Italy: {
-    start: 'E2',
-    end: 'F',
-  },
-  UK: {
-    start: 'G2',
-    end: 'H',
-  },
-  Global: {
-    start: 'I2',
-    end: 'J',
-  },
-};
+// const getAndSendGSheetResources = url =>
+//   request(url)
+//     .then((body) => {
+//       const resourceArray = JSON.parse(body).values.map((resource) => {
+//         const singleResourceArray = resource.map((str, index, array) => {
+//           if (index % 2 === 1) return null;
+//           return { text: array[index], href: array[index + 1] };
+//         });
+//
+//         return singleResourceArray.filter(Boolean);
+//       });
+//       return [].concat(...resourceArray);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
 
-const getAndSendGSheetResources = (res, data, url) => {
-  const newData = Object.assign({}, data);
-  request(url, (err, gsres, body) => {
-    const resourceArray = JSON.parse(body).values.map((resource) => {
-      const singleResourceArray = resource.map((str, index, array) => {
-        if (index % 2 === 1) return null;
-        return { text: array[index], href: array[index + 1] };
+const getResource = (countryObj) => {
+  const cellRef = gSheetLookup[countryObj.lookup];
+  const url = GOOGLE_API_1 + cellRef + GOOGLE_API_2;
+
+  return request(url)
+    .then((body) => {
+      const resourceArray = JSON.parse(body).values.map((resource) => {
+        const singleResourceArray = resource.map((str, index, array) => {
+          if (index % 2 === 1) return null;
+          return { text: array[index], href: array[index + 1] };
+        });
+
+        return singleResourceArray.filter(Boolean);
       });
-
-      return singleResourceArray.filter(Boolean);
+      return [].concat(...resourceArray);
+    })
+    .catch((err) => {
+      console.log(err);
     });
-    newData.resources = [].concat(...resourceArray);
-    res.send(newData);
-  });
 };
 
 const findCellRef = (selectedCountries) => {
@@ -81,10 +81,19 @@ const apiaiCall = (req, res, speech) => {
 
     if (payload.resources) {
       let { selectedCountries } = req.body;
-      selectedCountries = selectedCountries || [{ text: 'Global' }];
-      const cellRef = findCellRef(selectedCountries);
-      const url = GOOGLE_API_1 + cellRef + GOOGLE_API_2;
-      getAndSendGSheetResources(res, data, url);
+      selectedCountries = selectedCountries || [{ lookup: 'Global' }];
+
+      const promiseArray = selectedCountries.map(async (countryObj) => {
+        const resource = await getResource(countryObj);
+        return resource;
+      });
+
+      Promise.all(promiseArray)
+        .then((resources2dArray) => {
+          data.resources = [].concat(...resources2dArray);
+          res.send(data);
+        })
+        .catch(err => console.log(err));
     } else {
       data.options = payload.options ? [...payload.options] : data.options;
       data.selectOptions = payload.selectOptions ? [...payload.selectOptions] : data.selectOptions;
