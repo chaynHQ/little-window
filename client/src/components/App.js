@@ -47,8 +47,9 @@ export default class App extends React.Component {
   addMessage = message => {
     if (!message.isUser && !message.isDot) {
       setTimeout(() => {
-        if (message.options.length > 0 || message.retrigger) {
+        if (message.options.length > 0) {
           this.setState({ inputStatus: true });
+          this.setState({ inputMessage: 'Choose a button...' });
         } else {
           this.setState({ inputStatus: false });
         }
