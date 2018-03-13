@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import Buttons from '../buttons/Button';
 import Resources from '../resources/Resources';
+import SelectOptions from '../select-buttons/SelectOptions';
 import catAvatar from '../../assets/catbot.png';
 
 const Botmessage = styled.p`
@@ -84,6 +85,11 @@ const Message = (props) => {
         uniqueId={uniqueId}
       />
       <Resources resources={messageObj.resources} />
+
+      <SelectOptions
+        selectOptions={messageObj.selectOptions}
+      />
+
     </div>
   );
 };
