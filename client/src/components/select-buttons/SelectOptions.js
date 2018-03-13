@@ -10,7 +10,7 @@ const SelectOptionsDiv = styled.div`
 
 const CountryOptionDiv = styled.div`
   border: 2px #b0b0b0 solid;
-  color: #b0b0b0;
+  color: black;
   background: white;
   margin-bottom: 20px;
   margin-right: 5px;
@@ -50,7 +50,7 @@ const SubmitButton = styled.button.attrs({
 
   &:disabled {
     background: white;
-    color: #b0b0b0;
+    color: black;
     cursor: not-allowed;
   }
 `;
@@ -82,27 +82,55 @@ export default class SelectOptions extends Component {
 
       return { activeOptions: newActiveOptions };
     });
-  }
+  };
 
-  renderSelectOptions = () => this.props.selectOptions.map((selectOption, index) => (
-    <CountryOptionDiv
-      key={selectOption.text}
-      active={this.state.activeOptions[index] ? 'active' : ''}
-      onClick={() => this.countryOptionClickHandler(selectOption, index)}
-    >
-      {selectOption.text}
-    </CountryOptionDiv>
-  ));
+  submitHandler = () => {
+    const selectedCountries = this.state.activeOptions
+      .map((option, index) => (option ? this.props.selectOptions[index] : null))
+      .filter(Boolean);
+
+    selectedCountries.forEach((countryObj) => {
+      const data = {
+        isUser: true,
+        isWaiting: true,
+        speech: countryObj.text,
+        uniqueId: this.props.uniqueId,
+      };
+
+      this.props.addMessage(data);
+    });
+
+    this.props.sendMessage({
+      speech: selectedCountries[0].postback,
+      uniqueId: this.props.uniqueId,
+      selectedCountries,
+    });
+
+    this.setState({ disabled: true });
+  };
+
+  renderSelectOptions = () =>
+    this.props.selectOptions.map((selectOption, index) => (
+      <CountryOptionDiv
+        key={selectOption.text}
+        active={this.state.activeOptions[index] ? 'active' : ''}
+        onClick={() => this.countryOptionClickHandler(selectOption, index)}
+      >
+        {selectOption.text}
+      </CountryOptionDiv>
+    ));
 
   render() {
-    if (this.props.selectOptions.length < 1) return null;
+    if (this.props.selectOptions.length === 0 || this.state.disabled) return null;
 
     const optionSelectedBool = this.state.activeOptions.some(Boolean);
 
     return (
       <div>
         <SelectOptionsDiv>{this.renderSelectOptions()}</SelectOptionsDiv>
-        <SubmitButton disabled={optionSelectedBool ? '' : 'disabled'}>Submit</SubmitButton>
+        <SubmitButton disabled={optionSelectedBool ? '' : 'disabled'} onClick={this.submitHandler}>
+          Submit
+        </SubmitButton>
       </div>
     );
   }
