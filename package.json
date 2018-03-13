@@ -29,7 +29,6 @@
     "express": "^4.16.2",
     "google-auth-library": "^0.12.0",
     "googleapis": "^25.0.0",
-    "nodemon": "^1.14.12",
     "pg-promise": "^7.4.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
@@ -45,7 +44,8 @@
     "eslint-plugin-react": "^7.7.0",
     "supertest": "^3.0.0",
     "tap-spec": "^4.1.1",
-    "tape": "^4.8.0"
+    "tape": "^4.8.0",
+    "nodemon": "^1.14.12"
   },
   "engines": {
     "node": "8.7.0"
