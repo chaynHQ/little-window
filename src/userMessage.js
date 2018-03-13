@@ -1,10 +1,29 @@
 const { DF_KEY, GOOGLE_API_1, GOOGLE_API_2 } = require('../config');
 const apiai = require('apiai');
-const request = require('request');
+const request = require('request-promise');
 const saveConversation = require('./database/queries/save_conversation');
 const saveMessage = require('./database/queries/save_message');
+const gSheetLookup = require('./googleSheetRef');
 
 const app = apiai(DF_KEY);
+
+const getResource = (countryObj) => {
+  const cellRef = gSheetLookup[countryObj.lookup];
+  const url = GOOGLE_API_1 + cellRef + GOOGLE_API_2;
+
+  return request(url)
+    .then((body) => {
+      const resourceArray = JSON.parse(body).values.map((resource) => {
+        const singleResourceArray = resource.map((str, index, array) => {
+          if (index % 2 === 1) return null;
+          return { text: array[index], href: array[index + 1] };
+        });
+
+        return singleResourceArray.filter(Boolean);
+      });
+      return [].concat(...resourceArray);
+    });
+};
 
 const apiaiCall = (req, res, speech) => {
   saveMessage(speech, req.body.uniqueId);
@@ -13,13 +32,6 @@ const apiaiCall = (req, res, speech) => {
   });
 
   requestdf.on('response', (response) => {
-    const lookup = {
-      DivorceIndia: 'A2:B',
-      DivorcePakistan: 'C2:D',
-      DivorceItaly: 'E2:F',
-      DivorceUK: 'G2:H',
-      DivorceGlobal: 'I2:J',
-    };
     const { messages } = response.result.fulfillment;
     const data = {
       speech: messages[0].speech,
@@ -33,34 +45,33 @@ const apiaiCall = (req, res, speech) => {
     saveMessage(data.speech, response.sessionId);
 
     const payload = messages[1] ? messages[1].payload : {};
-    if (!payload.timedelay) {
-      data.timedelay = 'fast';
-    } else {
-      data.timedelay = payload.timedelay;
-    }
+
+    data.timedelay = payload.timedelay ? payload.timedelay : 'fast';
 
     if (payload.retrigger) {
       data.retrigger = payload.retrigger;
     }
 
     if (payload.resources) {
-      const cellRef = lookup[payload.resources];
-      const url = GOOGLE_API_1 + cellRef + GOOGLE_API_2;
-      request(url, (err, gsres, body) => {
-        if (JSON.parse(body).error || err) {
+      let { selectedCountries } = req.body;
+      selectedCountries = selectedCountries || [{ lookup: 'Global' }];
+
+      const promiseArray = selectedCountries.map(async (countryObj) => {
+        const resource = await getResource(countryObj);
+        return resource;
+      });
+
+      Promise.all(promiseArray)
+        .then((resources2dArray) => {
+          data.resources = [].concat(...resources2dArray);
+          res.send(data);
+        })
+        .catch(() => {
           data.resources = [{ text: 'Chayn Website', href: 'www.chayn.co' }];
           data.retrigger = '';
           data.speech = "Sorry there's a problem getting the information, please check the Chayn website or try again later";
           res.send(data);
-        } else {
-          const resourceArray = JSON.parse(body).values.map(resource => ({
-            text: resource[0],
-            href: resource[1],
-          }));
-          data.resources = [...resourceArray];
-          res.send(data);
-        }
-      });
+        });
     } else {
       data.options = payload.options ? [...payload.options] : data.options;
       data.selectOptions = payload.selectOptions ? [...payload.selectOptions] : data.selectOptions;

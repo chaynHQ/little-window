@@ -81,6 +81,9 @@ const Message = props => {
 
       <SelectOptions
         selectOptions={messageObj.selectOptions}
+        addMessage={addMessage}
+        sendMessage={sendMessage}
+        uniqueId={uniqueId}
       />
 
     </div>

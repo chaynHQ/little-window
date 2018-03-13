@@ -78,7 +78,7 @@ export default class App extends React.Component {
     if (this.state.messages.length > 0) {
       if (this.state.messages[this.state.messages.length - 1].speech === '') {
         this.setState(prevState => ({
-          messages: [...prevState.messages.slice(0, -1)]
+          messages: [...prevState.messages.slice(0, -1)],
         }));
       }
     }
