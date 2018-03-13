@@ -30,7 +30,9 @@ const CountryOptionDiv = styled.div`
     `};
 `;
 
-const SubmitButton = styled.button`
+const SubmitButton = styled.button.attrs({
+  disabled: props => props.disabled,
+})`
   margin: auto;
   border: 2px #b0b0b0 solid;
   color: white;
@@ -44,6 +46,12 @@ const SubmitButton = styled.button`
 
   &:hover {
     cursor: pointer;
+  }
+
+  &:disabled {
+    background: white;
+    color: #b0b0b0;
+    cursor: not-allowed;
   }
 `;
 
@@ -60,23 +68,27 @@ export default class SelectOptions extends Component {
     };
   }
 
+  countryOptionClickHandler = (selectOption, index) => {
+    this.setState((prevState) => {
+      let newActiveOptions = Array.from(prevState.activeOptions);
+      newActiveOptions[index] = !newActiveOptions[index];
+
+      if (selectOption.text === 'None of the above') {
+        newActiveOptions = newActiveOptions.map((value, optionIndex) => {
+          if (optionIndex !== index) return false;
+          return value;
+        });
+      } else newActiveOptions[newActiveOptions.length - 1] = false;
+
+      return { activeOptions: newActiveOptions };
+    });
+  }
+
   renderSelectOptions = () => this.props.selectOptions.map((selectOption, index) => (
     <CountryOptionDiv
       key={selectOption.text}
       active={this.state.activeOptions[index] ? 'active' : ''}
-      onClick={() => this.setState(((prevState) => {
-        let newActiveOptions = Array.from(prevState.activeOptions);
-        newActiveOptions[index] = !newActiveOptions[index];
-
-        if (selectOption.text === 'None of the above') {
-          newActiveOptions = newActiveOptions.map((value, optionIndex) => {
-            if (optionIndex !== index) return false;
-            return value;
-          });
-        } else newActiveOptions[newActiveOptions.length - 1] = false;
-
-        return { activeOptions: newActiveOptions };
-      }))}
+      onClick={() => this.countryOptionClickHandler(selectOption, index)}
     >
       {selectOption.text}
     </CountryOptionDiv>
@@ -85,10 +97,12 @@ export default class SelectOptions extends Component {
   render() {
     if (this.props.selectOptions.length < 1) return null;
 
+    const optionSelectedBool = this.state.activeOptions.some(Boolean);
+
     return (
       <div>
         <SelectOptionsDiv>{this.renderSelectOptions()}</SelectOptionsDiv>
-        <SubmitButton>Submit</SubmitButton>
+        <SubmitButton disabled={optionSelectedBool ? '' : 'disabled'}>Submit</SubmitButton>
       </div>
     );
   }
