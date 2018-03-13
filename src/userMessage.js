@@ -47,13 +47,7 @@ const apiaiCall = (req, res, speech) => {
       const cellRef = lookup[payload.resources];
       const url = GOOGLE_API_1 + cellRef + GOOGLE_API_2;
       request(url, (err, gsres, body) => {
-        if (err) {
-          data.speech = "Sorry there's a problem getting the information, please check the Chayn website or try again later";
-          data.retrigger = '';
-          res.send(data);
-        }
-
-        if (JSON.parse(body).error) {
+        if (JSON.parse(body).error || err) {
           data.resources = [{ text: 'Chayn Website', href: 'www.chayn.co' }];
           data.retrigger = '';
           data.speech = "Sorry there's a problem getting the information, please check the Chayn website or try again later";
