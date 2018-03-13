@@ -9,7 +9,7 @@ const app = apiai(DF_KEY);
 const apiaiCall = (req, res, speech) => {
   saveMessage(speech, req.body.uniqueId);
   const requestdf = app.textRequest(speech, {
-    sessionId: req.body.uniqueId
+    sessionId: req.body.uniqueId,
   });
 
   requestdf.on('response', (response) => {
@@ -18,7 +18,7 @@ const apiaiCall = (req, res, speech) => {
       DivorcePakistan: 'C2:D',
       DivorceItaly: 'E2:F',
       DivorceUK: 'G2:H',
-      DivorceGlobal: 'I2:J'
+      DivorceGlobal: 'I2:J',
     };
     const { messages } = response.result.fulfillment;
     const data = {
@@ -27,7 +27,7 @@ const apiaiCall = (req, res, speech) => {
       resources: [],
       selectOptions: [],
       retrigger: '',
-      timedelay: ''
+      timedelay: '',
     };
 
     saveMessage(data.speech, response.sessionId);
@@ -47,12 +47,19 @@ const apiaiCall = (req, res, speech) => {
       const cellRef = lookup[payload.resources];
       const url = GOOGLE_API_1 + cellRef + GOOGLE_API_2;
       request(url, (err, gsres, body) => {
-        const resourceArray = JSON.parse(body).values.map(resource => ({
-          text: resource[0],
-          href: resource[1],
-        }));
-        data.resources = [...resourceArray];
-        res.send(data);
+        if (JSON.parse(body).error || err) {
+          data.resources = [{ text: 'Chayn Website', href: 'www.chayn.co' }];
+          data.retrigger = '';
+          data.speech = "Sorry there's a problem getting the information, please check the Chayn website or try again later";
+          res.send(data);
+        } else {
+          const resourceArray = JSON.parse(body).values.map(resource => ({
+            text: resource[0],
+            href: resource[1],
+          }));
+          data.resources = [...resourceArray];
+          res.send(data);
+        }
       });
     } else {
       data.options = payload.options ? [...payload.options] : data.options;
