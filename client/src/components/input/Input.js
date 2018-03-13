@@ -16,9 +16,11 @@ const StyledInput = styled.input`
   padding-left: 5%;
 
   &:disabled {
+    background-color: white;
   }
 
   &::placeholder {
+    color: black;
   }
 `;
 
