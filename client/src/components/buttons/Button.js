@@ -12,6 +12,7 @@ const Botbuttons = styled.div`
 const Styledbutton = styled.button`
   border: 2px #b0b0b0 solid;
   color: black;
+  background: white;
   margin: 5%;
   border-radius: 15px;
   font-size: 1rem;
@@ -24,6 +25,7 @@ const Styledbutton = styled.button`
 const Countrybutton = styled.button`
   border: 2px #b0b0b0 solid;
   color: black;
+  background: white;
   margin: 1%;
   border-radius: 15px;
   font-size: 1rem;
