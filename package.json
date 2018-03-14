@@ -8,7 +8,7 @@
     "start:test": "NODE_ENV=production node ./src/server.js",
     "postinstall": "cd client && npm install && npm run build",
     "test": "NODE_ENV=test tape ./src/test/test.js | tap-spec",
-    "server": "nodemon ./src/server.js",
+    "server": "NODE_ENV=dev nodemon ./src/server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "client": "cd client && npm start"
   },

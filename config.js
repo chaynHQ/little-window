@@ -5,6 +5,8 @@ let { DATABASE_URL } = process.env;
 
 if (process.env.NODE_ENV === 'test') {
   DATABASE_URL = process.env.HEROKU_POSTGRESQL_OLIVE_URL;
+} else if (process.env.NODE_ENV === 'dev') {
+  DATABASE_URL = process.env.HEROKU_POSTGRESQL_MAROON_URL;
 }
 
 if (!DATABASE_URL) throw new Error('Environment variable DATABASE_URL must be set');
