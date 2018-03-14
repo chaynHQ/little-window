@@ -19,6 +19,7 @@ const Botmessage = styled.p`
   border-radius: 15px;
   padding: 10px;
   min-width: 2.2rem;
+  max-width: 60%;
 
   ${props =>
     props.dotty &&
@@ -44,8 +45,8 @@ const Usermessage = styled.p`
 `;
 
 const StyledImg = styled.img`
-  width: 12%;
-  height: 12%;
+  width: 10%;
+  height: 10%;
   margin-top: 1rem;
   margin-left: 2%;
 `;
