@@ -60,3 +60,6 @@ typings/
 #files related to api setup
 client_secret.json
 quickstart.js
+
+#DSStore
+.DS_Store
