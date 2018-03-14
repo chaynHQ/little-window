@@ -45,8 +45,8 @@ const Usermessage = styled.p`
 `;
 
 const StyledImg = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 10%;
+  height: 10%;
   margin-top: 1rem;
   margin-left: 2%;
 `;
