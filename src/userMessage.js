@@ -72,7 +72,9 @@ const apiaiCall = (req, res, speech) => {
 
 const userMessage = (req, res) => {
   const { speech, uniqueId } = req.body;
-  saveConversation(uniqueId);
+  if (speech === 'Yes, I know what I am looking for today' || speech === 'No, I don\'t know what I am looking for today') {
+    saveConversation(uniqueId);
+  }
   saveMessage(speech, uniqueId);
   apiaiCall(req, res, speech);
 };
