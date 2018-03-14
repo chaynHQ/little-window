@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -32,7 +32,7 @@ const Countrybutton = styled.button`
   cursor: pointer;
 `;
 
-export default class Button extends React.Component {
+export default class Button extends Component {
   static propTypes = {
     uniqueId: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(PropTypes.object),

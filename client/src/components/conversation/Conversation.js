@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import Message from '../message/Message';
 
@@ -14,8 +14,7 @@ const Div = styled.div`
   margin-bottom: 10px;
 `;
 
-export default class Conversation extends React.Component {
-
+export default class Conversation extends Component {
   componentDidUpdate() {
     this.scrollToBottom();
   }
