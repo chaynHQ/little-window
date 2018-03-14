@@ -10,8 +10,10 @@ const Container = styled.div`
   background: #f8f5f1;
 `;
 
-const Div = styled.div`
+const ScrollToDiv = styled.div`
   margin-bottom: 10px;
+  float: left;
+  clear: both;
 `;
 
 export default class Conversation extends Component {
@@ -35,8 +37,7 @@ export default class Conversation extends Component {
             uniqueId={this.props.uniqueId}
           />
         ))}
-        <Div
-          style={{ float: 'left', clear: 'both' }}
+        <ScrollToDiv
           innerRef={(el) => { this.scrollTarget = el; }}
         />
       </Container>
