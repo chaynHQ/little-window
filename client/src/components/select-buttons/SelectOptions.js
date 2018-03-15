@@ -25,7 +25,7 @@ const CountryOptionDiv = styled.div`
   ${props =>
     props.active &&
     css`
-      background: red;
+      background: #DB5759;
       color: white;
     `};
 `;
@@ -36,7 +36,7 @@ const SubmitButton = styled.button.attrs({
   margin: auto;
   border: 2px #b0b0b0 solid;
   color: white;
-  background: green;
+  background: #7CAC95;
   display: block;
   border-radius: 15px;
   font-size: 1rem;
