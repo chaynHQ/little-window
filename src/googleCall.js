@@ -5,6 +5,7 @@ const request = require('request-promise');
 const getResource = (countryObj) => {
   const cellRef = gSheetLookup[countryObj.lookup];
   const url = GOOGLE_API_1 + cellRef + GOOGLE_API_2;
+  console.log(url);
 
   return request(url)
     .then((body) => {
