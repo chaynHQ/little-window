@@ -6,6 +6,7 @@ const SelectOptionsDiv = styled.div`
   margin-left: 5%;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;  
 `;
 
 const CountryOptionDiv = styled.div`
