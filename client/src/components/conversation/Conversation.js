@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import Message from '../message/Message';
 
@@ -10,12 +10,13 @@ const Container = styled.div`
   background: #f8f5f1;
 `;
 
-const Div = styled.div`
+const ScrollToDiv = styled.div`
   margin-bottom: 10px;
+  float: left;
+  clear: both;
 `;
 
-export default class Conversation extends React.Component {
-
+export default class Conversation extends Component {
   componentDidUpdate() {
     this.scrollToBottom();
   }
@@ -36,8 +37,7 @@ export default class Conversation extends React.Component {
             uniqueId={this.props.uniqueId}
           />
         ))}
-        <Div
-          style={{ float: 'left', clear: 'both' }}
+        <ScrollToDiv
           innerRef={(el) => { this.scrollTarget = el; }}
         />
       </Container>

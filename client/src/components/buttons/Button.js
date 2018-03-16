@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -22,7 +22,7 @@ const Styledbutton = styled.button`
   cursor: pointer;
 `;
 
-const Countrybutton = styled.button`
+const Multiplebutton = styled.button`
   border: 2px #b0b0b0 solid;
   color: black;
   background: white;
@@ -32,7 +32,7 @@ const Countrybutton = styled.button`
   cursor: pointer;
 `;
 
-export default class Button extends React.Component {
+export default class Button extends Component {
   static propTypes = {
     uniqueId: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(PropTypes.object),
@@ -64,32 +64,19 @@ export default class Button extends React.Component {
   render() {
     if (!this.props.options || this.state.disabled) return null;
 
-    if (this.props.options.length > 2) {
-      return (
-        <Botbuttons>
-          {this.props.options.map(option => (
-            <Countrybutton
-              value={option.postback}
-              key={option.postback}
-              onClick={() => this.clickHandler(option.text, option.postback)}
-            >
-              {option.text}
-            </Countrybutton>
-          ))}
-        </Botbuttons>
-      );
-    }
+    const ButtonName =
+          this.props.options.length > 2 ? Multiplebutton : Styledbutton;
     return (
       <Botbuttons>
-        {this.props.options.map(option => (
-          <Styledbutton
+        {this.props.options.map((option, index) => (
+          <ButtonName
             value={option.postback}
-            key={option.postback}
+            key={index}
             onClick={() => this.clickHandler(option.text, option.postback)}
           >
             {option.text}
-          </Styledbutton>
-        ))}
+          </ButtonName>
+            ))}
       </Botbuttons>
     );
   }
