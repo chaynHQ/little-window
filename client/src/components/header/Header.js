@@ -9,26 +9,32 @@ const StyledHeader = styled.div`
   justify-content: flex-start;
   border-bottom: 1px solid black;
   box-sizing: border-box;
+  position: relative;
 `;
 
 const RefreshButton = styled.button`
   align-self: flex-end;
   background: white;
-  padding: 3px;
+  padding: 5px;
   border-radius: 100%;
+  border: none;
   display: flex;
   justify-content: center;
   align-items: center;
-
   margin-top: 3px;
   margin-right: 3px;
+  cursor: pointer;
 `;
 
-const Icon = styled.i``;
+const Icon = styled.i`
+
+`;
 
 const HeadingText = styled.div`
-  text-align: center;
-  padding-top: 3%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const Styledh1 = styled.h1`
