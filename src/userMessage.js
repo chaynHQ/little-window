@@ -33,10 +33,10 @@ const apiaiCall = (req, res, speech) => {
     }
 
     if (payload.resources) {
-      let { selectedCountries } = req.body;
-      selectedCountries = selectedCountries || [{ lookup: 'Global' }];
-      const promiseArray = googleCall(selectedCountries);
-
+      const { selectedCountries, speech } = req.body;
+      const lookupVal = speech || 'Global';
+      const resourceLink = selectedCountries || [{ lookup: lookupVal }];
+      const promiseArray = googleCall(resourceLink)
       Promise.all(promiseArray)
         .then((resources2dArray) => {
           data.resources = [].concat(...resources2dArray);
@@ -72,7 +72,9 @@ const apiaiCall = (req, res, speech) => {
 
 const userMessage = (req, res) => {
   const { speech, uniqueId } = req.body;
-  saveConversation(uniqueId);
+  if (speech === 'Yes, I know what I am looking for today' || speech === 'No, I don\'t know what I am looking for today') {
+    saveConversation(uniqueId);
+  }
   saveMessage(speech, uniqueId);
   apiaiCall(req, res, speech);
 };

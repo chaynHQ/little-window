@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import React from 'react';
+import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Message from '../message/Message';
 
@@ -11,8 +11,10 @@ const Container = styled.div`
   position: relative;
 `;
 
-const Div = styled.div`
+const ScrollToDiv = styled.div`
   margin-bottom: 10px;
+  float: left;
+  clear: both;
 `;
 
 const spin = keyframes`
@@ -34,7 +36,7 @@ const Loader = styled.div`
   animation: ${spin} 1s linear infinite;
 `;
 
-export default class Conversation extends React.Component {
+export default class Conversation extends Component {
   componentDidUpdate() {
     this.scrollToBottom();
   }
@@ -59,8 +61,7 @@ export default class Conversation extends React.Component {
     return (
       <Container>
         {messages.length ? this.renderMessages() : <Loader />}
-        <Div
-          style={{ float: 'left', clear: 'both' }}
+        <ScrollToDiv
           innerRef={(el) => {
             this.scrollTarget = el;
           }}

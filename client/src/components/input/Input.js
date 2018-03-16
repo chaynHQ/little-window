@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -41,7 +41,7 @@ const Form = styled.form`
   box-sizing: border-box;
 `;
 
-export default class Input extends React.Component {
+export default class Input extends Component {
   constructor(props) {
     super(props);
     this.state = { term: '' };
