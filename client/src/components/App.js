@@ -31,8 +31,8 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       messages: [],
-      inputStatus: false,
-      inputMessage: 'Choose a button...',
+      inputStatus: true,
+      inputMessage: 'typing...',
       timedelay: '',
     };
   }
