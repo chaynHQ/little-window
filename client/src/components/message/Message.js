@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import Buttons from '../buttons/Button';
 import Resources from '../resources/Resources';
 import SelectOptions from '../select-buttons/SelectOptions';
 import catAvatar from '../../assets/catbot.png';
+
 
 const ellipsis = keyframes`
   to {
@@ -57,6 +59,13 @@ const StyledKittyContainer = styled.div`
 `;
 
 export default class Message extends Component {
+  static propTypes = {
+    messageObj: PropTypes.objectOf(PropTypes.node).isRequired,
+    addMessage: PropTypes.func.isRequired,
+    sendMessage: PropTypes.func.isRequired,
+    uniqueId: PropTypes.string.isRequired,
+  }
+
   speaker = messageObj => {
     return messageObj.isUser ? (
       <Usermessage>{messageObj.speech}</Usermessage>
@@ -72,7 +81,7 @@ export default class Message extends Component {
 
   render() {
     const {
-      messageObj, addMessage, sendMessage, uniqueId
+      messageObj, addMessage, sendMessage, uniqueId,
     } = this.props;
     const speaker = this.speaker(messageObj);
     return (

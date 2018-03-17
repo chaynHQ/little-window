@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Container = styled.div`
   height: 20%;
@@ -42,6 +43,13 @@ const Form = styled.form`
 `;
 
 export default class Input extends Component {
+  static propTypes = {
+    addMessage: PropTypes.func.isRequired,
+    sendMessage: PropTypes.func.isRequired,
+    inputStatus: PropTypes.bool.isRequired,
+    inputMessage: PropTypes.string.isRequired,
+    uniqueId: PropTypes.string.isRequired,
+  }
   constructor(props) {
     super(props);
     this.state = { term: '' };
