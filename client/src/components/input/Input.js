@@ -66,7 +66,7 @@ export default class Input extends Component {
       isUser: true,
       isWaiting: true,
       uniqueId: this.props.uniqueId,
-      speech: this.state.term
+      speech: this.state.term,
     };
 
     this.props.sendMessage(data);
