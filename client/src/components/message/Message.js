@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import Buttons from '../buttons/Button';
 import Resources from '../resources/Resources';
@@ -56,39 +56,44 @@ const StyledKittyContainer = styled.div`
   width: 100%;
 `;
 
-const Message = props => {
-  const { messageObj, addMessage, sendMessage, uniqueId } = props;
+export default class Message extends Component {
+  speaker = messageObj => {
+    return messageObj.isUser ? (
+      <Usermessage>{messageObj.speech}</Usermessage>
+    ) : (
+      <StyledKittyContainer>
+        <StyledImg src={catAvatar} />
+        <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
+          {messageObj.speech}
+        </Botmessage>
+      </StyledKittyContainer>
+    );
+  }
 
-  const speaker = messageObj.isUser ? (
-    <Usermessage>{messageObj.speech}</Usermessage>
-  ) : (
-    <StyledKittyContainer>
-      <StyledImg src={catAvatar} />
-      <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
-        {messageObj.speech}
-      </Botmessage>
-    </StyledKittyContainer>
-  );
-  return (
-    <div>
-      {speaker}
-      <Buttons
-        options={messageObj.options}
-        addMessage={addMessage}
-        sendMessage={sendMessage}
-        uniqueId={uniqueId}
-      />
-      <Resources resources={messageObj.resources} />
+  render() {
+    const {
+      messageObj, addMessage, sendMessage, uniqueId
+    } = this.props;
+    const speaker = this.speaker(messageObj);
+    return (
+      <div>
+        {speaker}
+        <Buttons
+          options={messageObj.options}
+          addMessage={addMessage}
+          sendMessage={sendMessage}
+          uniqueId={uniqueId}
+        />
+        <Resources resources={messageObj.resources} />
 
-      <SelectOptions
-        selectOptions={messageObj.selectOptions}
-        addMessage={addMessage}
-        sendMessage={sendMessage}
-        uniqueId={uniqueId}
-      />
+        <SelectOptions
+          selectOptions={messageObj.selectOptions}
+          addMessage={addMessage}
+          sendMessage={sendMessage}
+          uniqueId={uniqueId}
+        />
 
-    </div>
-  );
-};
-
-export default Message;
+      </div>
+    );
+  }
+}
