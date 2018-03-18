@@ -90,11 +90,20 @@ You can setup your conversation flow in Dialogflow using the following guideline
 
 ![](https://i.imgur.com/IXCBfig.png)
 
-- For resources, a `resources` property needs to be added to the payload. This will be a reference for the server to lookup the correct columns in a Google Sheet.
-
-![](https://i.imgur.com/80TlHdG.png)
+- If it is intended that by selecting the relevant option that resources will be displayed to the user, the `postback` on the button should also be the reference for the server to lookup the correct columns in a Google Sheet. The message that is then returned by Dialogflow in response to the postback should contain a value of `"resources": "true"`, which then triggers this lookup.
 
 ![](https://i.imgur.com/UpLSqMy.png)
 
+- If it is intended that multiple options should be selected for a set of buttons, which are then submitted:
 
-(More info to come on retriggering)
+![](https://user-images.githubusercontent.com/24212625/37565312-f5a33fce-2a9e-11e8-9f43-ef0769fb4fe1.png)
+
+- Then the payload should contain a `selectOptions` property which is an array of objects for each option, where each object contains a `text`, `postback` and `lookup` value. However in contrast to the button options, instead of the `postback` being the lookup to the Google Sheet, the `lookup` value should map to the relevant columns in the Google Sheet. The user can then select multiple options before submitting.
+
+![](https://user-images.githubusercontent.com/24212625/37565331-589a60c6-2a9f-11e8-949c-219964f0ccaf.png)
+
+- Where multiple messages are to be displayed to the user, without any user input, each message where there should be a followup message from the bot should contain a `retrigger` property for which the value maps to the utterance for the intent for the next message:
+
+![](https://user-images.githubusercontent.com/24212625/37565342-92b8fd44-2a9f-11e8-8f2c-39a534059d82.png)
+
+- As in the above screenshot, each message can be given a `time delay` in the payload of `slow` (5secs) or `superslow` (8secs) to slow down the speed of a given bot response. The standard speed is 1.5secs. 
