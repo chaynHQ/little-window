@@ -75,6 +75,10 @@ Steps:
 5. Run the app in dev mode:
 `npm run dev`
 
+Testing:
+1. Run `npm test` in the command line
+2. Run `cd client` then `npm test` to run React tests
+
 ## Setting up Dialogflow
 
 You can setup your conversation flow in Dialogflow using the following guidelines:
