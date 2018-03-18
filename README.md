@@ -99,7 +99,7 @@ You can setup your conversation flow in Dialogflow using the following guideline
 
 ![](https://user-images.githubusercontent.com/24212625/37565424-38e4102c-2aa1-11e8-91ad-2d6b7cfa83da.png)
 
-![](https://user-images.githubusercontent.com/24212625/37565584-b1ccd184-2aa3-11e8-8b3f-9c25ac5be5cb.png)
+![](https://user-images.githubusercontent.com/24212625/37565637-cb519e5e-2aa4-11e8-96de-1ee97a6c5cee.png)
 
 - The message that is then returned by Dialogflow in response to the postback should contain a value of `"resources": "true"`, which then triggers this lookup:
 
