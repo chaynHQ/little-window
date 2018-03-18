@@ -1,21 +1,20 @@
 /* eslint-env browser */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Buttons from './Button';
+import SelectOptions from './SelectOptions';
 
-const uniqueId = '1234';
-const options = [{ text: 'test', postback: 'postback' }];
+const selectOptions = [{ text: 'text', postback: 'postback' }];
 const addMessage = () => {};
 const sendMessage = () => {};
+const uniqueId = 'test';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Buttons
-    uniqueId={uniqueId}
-    options={options}
+  ReactDOM.render(<SelectOptions
+    selectOptions={selectOptions}
     addMessage={addMessage}
     sendMessage={sendMessage}
+    uniqueId={uniqueId}
   />, div);
   ReactDOM.unmountComponentAtNode(div);
 });

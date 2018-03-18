@@ -33,7 +33,11 @@ const Multiplebutton = styled(Basicbutton)`
 export default class Button extends Component {
   static propTypes = {
     uniqueId: PropTypes.string.isRequired,
-    options: PropTypes.arrayOf(PropTypes.object),
+    options: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      postback: PropTypes.string.isRequired,
+      lookup: PropTypes.string,
+    })),
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
   };

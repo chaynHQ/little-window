@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Botresources = styled.div`
   float: left;
@@ -29,6 +30,16 @@ const Resources = (props) => {
         ))}
     </Botresources>
   );
+};
+
+Resources.propTypes = {
+  resources: PropTypes.arrayOf(PropTypes.shape({
+    text: PropTypes.string.isRequired, href: PropTypes.string.isRequired,
+  })),
+};
+
+Resources.defaultProps = {
+  resources: [],
 };
 
 export default Resources;

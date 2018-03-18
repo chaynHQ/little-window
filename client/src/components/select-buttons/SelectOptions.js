@@ -59,7 +59,11 @@ const SubmitButton = styled.button.attrs({
 
 export default class SelectOptions extends Component {
   static propTypes = {
-    selectOptions: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.node)),
+    selectOptions: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      postback: PropTypes.string.isRequired,
+      lookup: PropTypes.string,
+    })),
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
     uniqueId: PropTypes.string.isRequired,

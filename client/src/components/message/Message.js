@@ -60,7 +60,26 @@ const StyledKittyContainer = styled.div`
 
 export default class Message extends Component {
   static propTypes = {
-    messageObj: PropTypes.objectOf(PropTypes.node).isRequired,
+    messageObj: PropTypes.shape({
+      isUser: PropTypes.bool,
+      isWaiting: PropTypes.bool,
+      options: PropTypes.arrayOf(PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        postback: PropTypes.string.isRequired,
+        lookup: PropTypes.string,
+      })),
+      resources: PropTypes.arrayOf(PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        href: PropTypes.string.isRequired,
+      })),
+      selectOptions: PropTypes.arrayOf(PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        postback: PropTypes.string.isRequired,
+        lookup: PropTypes.string,
+      })),
+      speech: PropTypes.string.isRequired,
+      timedelay: PropTypes.string,
+    }).isRequired,
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
     uniqueId: PropTypes.string.isRequired,

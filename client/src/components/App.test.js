@@ -26,6 +26,5 @@ it('sendToServer', async () => {
     speech: 'hello',
     uniqueId: '1234',
   });
-  console.log(testApp.sendToServer, 'App');
   expect(response).toBe(testObj);
 });
