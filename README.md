@@ -1,5 +1,5 @@
 # Little Window
-![logo](client/src/assets/chayn.png)
+![logo](https://user-images.githubusercontent.com/24212625/37564924-8fc09424-2a97-11e8-90bf-32a0dc3255e1.png)
 
 The Little Window app is avaliable [here](https://little-window.herokuapp.com)
 
@@ -20,13 +20,13 @@ ___
 
 ### The app
 
-![LWDemo](client/src/assets/LW.gif)
+![LWDemo](https://user-images.githubusercontent.com/24212625/37564932-9ac46b84-2a97-11e8-8087-127b9225db75.gif)
 
 ___
 
 ### What it will look like on the Chayn website
 
-![figma](client/src/assets/figma.png)
+![figma](https://user-images.githubusercontent.com/24212625/37564928-95868bac-2a97-11e8-8e29-636986686a8a.png)
 
 ___
 
@@ -43,14 +43,14 @@ ___
 ### Software Architecture
 <br>
 
-![architecture](client/src/assets/architecture.png)
+![architecture](https://user-images.githubusercontent.com/24212625/37564922-8ba64078-2a97-11e8-82c6-172ca3a67a8d.png)
 
 ___
 
-### Our Conversation Flow
+### Our Conversation Flow (Divorce Route Example)
 <br>
 
-![conversation](client/src/assets/decision_tree.png)
+![conversation](https://user-images.githubusercontent.com/24212625/37564925-9256652e-2a97-11e8-84ec-2bbb4637cd8e.png)
 
 ## How to run locally
 You will need before hand:
