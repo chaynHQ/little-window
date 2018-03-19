@@ -43,6 +43,9 @@ export default class App extends React.Component {
       speech: 'Little window welcome',
       uniqueId: this.props.uniqueId,
     });
+    this.setState({
+      uniqueId: this.props.uniqueId,
+    });
   };
 
   addMessage = (message) => {
@@ -86,7 +89,6 @@ export default class App extends React.Component {
   };
 
   sendMessage = (data) => {
-    console.log(this.props.uniqueId);
     this.sendToServer(data)
       .then(res => res.json())
       .then((resData) => {
@@ -95,7 +97,7 @@ export default class App extends React.Component {
           setTimeout(() => {
             this.sendMessage({
               speech: resData.retrigger,
-              uniqueId: this.props.uniqueId,
+              uniqueId: this.state.uniqueId,
             });
           }, this.state.timedelay);
         }
@@ -134,14 +136,14 @@ export default class App extends React.Component {
     });
 
   refresh = () => {
-    this.props.uniqueIdGenerator();
-    this.setState({
-      messages: [],
-    });
-
+    const newId = this.props.uniqueIdGenerator();
     this.sendMessage({
       speech: 'Little window welcome',
-      uniqueId: this.props.uniqueId,
+      uniqueId: newId,
+    });
+    this.setState({
+      messages: [],
+      uniqueId: newId,
     });
   };
 
@@ -153,7 +155,7 @@ export default class App extends React.Component {
           messages={this.state.messages}
           addMessage={this.addMessage}
           sendMessage={this.sendMessage}
-          uniqueId={this.props.uniqueId}
+          uniqueId={this.state.uniqueId || this.props.uniqueId}
         />
 
         <Input
@@ -161,7 +163,7 @@ export default class App extends React.Component {
           sendMessage={this.sendMessage}
           inputStatus={this.state.inputStatus}
           inputMessage={this.state.inputMessage}
-          uniqueId={this.props.uniqueId}
+          uniqueId={this.state.uniqueId || this.props.uniqueId}
         />
       </Container>
     );
