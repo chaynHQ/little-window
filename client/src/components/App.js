@@ -25,6 +25,7 @@ const speed = {
 export default class App extends React.Component {
   static propTypes = {
     uniqueId: PropTypes.string.isRequired,
+    uniqueIdGenerator: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -85,6 +86,7 @@ export default class App extends React.Component {
   };
 
   sendMessage = (data) => {
+    console.log(this.props.uniqueId);
     this.sendToServer(data)
       .then(res => res.json())
       .then((resData) => {
@@ -132,6 +134,7 @@ export default class App extends React.Component {
     });
 
   refresh = () => {
+    this.props.uniqueIdGenerator();
     this.setState({
       messages: [],
     });
