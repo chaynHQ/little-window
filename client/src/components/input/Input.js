@@ -64,7 +64,6 @@ export default class Input extends Component {
 
     const data = {
       isUser: true,
-      isWaiting: true,
       uniqueId: this.props.uniqueId,
       speech: this.state.term,
     };

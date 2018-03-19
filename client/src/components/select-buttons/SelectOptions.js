@@ -105,7 +105,6 @@ export default class SelectOptions extends Component {
     selectedCountries.forEach((countryObj) => {
       const data = {
         isUser: true,
-        isWaiting: true,
         speech: countryObj.text,
         uniqueId: this.props.uniqueId,
       };

@@ -5,7 +5,6 @@ import Message from './Message';
 
 const messageObj = {
   isUser: true,
-  isWaiting: true,
   options: [{ text: 'test', postback: 'postback' }],
   resources: [{ text: 'test', href: 'href' }],
   selectOptions: [{ text: 'test', postback: 'postback' }],
