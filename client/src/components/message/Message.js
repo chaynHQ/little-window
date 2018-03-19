@@ -1,9 +1,11 @@
-import React from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import Buttons from '../buttons/Button';
 import Resources from '../resources/Resources';
 import SelectOptions from '../select-buttons/SelectOptions';
 import catAvatar from '../../assets/catbot.png';
+
 
 const ellipsis = keyframes`
   to {
@@ -56,39 +58,70 @@ const StyledKittyContainer = styled.div`
   width: 100%;
 `;
 
-const Message = props => {
-  const { messageObj, addMessage, sendMessage, uniqueId } = props;
+export default class Message extends Component {
+  static propTypes = {
+    messageObj: PropTypes.shape({
+      isUser: PropTypes.bool,
+      isWaiting: PropTypes.bool,
+      options: PropTypes.arrayOf(PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        postback: PropTypes.string.isRequired,
+        lookup: PropTypes.string,
+      })),
+      resources: PropTypes.arrayOf(PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        href: PropTypes.string.isRequired,
+      })),
+      selectOptions: PropTypes.arrayOf(PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        postback: PropTypes.string.isRequired,
+        lookup: PropTypes.string,
+      })),
+      speech: PropTypes.string.isRequired,
+      timedelay: PropTypes.string,
+    }).isRequired,
+    addMessage: PropTypes.func.isRequired,
+    sendMessage: PropTypes.func.isRequired,
+    uniqueId: PropTypes.string.isRequired,
+  }
 
-  const speaker = messageObj.isUser ? (
-    <Usermessage>{messageObj.speech}</Usermessage>
-  ) : (
-    <StyledKittyContainer>
-      <StyledImg src={catAvatar} />
-      <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
-        {messageObj.speech}
-      </Botmessage>
-    </StyledKittyContainer>
-  );
-  return (
-    <div>
-      {speaker}
-      <Buttons
-        options={messageObj.options}
-        addMessage={addMessage}
-        sendMessage={sendMessage}
-        uniqueId={uniqueId}
-      />
-      <Resources resources={messageObj.resources} />
+  speaker = messageObj => {
+    return messageObj.isUser ? (
+      <Usermessage>{messageObj.speech}</Usermessage>
+    ) : (
+      <StyledKittyContainer>
+        <StyledImg src={catAvatar} />
+        <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
+          {messageObj.speech}
+        </Botmessage>
+      </StyledKittyContainer>
+    );
+  }
 
-      <SelectOptions
-        selectOptions={messageObj.selectOptions}
-        addMessage={addMessage}
-        sendMessage={sendMessage}
-        uniqueId={uniqueId}
-      />
+  render() {
+    const {
+      messageObj, addMessage, sendMessage, uniqueId,
+    } = this.props;
+    const speaker = this.speaker(messageObj);
+    return (
+      <div>
+        {speaker}
+        <Buttons
+          options={messageObj.options}
+          addMessage={addMessage}
+          sendMessage={sendMessage}
+          uniqueId={uniqueId}
+        />
+        <Resources resources={messageObj.resources} />
 
-    </div>
-  );
-};
+        <SelectOptions
+          selectOptions={messageObj.selectOptions}
+          addMessage={addMessage}
+          sendMessage={sendMessage}
+          uniqueId={uniqueId}
+        />
 
-export default Message;
+      </div>
+    );
+  }
+}

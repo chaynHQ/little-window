@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -52,5 +53,9 @@ const Header = props => (
     </HeadingText>
   </StyledHeader>
 );
+
+Header.propTypes = {
+  refresh: PropTypes.func.isRequired,
+};
 
 export default Header;

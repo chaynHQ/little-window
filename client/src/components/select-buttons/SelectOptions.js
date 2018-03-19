@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -6,7 +7,7 @@ const SelectOptionsDiv = styled.div`
   margin-left: 5%;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;  
+  flex-wrap: wrap;
 `;
 
 const CountryOptionDiv = styled.div`
@@ -57,6 +58,17 @@ const SubmitButton = styled.button.attrs({
 `;
 
 export default class SelectOptions extends Component {
+  static propTypes = {
+    selectOptions: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      postback: PropTypes.string.isRequired,
+      lookup: PropTypes.string,
+    })),
+    addMessage: PropTypes.func.isRequired,
+    sendMessage: PropTypes.func.isRequired,
+    uniqueId: PropTypes.string.isRequired,
+  }
+
   static defaultProps = {
     selectOptions: [],
   };

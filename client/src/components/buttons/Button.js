@@ -9,33 +9,35 @@ const Botbuttons = styled.div`
   flex-direction: row;
   cursor: pointer;
 `;
-const Styledbutton = styled.button`
+
+const Basicbutton = styled.button`
   border: 2px #b0b0b0 solid;
   color: black;
   background: white;
-  margin: 5%;
   border-radius: 15px;
   font-size: 1rem;
-  padding-top: 3px;
-  padding-bottom: 4px;
-  width: 5rem;
   cursor: pointer;
 `;
 
-const Multiplebutton = styled.button`
-  border: 2px #b0b0b0 solid;
-  color: black;
-  background: white;
+const Styledbutton = styled(Basicbutton)`
+  margin: 5%;
+  padding-top: 3px;
+  padding-bottom: 4px;
+  width: 5rem;
+`;
+
+const Multiplebutton = styled(Basicbutton)`
   margin: 1%;
-  border-radius: 15px;
-  font-size: 1rem;
-  cursor: pointer;
 `;
 
 export default class Button extends Component {
   static propTypes = {
     uniqueId: PropTypes.string.isRequired,
-    options: PropTypes.arrayOf(PropTypes.object),
+    options: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      postback: PropTypes.string.isRequired,
+      lookup: PropTypes.string,
+    })),
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
   };

@@ -1,8 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
-
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Message from '../message/Message';
+
 
 const Container = styled.div`
   height: 60%;
@@ -37,6 +38,29 @@ const Loader = styled.div`
 `;
 
 export default class Conversation extends Component {
+  static propTypes = {
+    messages: PropTypes.arrayOf(PropTypes.shape({
+      isUser: PropTypes.bool,
+      isWaiting: PropTypes.bool,
+      options: PropTypes.arrayOf(PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        postback: PropTypes.string.isRequired,
+        lookup: PropTypes.string,
+      })),
+      resources: PropTypes.arrayOf(PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        href: PropTypes.string.isRequired,
+      })),
+    })),
+    addMessage: PropTypes.func.isRequired,
+    sendMessage: PropTypes.func.isRequired,
+    uniqueId: PropTypes.string.isRequired,
+  };
+
+  static defaultProps = {
+    messages: [],
+  };
+
   componentDidUpdate() {
     this.scrollToBottom();
   }
