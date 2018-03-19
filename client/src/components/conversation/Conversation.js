@@ -41,7 +41,6 @@ export default class Conversation extends Component {
   static propTypes = {
     messages: PropTypes.arrayOf(PropTypes.shape({
       isUser: PropTypes.bool,
-      isWaiting: PropTypes.bool,
       options: PropTypes.arrayOf(PropTypes.shape({
         text: PropTypes.string.isRequired,
         postback: PropTypes.string.isRequired,

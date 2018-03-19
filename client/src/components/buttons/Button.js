@@ -17,6 +17,7 @@ const Basicbutton = styled.button`
   border-radius: 15px;
   font-size: 1rem;
   cursor: pointer;
+  font-family: 'Source Code Pro', monospace;
 `;
 
 const Styledbutton = styled(Basicbutton)`
@@ -54,7 +55,6 @@ export default class Button extends Component {
   clickHandler(speech, postback) {
     const data = {
       isUser: true,
-      isWaiting: true,
       speech,
       uniqueId: this.props.uniqueId,
     };

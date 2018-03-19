@@ -1,6 +1,14 @@
 require('env2')('config.env');
 
-const { DF_KEY, GOOGLE_API_1, GOOGLE_API_2 } = process.env;
+const {
+  DF_KEY,
+  GOOGLE_API_1,
+  GOOGLE_API_2,
+  EMAIL_PASSWORD,
+  EMAIL_ACCOUNT,
+  EMAIL_TO,
+} = process.env;
+
 let { DATABASE_URL } = process.env;
 
 if (process.env.NODE_ENV === 'test') {
@@ -16,4 +24,7 @@ module.exports = {
   DF_KEY,
   GOOGLE_API_1,
   GOOGLE_API_2,
+  EMAIL_PASSWORD,
+  EMAIL_ACCOUNT,
+  EMAIL_TO,
 };

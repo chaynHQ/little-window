@@ -62,7 +62,6 @@ export default class Message extends Component {
   static propTypes = {
     messageObj: PropTypes.shape({
       isUser: PropTypes.bool,
-      isWaiting: PropTypes.bool,
       options: PropTypes.arrayOf(PropTypes.shape({
         text: PropTypes.string.isRequired,
         postback: PropTypes.string.isRequired,

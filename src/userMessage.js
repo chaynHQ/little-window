@@ -43,7 +43,7 @@ const apiaiCall = (req, res, speech) => {
           res.send(data);
         })
         .catch(() => {
-          data.resources = [{ text: 'Chayn Website', href: 'www.chayn.co' }];
+          data.resources = [{ text: 'Chayn Website', href: 'https://chayn.co' }];
           data.retrigger = '';
           data.speech = "Sorry there's a problem getting the information, please check the Chayn website or try again later";
           res.send(data);
@@ -60,7 +60,7 @@ const apiaiCall = (req, res, speech) => {
       options: [],
       selectOptions: [],
       timedelay: '',
-      resources: [{ text: 'Chayn Website', href: 'www.chayn.co' }],
+      resources: [{ text: 'Chayn Website', href: 'https://chayn.co' }],
       retrigger: '',
       speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later",
     };

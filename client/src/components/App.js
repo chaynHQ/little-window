@@ -111,8 +111,6 @@ export default class App extends React.Component {
         const newMessage = Object.assign({}, resData);
 
         newMessage.isUser = false;
-        newMessage.isWaiting = false;
-
         this.setState({ inputStatus: true, inputMessage: 'typing...' });
         // Add dots
         this.addMessage({
