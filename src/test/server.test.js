@@ -26,4 +26,3 @@ test('check /potato returns 404', (t) => {
             t.end();
         });
 });
-
