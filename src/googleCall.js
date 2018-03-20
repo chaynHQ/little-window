@@ -6,18 +6,8 @@ const getResource = (countryObj) => {
   const cellRef = gSheetLookup[countryObj.lookup];
   const url = GOOGLE_API_1 + cellRef + GOOGLE_API_2;
 
-  return request(url)
-    .then((body) => {
-      const resourceArray = JSON.parse(body).values.map((resource) => {
-        const singleResourceArray = resource.map((str, index, array) => {
-          if (index % 2 === 1) return null;
-          return { text: array[index], href: array[index + 1] };
-        });
-
-        return singleResourceArray.filter(Boolean);
-      });
-      return [].concat(...resourceArray);
-    });
+  return request(url).then(body =>
+    JSON.parse(body).values.reduce((acc, cur) => [...acc, { text: cur[0], href: cur[1] }], []));
 };
 
 const googleCall = selectedCountries =>
