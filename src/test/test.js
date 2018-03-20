@@ -64,7 +64,6 @@ test('Google Sheets API', (t) => {
     .get(`/A2:6${GOOGLE_API_2}`)
     .reply(200, {resources: "IndiaDivorce"});
     request(`${GOOGLE_API_1}A2:6${GOOGLE_API_2}`, (err, res, body) => {
-      console.log(err);
       t.deepEqual(
         JSON.parse(body),
         expected,
