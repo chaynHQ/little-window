@@ -1,19 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Renders correctly 1`] = `
-<div
-  className="sc-bdVaJa NicIV"
->
-  <a
-    className="sc-bwzfXH kGGnuj"
-    href="www.chayn.co"
-    target="__blank"
-  >
-    Test 1
-  </a>
-</div>
-`;
-
 exports[`Renders correctly with one resource 1`] = `
 <div
   className="sc-bdVaJa NicIV"
