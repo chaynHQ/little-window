@@ -99,10 +99,8 @@ export default class App extends React.Component {
     this.sendToServer(data)
       .then(res => res.json())
       .then((resData) => {
-        console.log(resData.refresh, 'refresh');
-        console.log(typeof resData.refresh);
         if (resData.refresh) {
-          this.setState({ delayDisabled: resData.refresh })
+          this.setState({ delayDisabled: resData.refresh });
         }
         this.setState({
           timedelay: speed[resData.timedelay],
