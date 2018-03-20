@@ -2,7 +2,7 @@
 /* eslint-env browser */
 
 import React from 'react';
-import styled from 'styled-components';
+import styled, { injectGlobal } from 'styled-components';
 import PropTypes from 'prop-types';
 import Header from './header/Header';
 import Conversation from './conversation/Conversation';
@@ -10,7 +10,7 @@ import Input from './input/Input';
 
 const Container = styled.div`
   width: 500px;
-  height: 500px;
+  height: 100vh;
   box-sizing: border-box;
   border: 1px solid black;
   font-family: 'Source Code Pro', monospace;
@@ -21,6 +21,12 @@ const speed = {
   slow: 5000,
   superslow: 8000,
 };
+
+injectGlobal`
+  body {
+margin: 0;
+}
+`;
 
 export default class App extends React.Component {
   static propTypes = {

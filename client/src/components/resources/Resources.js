@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 const Botresources = styled.div`
   float: left;
   margin-left: 5%;
+  margin-right: 5%;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
