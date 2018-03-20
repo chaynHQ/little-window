@@ -45,7 +45,7 @@ const Styledh1 = styled.h1`
 
 const Header = props => (
   <StyledHeader>
-    <RefreshButton onClick={props.refresh}>
+    <RefreshButton onClick={props.refresh} disabled={props.refreshDisabled}>
       <Icon className="fas fa-sync-alt" />
     </RefreshButton>
     <HeadingText>
@@ -56,6 +56,7 @@ const Header = props => (
 
 Header.propTypes = {
   refresh: PropTypes.func.isRequired,
+  refreshDisabled: PropTypes.bool.isRequired,
 };
 
 export default Header;

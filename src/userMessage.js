@@ -20,11 +20,16 @@ const apiaiCall = (req, res, speech) => {
       selectOptions: [],
       retrigger: '',
       timedelay: '',
+      refresh: '',
     };
 
     saveMessage(data.speech, response.sessionId);
 
     const payload = messages[1] ? messages[1].payload : {};
+
+    if (payload.refresh) {
+      data.refresh = payload.refresh;
+    }
 
     data.timedelay = payload.timedelay ? payload.timedelay : 'fast';
 

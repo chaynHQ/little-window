@@ -35,6 +35,8 @@ export default class App extends React.Component {
       inputStatus: true,
       inputMessage: 'typing...',
       timedelay: '',
+      refreshDisabled: true,
+      delayDisabled: false,
     };
   }
 
@@ -86,13 +88,25 @@ export default class App extends React.Component {
         }));
       }
     }
+    if (this.state.delayDisabled) {
+      this.setState({
+        refreshDisabled: false,
+      });
+    }
   };
 
   sendMessage = (data) => {
     this.sendToServer(data)
       .then(res => res.json())
       .then((resData) => {
-        this.setState({ timedelay: speed[resData.timedelay] });
+        console.log(resData.refresh, 'refresh');
+        console.log(typeof resData.refresh);
+        if (resData.refresh) {
+          this.setState({ delayDisabled: resData.refresh })
+        }
+        this.setState({
+          timedelay: speed[resData.timedelay],
+        });
         if (resData.retrigger) {
           setTimeout(() => {
             this.sendMessage({
@@ -137,12 +151,14 @@ export default class App extends React.Component {
 
   refresh = () => {
     const newId = this.props.uniqueIdGenerator();
-    this.sendMessage({
-      speech: 'Little window welcome',
-      uniqueId: newId,
-    });
     this.setState({
       messages: [],
+      uniqueId: newId,
+      refreshDisabled: true,
+      delayDisabled: false,
+    });
+    this.sendMessage({
+      speech: 'Little window welcome',
       uniqueId: newId,
     });
   };
@@ -150,7 +166,7 @@ export default class App extends React.Component {
   render() {
     return (
       <Container>
-        <Header refresh={this.refresh} />
+        <Header refresh={this.refresh} refreshDisabled={this.state.refreshDisabled} />
         <Conversation
           messages={this.state.messages}
           addMessage={this.addMessage}
