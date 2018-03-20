@@ -2,10 +2,16 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const Botbuttons = styled.div`
+const Multiplebuttonsdiv = styled.div`
   float: left;
-  margin-left: 5%;
   display: flex;
+  flex-direction: row;
+  cursor: pointer;
+`
+const Styledbuttonsdiv = styled(Multiplebuttonsdiv)`
+  float: left;
+  display: flex;
+  margin-left: 5%;
   flex-direction: row;
   cursor: pointer;
 `;
@@ -28,7 +34,7 @@ const Styledbutton = styled(Basicbutton)`
 `;
 
 const Multiplebutton = styled(Basicbutton)`
-  margin: 1%;
+  margin: 0.5%;
 `;
 
 export default class Button extends Component {
@@ -67,9 +73,11 @@ export default class Button extends Component {
     if (!this.props.options || this.state.disabled) return null;
 
     const ButtonName =
-          this.props.options.length > 2 ? Multiplebutton : Styledbutton;
+        this.props.options.length > 2 ? Multiplebutton : Styledbutton;
+    const ButtonDiv =
+        this.props.options.length > 3 && this.props.options.length < 5 ? Multiplebuttonsdiv : Styledbuttonsdiv;
     return (
-      <Botbuttons>
+      <ButtonDiv>
         {this.props.options.map((option, index) => (
           <ButtonName
             value={option.postback}
@@ -79,7 +87,7 @@ export default class Button extends Component {
             {option.text}
           </ButtonName>
             ))}
-      </Botbuttons>
+      </ButtonDiv>
     );
   }
 }
