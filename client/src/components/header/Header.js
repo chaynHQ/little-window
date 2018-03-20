@@ -43,6 +43,9 @@ const Styledh1 = styled.h1`
   font-size: 20px;
 `;
 
+
+// RefreshButton refreshes the conversation in App. The property of
+// refreshDisabled property disables the refresh button while the bot is typing.
 const Header = props => (
   <StyledHeader>
     <RefreshButton onClick={props.refresh} disabled={props.refreshDisabled}>

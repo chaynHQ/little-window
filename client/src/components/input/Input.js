@@ -55,10 +55,13 @@ export default class Input extends Component {
     this.state = { term: '' };
   }
 
+  // sets the state to what is currently in the input field.
   onInputChange(term) {
     this.setState({ term });
   }
 
+  // handle submit sends the data to dialogflow, adds the message to the message
+  // array, and sets the input field back to an empty string.
   handleSubmit(e) {
     e.preventDefault();
 

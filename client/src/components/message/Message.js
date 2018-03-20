@@ -44,7 +44,7 @@ const Usermessage = styled.p`
   padding: 10px;
   margin-right: 4%;
   max-width: 60%;
-  word-wrap: break-word;  
+  word-wrap: break-word;
 `;
 
 const StyledImg = styled.img`
@@ -85,6 +85,8 @@ export default class Message extends Component {
     uniqueId: PropTypes.string.isRequired,
   }
 
+// speaker function determines if the message is from a user or from the bot,
+// and renders the appropriate message & styling
   speaker = messageObj => {
     return messageObj.isUser ? (
       <Usermessage>{messageObj.speech}</Usermessage>
