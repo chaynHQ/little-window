@@ -44,6 +44,7 @@ const Usermessage = styled.p`
   padding: 10px;
   margin-right: 4%;
   max-width: 60%;
+  word-wrap: break-word;  
 `;
 
 const StyledImg = styled.img`
