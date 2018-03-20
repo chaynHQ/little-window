@@ -40,7 +40,6 @@ test("save message is working", t => {
   });
 });
 
-// check status code is 200
 test("check /usermessage is returning correct resources", t => {
   request
     .post("/usermessage")
