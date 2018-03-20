@@ -7,7 +7,10 @@ const runDbBuild = require("../database/db_build");
 const checkChat = require("./checkChat");
 const checkMessages = require("./checkMessages");
 const myApp = require("../app");
-const request = require("supertest")(myApp);
+const supertest = require("supertest")(myApp);
+const nock = require("nock");
+const { GOOGLE_API_1, GOOGLE_API_2 } = require("../../config");
+const request = require("request");
 
 test("tape is working", t => {
   const num = 2;
@@ -41,7 +44,7 @@ test("save message is working", t => {
 });
 
 test("check /usermessage is returning correct resources", t => {
-  request
+  supertest
     .post("/usermessage")
     .expect(200)
     .send('divorce')
@@ -51,4 +54,22 @@ test("check /usermessage is returning correct resources", t => {
       t.deepEqual(res.body.resources, [{ text: 'Chayn Website', href: 'https://chayn.co' }], "should return correct resources");
       t.end();
     });
+});
+
+test('Google Sheets API', (t) => {
+  const expected = {
+    resources: 'IndiaDivorce',
+  };
+  nock(GOOGLE_API_1)
+    .get(`/A2:6${GOOGLE_API_2}`)
+    .reply(200, {resources: "IndiaDivorce"});
+    request(`${GOOGLE_API_1}A2:6${GOOGLE_API_2}`, (err, res, body) => {
+      console.log(err);
+      t.deepEqual(
+        JSON.parse(body),
+        expected,
+        "correct resource returned"
+      );
+      t.end();
+    })
 });
