@@ -19,9 +19,11 @@ const Styledbuttonsdiv = styled(Multiplebuttonsdiv)`
   margin-left: 5%;
   flex-direction: row;
   cursor: pointer;
+  flex-wrap: wrap;
+  min-width: 90%;
 `;
 
-// Basic button applies to yes/no buttons
+// Basic button
 const Basicbutton = styled.button`
   border: 2px #b0b0b0 solid;
   color: black;
@@ -32,14 +34,16 @@ const Basicbutton = styled.button`
   font-family: 'Source Code Pro', monospace;
 `;
 
-// Styled button applies to all other buttons
+// Styled button applies to yes/no
 const Styledbutton = styled(Basicbutton)`
   margin: 5%;
+  margin-right: 0%;
   padding-top: 3px;
   padding-bottom: 4px;
   width: 5rem;
 `;
 
+// Applies to other buttons
 const Multiplebutton = styled(Basicbutton)`
   margin: 0.5%;
 `;
