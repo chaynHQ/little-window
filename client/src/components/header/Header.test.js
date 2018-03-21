@@ -1,11 +1,10 @@
 /* eslint-env browser */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Header from './Header';
 
 const refresh = () => { };
-const refreshDisabled = () => { };
+const refreshDisabled = false;
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

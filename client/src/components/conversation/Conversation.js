@@ -6,7 +6,7 @@ import Message from '../message/Message';
 
 
 const Container = styled.div`
-  height: 60%;
+  height: 65%;
   overflow-y: scroll;
   background: #f8f5f1;
   position: relative;

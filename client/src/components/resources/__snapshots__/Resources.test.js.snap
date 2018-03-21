@@ -2,7 +2,7 @@
 
 exports[`Renders correctly with one resource 1`] = `
 <div
-  className="sc-bdVaJa NicIV"
+  className="sc-bdVaJa lvetn"
 >
   <a
     className="sc-bwzfXH kGGnuj"
@@ -16,7 +16,7 @@ exports[`Renders correctly with one resource 1`] = `
 
 exports[`Renders correctly with two resources 1`] = `
 <div
-  className="sc-bdVaJa NicIV"
+  className="sc-bdVaJa lvetn"
 >
   <a
     className="sc-bwzfXH kGGnuj"
