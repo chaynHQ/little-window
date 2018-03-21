@@ -77,6 +77,9 @@ export default class Input extends Component {
   }
 
   render() {
+    if (this.props.minimise) {
+      return null
+    }
     return (
       <Container>
         <Form onSubmit={this.handleSubmit.bind(this)}>
