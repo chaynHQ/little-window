@@ -12,12 +12,16 @@ const Container = styled.div`
   position: relative;
 `;
 
+// This div only exists for the autoscroll so that there is a target
+// to be scrolled to
+// See scrollToBottom below.
 const ScrollToDiv = styled.div`
   margin-bottom: 10px;
   float: left;
   clear: both;
 `;
 
+// keyframes for the Loader
 const spin = keyframes`
   {
     0% { transform: rotate(0deg); }
@@ -25,6 +29,7 @@ const spin = keyframes`
   }
 `;
 
+// Loader to display where page slow to display
 const Loader = styled.div`
   border: 8px solid #E2DFDC;
   border-top: 8px solid grey;
@@ -38,6 +43,7 @@ const Loader = styled.div`
 `;
 
 export default class Conversation extends Component {
+  // prop-types module used to specify the types of the props
   static propTypes = {
     messages: PropTypes.arrayOf(PropTypes.shape({
       isUser: PropTypes.bool,
@@ -60,14 +66,17 @@ export default class Conversation extends Component {
     messages: [],
   };
 
+  // chat window scrolls to bottom each time it updates
   componentDidUpdate() {
     this.scrollToBottom();
   }
 
+  // scroll function for scrolling to the end.
   scrollToBottom = () => {
     this.scrollTarget.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // mapping through the messages to render them one by one
   renderMessages = () =>
     this.props.messages.map((messageObj, index) => (
       <Message
@@ -79,6 +88,7 @@ export default class Conversation extends Component {
       />
     ));
 
+  // rendering the conversation. ScrollToDiv is purely for scrolling purposes.
   render() {
     const { messages } = this.props;
     return (

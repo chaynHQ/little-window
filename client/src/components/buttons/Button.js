@@ -2,12 +2,17 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
+// div is container where there are multiple buttons.
+//  Applies to category option buttons.
 const Multiplebuttonsdiv = styled.div`
   float: left;
   display: flex;
   flex-direction: row;
   cursor: pointer;
-`
+`;
+
+// div is container where there are only 2, or more than 4 buttons.
+// Applies to yes/no buttons
 const Styledbuttonsdiv = styled(Multiplebuttonsdiv)`
   float: left;
   display: flex;
@@ -16,6 +21,7 @@ const Styledbuttonsdiv = styled(Multiplebuttonsdiv)`
   cursor: pointer;
 `;
 
+// Basic button applies to yes/no buttons
 const Basicbutton = styled.button`
   border: 2px #b0b0b0 solid;
   color: black;
@@ -26,6 +32,7 @@ const Basicbutton = styled.button`
   font-family: 'Source Code Pro', monospace;
 `;
 
+// Styled button applies to all other buttons
 const Styledbutton = styled(Basicbutton)`
   margin: 5%;
   padding-top: 3px;
@@ -37,7 +44,10 @@ const Multiplebutton = styled(Basicbutton)`
   margin: 0.5%;
 `;
 
+
+// Button component for all buttons
 export default class Button extends Component {
+// prop-types module used to specify the types of the props
   static propTypes = {
     uniqueId: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(PropTypes.shape({
@@ -49,15 +59,23 @@ export default class Button extends Component {
     sendMessage: PropTypes.func.isRequired,
   };
 
+  // default props are required when prop does not have isRequired property
   static defaultProps = {
     options: [],
   };
 
+  // disabled property determines if buttons are displayed or not.
+  // Buttons are displayed before one is clicked.
   constructor(props) {
     super(props);
     this.state = { disabled: false };
   }
 
+  // clickHandler happens on user input.
+  // addMessage adds the message to state in App
+  // sendMessage sends the message to dialogflow
+  // once a button is clicked, state is set to disabled so that buttons don't
+  // appear
   clickHandler(speech, postback) {
     const data = {
       isUser: true,
@@ -69,13 +87,17 @@ export default class Button extends Component {
     this.setState({ disabled: true });
   }
 
+  // render button component function. Not rendered if there are no option,
+  // or if state.disabled is set to false.
+
   render() {
     if (!this.props.options || this.state.disabled) return null;
 
     const ButtonName =
         this.props.options.length > 2 ? Multiplebutton : Styledbutton;
     const ButtonDiv =
-        this.props.options.length > 3 && this.props.options.length < 5 ? Multiplebuttonsdiv : Styledbuttonsdiv;
+        this.props.options.length > 3 && this.props.options.length < 5 ?
+          Multiplebuttonsdiv : Styledbuttonsdiv;
     return (
       <ButtonDiv>
         {this.props.options.map((option, index) => (
