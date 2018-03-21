@@ -43,6 +43,21 @@ const Styledh1 = styled.h1`
   font-size: 20px;
 `;
 
+const MinimiseButton = styled.button`
+align-self: flex-start;
+background: white;
+padding: 5px;
+border-radius: 100%;
+border: none;
+display: flex;
+justify-content: center;
+align-items: center;
+margin-top: -20px;
+margin-left: 3px;
+height: 22px;
+width: 22px;
+cursor: pointer;
+`;
 
 // RefreshButton refreshes the conversation in App. The property of
 // refreshDisabled property disables the refresh button while the bot is typing.
@@ -51,6 +66,7 @@ const Header = props => (
     <RefreshButton onClick={props.refresh} disabled={props.refreshDisabled}>
       <Icon className="fas fa-sync-alt" />
     </RefreshButton>
+    <MinimiseButton>X</MinimiseButton>
     <HeadingText>
       <Styledh1>Little Window</Styledh1>
     </HeadingText>

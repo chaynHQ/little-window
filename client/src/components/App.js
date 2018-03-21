@@ -186,6 +186,10 @@ export default class App extends React.Component {
     });
   };
 
+  minimise = () => {
+
+  }
+
   render() {
     return (
       <Container>
