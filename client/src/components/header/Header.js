@@ -66,7 +66,7 @@ const Header = props => (
     <RefreshButton onClick={props.refresh} disabled={props.refreshDisabled}>
       <Icon className="fas fa-sync-alt" />
     </RefreshButton>
-    <MinimiseButton>X</MinimiseButton>
+    <MinimiseButton onClick={props.minimise}>X</MinimiseButton>
     <HeadingText>
       <Styledh1>Little Window</Styledh1>
     </HeadingText>

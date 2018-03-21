@@ -76,6 +76,13 @@ export default class Conversation extends Component {
     this.scrollTarget.scrollIntoView({ behavior: 'smooth' });
   };
 
+
+  Conversation = (props) => {
+    if (this.props.minimise) {
+      return null;
+    }
+  };
+
   // mapping through the messages to render them one by one
   renderMessages = () =>
     this.props.messages.map((messageObj, index) => (

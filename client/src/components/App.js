@@ -43,6 +43,7 @@ export default class App extends React.Component {
       timedelay: '',
       refreshDisabled: true,
       delayDisabled: false,
+      minimise: false,
     };
   }
 
@@ -187,18 +188,21 @@ export default class App extends React.Component {
   };
 
   minimise = () => {
-
-  }
+    this.setState({
+      minimise: true,
+    });
+  };
 
   render() {
     return (
       <Container>
-        <Header refresh={this.refresh} refreshDisabled={this.state.refreshDisabled} />
+        <Header minimise={this.minimise} refresh={this.refresh} refreshDisabled={this.state.refreshDisabled} />
         <Conversation
           messages={this.state.messages}
           addMessage={this.addMessage}
           sendMessage={this.sendMessage}
           uniqueId={this.state.uniqueId || this.props.uniqueId}
+          minimise={this.state.minimise}
         />
 
         <Input
@@ -207,6 +211,7 @@ export default class App extends React.Component {
           inputStatus={this.state.inputStatus}
           inputMessage={this.state.inputMessage}
           uniqueId={this.state.uniqueId || this.props.uniqueId}
+          minimise={this.state.minimise}
         />
       </Container>
     );
