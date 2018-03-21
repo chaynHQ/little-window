@@ -13,6 +13,8 @@ const ellipsis = keyframes`
   }
 `;
 
+// dotty adds the animated waiting dots
+
 const Botmessage = styled.p`
   float: left;
   margin-left: 4%;
@@ -85,9 +87,9 @@ export default class Message extends Component {
     uniqueId: PropTypes.string.isRequired,
   }
 
-// speaker function determines if the message is from a user or from the bot,
-// and renders the appropriate message & styling
-  speaker = messageObj => {
+  // speaker function determines if the message is from a user or from the bot,
+  // and renders the appropriate message & styling
+  speaker = (messageObj) => {
     return messageObj.isUser ? (
       <Usermessage>{messageObj.speech}</Usermessage>
     ) : (

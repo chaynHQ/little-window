@@ -46,6 +46,9 @@ export default class App extends React.Component {
     };
   }
 
+  // On loading the page the first message is sent to Dialog Flow with
+  // speech to bring back first message and sending the unique id.  The
+  // next two messages appear through retriggers in the payload
   componentDidMount = () => {
     this.sendMessage({
       speech: 'Little window welcome',
@@ -56,6 +59,10 @@ export default class App extends React.Component {
     });
   };
 
+  // Add message and set the text on the disabled input to either choose
+  // buttons/options.  If retrigger (waiting for next message to arrive)
+  // input also disabled.  Otherwise input is enabled. Dots are removed
+  // and message added to messages in state
   addMessage = (message) => {
     if (!message.isUser && !message.isDot) {
       setTimeout(() => {
@@ -86,6 +93,9 @@ export default class App extends React.Component {
     }
   };
 
+  // An empty string as message represents the animated waiting dots
+  // (these are added with CSS with the dotty class).  Therefore we need to check
+  // if last message is empty string to then remove the dots.
   removeWaitingDots = () => {
     if (this.state.messages.length > 0) {
       if (this.state.messages[this.state.messages.length - 1].speech === '') {
@@ -101,6 +111,9 @@ export default class App extends React.Component {
     }
   };
 
+  // Send the speech to backend, on response check if there is a retrigger property
+  // if so send another message to backend (for a string of messages in a row
+  // with no input from user)
   sendMessage = (data) => {
     this.sendToServer(data)
       .then(res => res.json())
@@ -153,6 +166,12 @@ export default class App extends React.Component {
       body: JSON.stringify(data),
     });
 
+  // Refresh resets the conversation so sets a new id and sends first message again.
+  // It disables the refresh button so it can't be clicked multiple times (refreshDisabled:true).
+  // To enable it again, the third message in Dialog Flow has refresh property in the payload.
+  // delayDisabled is set as true in sendMessage when this refresh property comes back.
+  // removeWaitingDots checks if delayDisabled is true and if so sets refreshDisabled as false,
+  // enabling the refresh button again.
   refresh = () => {
     const newId = this.props.uniqueIdGenerator();
     this.setState({

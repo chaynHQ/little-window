@@ -89,9 +89,9 @@ export default class SelectOptions extends Component {
     };
   }
 
-// When a country is clicked, it changes the value in activeOptions of the same
-// index to be false if it had been true, and vice versa. If 'none of the above'
-// is selected, all the other buttons in activeOptions are set to false.
+  // When a country is clicked, it changes the value in activeOptions of the same
+  // index to be false if it had been true, and vice versa. If 'none of the above'
+  // is selected, all the other buttons in activeOptions are set to false.
   countryOptionClickHandler = (selectOption, index) => {
     this.setState((prevState) => {
       let newActiveOptions = Array.from(prevState.activeOptions);

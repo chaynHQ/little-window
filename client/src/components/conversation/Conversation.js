@@ -21,6 +21,7 @@ const ScrollToDiv = styled.div`
   clear: both;
 `;
 
+// keyframes for the Loader
 const spin = keyframes`
   {
     0% { transform: rotate(0deg); }
@@ -28,6 +29,7 @@ const spin = keyframes`
   }
 `;
 
+// Loader to display where page slow to display
 const Loader = styled.div`
   border: 8px solid #E2DFDC;
   border-top: 8px solid grey;
