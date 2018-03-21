@@ -17,6 +17,8 @@ const Singleresource = styled.a`
   border-radius: 15px;
 `;
 
+// Resources renders the resources from the props passed down, from the
+// text and href properties within the array of resources.
 const Resources = (props) => {
   if (!props.resources) {
     return null;
