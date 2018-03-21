@@ -14,7 +14,8 @@ const gSheetLookup = {
   CollectingEvidence: 'Y2:Z',
   MentalHealth: 'AA2:AB',
   RecognisingAbuse: 'AC2:AD',
-  AdditionalResources: 'AE2:AF',
+  HelpingFriend: 'AE2:AF',
+  AdditionalResources: 'AG2:AH',
 };
 
 module.exports = gSheetLookup;
