@@ -122,6 +122,7 @@ export default class App extends React.Component {
           this.setState({ delayDisabled: resData.refresh });
         }
         this.setState({
+          refreshDisabled: true,
           timedelay: speed[resData.timedelay],
         });
         if (resData.retrigger) {
