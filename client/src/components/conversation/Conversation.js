@@ -68,8 +68,10 @@ export default class Conversation extends Component {
 
   // chat window scrolls to bottom each time it updates
   componentDidUpdate() {
-    this.scrollToBottom();
-  }
+    if (!this.props.minimise) {
+      this.scrollToBottom();
+    }
+}
 
   // scroll function for scrolling to the end.
   scrollToBottom = () => {
@@ -90,6 +92,9 @@ export default class Conversation extends Component {
 
   // rendering the conversation. ScrollToDiv is purely for scrolling purposes.
   render() {
+    if (this.props.minimise) {
+      return null;
+    }
     const { messages } = this.props;
     return (
       <Container>

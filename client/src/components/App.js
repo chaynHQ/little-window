@@ -2,7 +2,7 @@
 /* eslint-env browser */
 
 import React from 'react';
-import styled, { injectGlobal } from 'styled-components';
+import styled, { injectGlobal, css } from 'styled-components';
 import PropTypes from 'prop-types';
 import Header from './header/Header';
 import Conversation from './conversation/Conversation';
@@ -14,6 +14,14 @@ const Container = styled.div`
   box-sizing: border-box;
   border: 1px solid black;
   font-family: 'Source Code Pro', monospace;
+  ${props =>
+    props.min &&
+    css`
+      height: 10%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      `}
 `;
 
 const speed = {
@@ -43,6 +51,7 @@ export default class App extends React.Component {
       timedelay: '',
       refreshDisabled: true,
       delayDisabled: false,
+      minimise: false,
     };
   }
 
@@ -189,15 +198,37 @@ export default class App extends React.Component {
     });
   };
 
+  // minimise function passed down to header to the minimise button onClick
+  // sets minimise in state to true, this is checked in conversation and input
+  // components so they are returned as null and not rendered.  Minimise state is
+  // also checked to change CSS in Header and App
+  minimiseFunc = () => {
+    if (!this.state.minimise) {
+      this.setState({
+        minimise: true,
+      });
+    } else {
+      this.setState({
+        minimise: false,
+      });
+    }
+  };
+
   render() {
     return (
-      <Container>
-        <Header refresh={this.refresh} refreshDisabled={this.state.refreshDisabled} />
+      <Container min={this.state.minimise === true ? 'min' : ''}>
+        <Header
+          refresh={this.refresh}
+          refreshDisabled={this.state.refreshDisabled}
+          minimiseFunc={this.minimiseFunc}
+          minimise={this.state.minimise}
+        />
         <Conversation
           messages={this.state.messages}
           addMessage={this.addMessage}
           sendMessage={this.sendMessage}
           uniqueId={this.state.uniqueId || this.props.uniqueId}
+          minimise={this.state.minimise}
         />
 
         <Input
@@ -206,6 +237,7 @@ export default class App extends React.Component {
           inputStatus={this.state.inputStatus}
           inputMessage={this.state.inputMessage}
           uniqueId={this.state.uniqueId || this.props.uniqueId}
+          minimise={this.state.minimise}
         />
       </Container>
     );

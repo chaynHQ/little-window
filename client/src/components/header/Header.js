@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const StyledHeader = styled.div`
   height: 20%;
@@ -11,6 +11,11 @@ const StyledHeader = styled.div`
   border-bottom: 1px solid black;
   box-sizing: border-box;
   position: relative;
+  ${props =>
+    props.minSize &&
+    css`
+      height: 100%;
+      `}
 `;
 
 const RefreshButton = styled.button`
@@ -43,14 +48,30 @@ const Styledh1 = styled.h1`
   font-size: 20px;
 `;
 
+const MinimiseButton = styled.button`
+align-self: flex-start;
+background: white;
+padding: 5px;
+border-radius: 100%;
+border: none;
+display: flex;
+justify-content: center;
+align-items: center;
+margin-top: -20px;
+margin-left: 3px;
+height: 22px;
+width: 22px;
+cursor: pointer;
+`;
 
 // RefreshButton refreshes the conversation in App. The property of
 // refreshDisabled property disables the refresh button while the bot is typing.
 const Header = props => (
-  <StyledHeader>
+  <StyledHeader minSize={props.minimise === true ? 'minSize' : ''}>
     <RefreshButton onClick={props.refresh} disabled={props.refreshDisabled}>
       <Icon className="fas fa-sync-alt" />
     </RefreshButton>
+    <MinimiseButton onClick={props.minimiseFunc}>X</MinimiseButton>
     <HeadingText>
       <Styledh1>Little Window</Styledh1>
     </HeadingText>
