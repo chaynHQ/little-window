@@ -9,6 +9,9 @@ const Botresources = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  a:visited {
+    color: blue;
+  }
 `;
 
 const Singleresource = styled.a`
@@ -30,7 +33,7 @@ const Resources = (props) => {
         <Singleresource href={resource.href} key={index} target="__blank">
           {resource.text}
         </Singleresource>
-        ))}
+      ))}
     </Botresources>
   );
 };
