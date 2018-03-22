@@ -43,7 +43,6 @@ export default class App extends React.Component {
       timedelay: '',
       refreshDisabled: true,
       delayDisabled: false,
-      uniqueId: this.props.uniqueId,
     };
   }
 
