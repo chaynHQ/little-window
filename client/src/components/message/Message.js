@@ -54,6 +54,7 @@ const StyledImg = styled.img`
   height: 10%;
   margin-top: 1rem;
   margin-left: 2%;
+  user-select: none;
 `;
 
 const StyledKittyContainer = styled.div`
@@ -93,13 +94,13 @@ export default class Message extends Component {
     return messageObj.isUser ? (
       <Usermessage>{messageObj.speech}</Usermessage>
     ) : (
-      <StyledKittyContainer>
-        <StyledImg src={catAvatar} />
-        <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
-          {messageObj.speech}
-        </Botmessage>
-      </StyledKittyContainer>
-    );
+        <StyledKittyContainer>
+          <StyledImg src={catAvatar} />
+          <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
+            {messageObj.speech}
+          </Botmessage>
+        </StyledKittyContainer>
+      );
   }
 
   render() {
