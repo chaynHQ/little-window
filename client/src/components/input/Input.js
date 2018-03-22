@@ -34,13 +34,13 @@ const StyledSubmitInput = styled.input`
   padding: 0;
   font-family: 'Source Code Pro', monospace;
   font-size: 16px;
-  background-color: white;
 `;
 
 const Form = styled.form`
   height: 100%;
   border-top: 1px solid black;
   box-sizing: border-box;
+  background-color: white;
 `;
 
 export default class Input extends Component {
