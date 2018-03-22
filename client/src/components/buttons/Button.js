@@ -9,11 +9,16 @@ const Multiplebuttonsdiv = styled.div`
   display: flex;
   flex-direction: row;
   cursor: pointer;
+  justify-content: space-around;
+  width: 100%;
+  padding-left: 5%;
+  padding-right: 5%;
+  box-sizing: border-box;
 `;
 
 // div is container where there are only 2, or more than 4 buttons.
 // Applies to yes/no buttons
-const Styledbuttonsdiv = styled(Multiplebuttonsdiv)`
+const Styledbuttonsdiv = styled.div`
   float: left;
   display: flex;
   margin-left: 5%;
@@ -35,7 +40,7 @@ const Basicbutton = styled.button`
 `;
 
 // Styled button applies to yes/no
-const Styledbutton = styled(Basicbutton)`
+const Styledbutton = styled(Basicbutton) `
   margin: 5%;
   margin-right: 0%;
   padding-top: 3px;
@@ -44,14 +49,14 @@ const Styledbutton = styled(Basicbutton)`
 `;
 
 // Applies to other buttons
-const Multiplebutton = styled(Basicbutton)`
+const Multiplebutton = styled(Basicbutton) `
   margin: 0.5%;
 `;
 
 
 // Button component for all buttons
 export default class Button extends Component {
-// prop-types module used to specify the types of the props
+  // prop-types module used to specify the types of the props
   static propTypes = {
     uniqueId: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(PropTypes.shape({
@@ -98,10 +103,10 @@ export default class Button extends Component {
     if (!this.props.options || this.state.disabled) return null;
 
     const ButtonName =
-        this.props.options.length > 2 ? Multiplebutton : Styledbutton;
+      this.props.options.length > 2 ? Multiplebutton : Styledbutton;
     const ButtonDiv =
-        this.props.options.length > 3 && this.props.options.length < 5 ?
-          Multiplebuttonsdiv : Styledbuttonsdiv;
+      this.props.options.length > 2 && this.props.options.length < 5 ?
+        Multiplebuttonsdiv : Styledbuttonsdiv;
     return (
       <ButtonDiv>
         {this.props.options.map((option, index) => (
@@ -112,7 +117,7 @@ export default class Button extends Component {
           >
             {option.text}
           </ButtonName>
-            ))}
+        ))}
       </ButtonDiv>
     );
   }

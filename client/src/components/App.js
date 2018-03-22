@@ -127,45 +127,48 @@ export default class App extends React.Component {
     this.sendToServer(data)
       .then(res => res.json())
       .then((resData) => {
-        if (resData.refresh) {
-          this.setState({ delayDisabled: resData.refresh });
-        }
-        this.setState({
-          timedelay: speed[resData.timedelay],
-        });
-        if (resData.retrigger) {
-          setTimeout(() => {
-            this.sendMessage({
-              speech: resData.retrigger,
-              uniqueId: this.state.uniqueId,
-            });
-          }, this.state.timedelay);
-        }
-
-        if (resData.options.length === 0) {
-          this.setState({ inputStatus: false });
-        } else {
+        if (this.state.uniqueId === data.uniqueId) {
+          if (resData.refresh) {
+            this.setState({ delayDisabled: resData.refresh });
+          }
           this.setState({
-            inputStatus: true,
-            inputMessage: 'Choose a button...',
+            refreshDisabled: true,
+            timedelay: speed[resData.timedelay],
           });
+          if (resData.retrigger) {
+            setTimeout(() => {
+              this.sendMessage({
+                speech: resData.retrigger,
+                uniqueId: this.state.uniqueId,
+              });
+            }, this.state.timedelay);
+          }
+
+          if (resData.options.length === 0) {
+            this.setState({ inputStatus: false });
+          } else {
+            this.setState({
+              inputStatus: true,
+              inputMessage: 'Choose a button...',
+            });
+          }
+
+          // create copy of resData to avoid mutating it
+          const newMessage = Object.assign({}, resData);
+
+          newMessage.isUser = false;
+          this.setState({ inputStatus: true, inputMessage: 'typing...' });
+          // Add dots
+          this.addMessage({
+            speech: '',
+            isUser: false,
+            isDot: true,
+          });
+
+          this.addMessage(newMessage);
         }
-
-        // create copy of resData to avoid mutating it
-        const newMessage = Object.assign({}, resData);
-
-        newMessage.isUser = false;
-        this.setState({ inputStatus: true, inputMessage: 'typing...' });
-        // Add dots
-        this.addMessage({
-          speech: '',
-          isUser: false,
-          isDot: true,
-        });
-
-        this.addMessage(newMessage);
       });
-  };
+  }
 
   sendToServer = data =>
     fetch('/usermessage', {

@@ -11,6 +11,7 @@ const SelectOptionsDiv = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
 `;
 
 const CountryOptionDiv = styled.div`
@@ -37,7 +38,7 @@ const CountryOptionDiv = styled.div`
 
 const SubmitButton = styled.button.attrs({
   disabled: props => props.disabled,
-})`
+}) `
   margin: auto;
   border: 2px #b0b0b0 solid;
   color: white;
@@ -114,8 +115,8 @@ export default class SelectOptions extends Component {
       .map((option, index) => (option ? this.props.selectOptions[index] : null))
       .filter(Boolean);
 
-      // Add the country to messages in App state so that the countries render on the
-      // screen as answers.
+    // Add the country to messages in App state so that the countries render on the
+    // screen as answers.
     selectedCountries.forEach((countryObj) => {
       const data = {
         isUser: true,
