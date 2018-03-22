@@ -4,9 +4,10 @@ import styled, { css } from 'styled-components';
 
 const StyledHeader = styled.div`
   height: 20%;
+  padding-top: 15px;
   background: #ffbdbd;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-start;
   border-bottom: 1px solid black;
   box-sizing: border-box;
@@ -19,7 +20,7 @@ const StyledHeader = styled.div`
 `;
 
 const RefreshButton = styled.button`
-  align-self: flex-end;
+  margin-left: auto;
   background: white;
   padding: 5px;
   border-radius: 100%;
@@ -27,9 +28,10 @@ const RefreshButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 3px;
-  margin-right: 3px;
+  margin-right: 15px;
   cursor: pointer;
+  height: 30px;
+  width: 30px;
 `;
 
 const Icon = styled.i`
@@ -49,29 +51,31 @@ const Styledh1 = styled.h1`
 `;
 
 const MinimiseButton = styled.button`
-align-self: flex-start;
-background: white;
-padding: 5px;
-border-radius: 100%;
-border: none;
-display: flex;
-justify-content: center;
-align-items: center;
-margin-top: -20px;
-margin-left: 3px;
-height: 22px;
-width: 22px;
-cursor: pointer;
+  align-self: flex-start;
+  background: white;
+  padding: 5px;
+  border-radius: 100%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  margin-left: 15px;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+  transform: rotate(45deg);
 `;
 
 // RefreshButton refreshes the conversation in App. The property of
 // refreshDisabled property disables the refresh button while the bot is typing.
 const Header = props => (
   <StyledHeader minSize={props.minimise === true ? 'minSize' : ''}>
+    <MinimiseButton onClick={props.minimiseFunc}><i className="fas fa-sort fa-2x" />
+
+    </MinimiseButton>
     <RefreshButton onClick={props.refresh} disabled={props.refreshDisabled}>
-      <Icon className="fas fa-sync-alt" />
+      <Icon className="fas fa-sync-alt fa-2x" />
     </RefreshButton>
-    <MinimiseButton onClick={props.minimiseFunc}>X</MinimiseButton>
+
     <HeadingText>
       <Styledh1>Little Window</Styledh1>
     </HeadingText>
@@ -81,6 +85,8 @@ const Header = props => (
 Header.propTypes = {
   refresh: PropTypes.func.isRequired,
   refreshDisabled: PropTypes.bool.isRequired,
+  minimise: PropTypes.bool.isRequired,
+  minimiseFunc: PropTypes.func.isRequired,
 };
 
 export default Header;
