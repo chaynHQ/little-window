@@ -13,6 +13,8 @@ const ellipsis = keyframes`
   }
 `;
 
+// dotty adds the animated waiting dots
+
 const Botmessage = styled.p`
   float: left;
   margin-left: 4%;
@@ -44,7 +46,7 @@ const Usermessage = styled.p`
   padding: 10px;
   margin-right: 4%;
   max-width: 60%;
-  word-wrap: break-word;  
+  word-wrap: break-word;
 `;
 
 const StyledImg = styled.img`
@@ -52,6 +54,7 @@ const StyledImg = styled.img`
   height: 10%;
   margin-top: 1rem;
   margin-left: 2%;
+  user-select: none;
 `;
 
 const StyledKittyContainer = styled.div`
@@ -85,17 +88,19 @@ export default class Message extends Component {
     uniqueId: PropTypes.string.isRequired,
   }
 
-  speaker = messageObj => {
+  // speaker function determines if the message is from a user or from the bot,
+  // and renders the appropriate message & styling
+  speaker = (messageObj) => {
     return messageObj.isUser ? (
       <Usermessage>{messageObj.speech}</Usermessage>
     ) : (
-      <StyledKittyContainer>
-        <StyledImg src={catAvatar} />
-        <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
-          {messageObj.speech}
-        </Botmessage>
-      </StyledKittyContainer>
-    );
+        <StyledKittyContainer>
+          <StyledImg src={catAvatar} />
+          <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
+            {messageObj.speech}
+          </Botmessage>
+        </StyledKittyContainer>
+      );
   }
 
   render() {

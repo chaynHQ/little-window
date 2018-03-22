@@ -2,7 +2,7 @@
 /* eslint-env browser */
 
 import React from 'react';
-import styled from 'styled-components';
+import styled, { injectGlobal, css } from 'styled-components';
 import PropTypes from 'prop-types';
 import Header from './header/Header';
 import Conversation from './conversation/Conversation';
@@ -10,10 +10,18 @@ import Input from './input/Input';
 
 const Container = styled.div`
   width: 500px;
-  height: 500px;
+  height: 100vh;
   box-sizing: border-box;
   border: 1px solid black;
   font-family: 'Source Code Pro', monospace;
+  ${props =>
+    props.min &&
+    css`
+      height: 10%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      `}
 `;
 
 const speed = {
@@ -21,6 +29,12 @@ const speed = {
   slow: 5000,
   superslow: 8000,
 };
+
+injectGlobal`
+  body {
+margin: 0;
+}
+`;
 
 export default class App extends React.Component {
   static propTypes = {
@@ -37,9 +51,13 @@ export default class App extends React.Component {
       timedelay: '',
       refreshDisabled: true,
       delayDisabled: false,
+      minimise: false,
     };
   }
 
+  // On loading the page the first message is sent to Dialog Flow with
+  // speech to bring back first message and sending the unique id.  The
+  // next two messages appear through retriggers in the payload
   componentDidMount = () => {
     this.sendMessage({
       speech: 'Little window welcome',
@@ -50,6 +68,10 @@ export default class App extends React.Component {
     });
   };
 
+  // Add message and set the text on the disabled input to either choose
+  // buttons/options.  If retrigger (waiting for next message to arrive)
+  // input also disabled.  Otherwise input is enabled. Dots are removed
+  // and message added to messages in state
   addMessage = (message) => {
     if (!message.isUser && !message.isDot) {
       setTimeout(() => {
@@ -80,6 +102,9 @@ export default class App extends React.Component {
     }
   };
 
+  // An empty string as message represents the animated waiting dots
+  // (these are added with CSS with the dotty class).  Therefore we need to check
+  // if last message is empty string to then remove the dots.
   removeWaitingDots = () => {
     if (this.state.messages.length > 0) {
       if (this.state.messages[this.state.messages.length - 1].speech === '') {
@@ -95,49 +120,55 @@ export default class App extends React.Component {
     }
   };
 
+  // Send the speech to backend, on response check if there is a retrigger property
+  // if so send another message to backend (for a string of messages in a row
+  // with no input from user)
   sendMessage = (data) => {
     this.sendToServer(data)
       .then(res => res.json())
       .then((resData) => {
-        if (resData.refresh) {
-          this.setState({ delayDisabled: resData.refresh });
-        }
-        this.setState({
-          timedelay: speed[resData.timedelay],
-        });
-        if (resData.retrigger) {
-          setTimeout(() => {
-            this.sendMessage({
-              speech: resData.retrigger,
-              uniqueId: this.state.uniqueId,
-            });
-          }, this.state.timedelay);
-        }
-
-        if (resData.options.length === 0) {
-          this.setState({ inputStatus: false });
-        } else {
+        if (this.state.uniqueId === data.uniqueId) {
+          if (resData.refresh) {
+            this.setState({ delayDisabled: resData.refresh });
+          }
           this.setState({
-            inputStatus: true,
-            inputMessage: 'Choose a button...',
+            refreshDisabled: true,
+            timedelay: speed[resData.timedelay],
           });
+          if (resData.retrigger) {
+            setTimeout(() => {
+              this.sendMessage({
+                speech: resData.retrigger,
+                uniqueId: this.state.uniqueId,
+              });
+            }, this.state.timedelay);
+          }
+
+          if (resData.options.length === 0) {
+            this.setState({ inputStatus: false });
+          } else {
+            this.setState({
+              inputStatus: true,
+              inputMessage: 'Choose a button...',
+            });
+          }
+
+          // create copy of resData to avoid mutating it
+          const newMessage = Object.assign({}, resData);
+
+          newMessage.isUser = false;
+          this.setState({ inputStatus: true, inputMessage: 'typing...' });
+          // Add dots
+          this.addMessage({
+            speech: '',
+            isUser: false,
+            isDot: true,
+          });
+
+          this.addMessage(newMessage);
         }
-
-        // create copy of resData to avoid mutating it
-        const newMessage = Object.assign({}, resData);
-
-        newMessage.isUser = false;
-        this.setState({ inputStatus: true, inputMessage: 'typing...' });
-        // Add dots
-        this.addMessage({
-          speech: '',
-          isUser: false,
-          isDot: true,
-        });
-
-        this.addMessage(newMessage);
       });
-  };
+  }
 
   sendToServer = data =>
     fetch('/usermessage', {
@@ -147,6 +178,12 @@ export default class App extends React.Component {
       body: JSON.stringify(data),
     });
 
+  // Refresh resets the conversation so sets a new id and sends first message again.
+  // It disables the refresh button so it can't be clicked multiple times (refreshDisabled:true).
+  // To enable it again, the third message in Dialog Flow has refresh property in the payload.
+  // delayDisabled is set as true in sendMessage when this refresh property comes back.
+  // removeWaitingDots checks if delayDisabled is true and if so sets refreshDisabled as false,
+  // enabling the refresh button again.
   refresh = () => {
     const newId = this.props.uniqueIdGenerator();
     this.setState({
@@ -161,15 +198,37 @@ export default class App extends React.Component {
     });
   };
 
+  // minimise function passed down to header to the minimise button onClick
+  // sets minimise in state to true, this is checked in conversation and input
+  // components so they are returned as null and not rendered.  Minimise state is
+  // also checked to change CSS in Header and App
+  minimiseFunc = () => {
+    if (!this.state.minimise) {
+      this.setState({
+        minimise: true,
+      });
+    } else {
+      this.setState({
+        minimise: false,
+      });
+    }
+  };
+
   render() {
     return (
-      <Container>
-        <Header refresh={this.refresh} refreshDisabled={this.state.refreshDisabled} />
+      <Container min={this.state.minimise === true ? 'min' : ''}>
+        <Header
+          refresh={this.refresh}
+          refreshDisabled={this.state.refreshDisabled}
+          minimiseFunc={this.minimiseFunc}
+          minimise={this.state.minimise}
+        />
         <Conversation
           messages={this.state.messages}
           addMessage={this.addMessage}
           sendMessage={this.sendMessage}
           uniqueId={this.state.uniqueId || this.props.uniqueId}
+          minimise={this.state.minimise}
         />
 
         <Input
@@ -178,6 +237,7 @@ export default class App extends React.Component {
           inputStatus={this.state.inputStatus}
           inputMessage={this.state.inputMessage}
           uniqueId={this.state.uniqueId || this.props.uniqueId}
+          minimise={this.state.minimise}
         />
       </Container>
     );

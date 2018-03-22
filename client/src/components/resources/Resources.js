@@ -5,9 +5,13 @@ import PropTypes from 'prop-types';
 const Botresources = styled.div`
   float: left;
   margin-left: 5%;
+  margin-right: 5%;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  a:visited {
+    color: blue;
+  }
 `;
 
 const Singleresource = styled.a`
@@ -17,6 +21,8 @@ const Singleresource = styled.a`
   border-radius: 15px;
 `;
 
+// Resources renders the resources from the props passed down, from the
+// text and href properties within the array of resources.
 const Resources = (props) => {
   if (!props.resources) {
     return null;
@@ -27,7 +33,7 @@ const Resources = (props) => {
         <Singleresource href={resource.href} key={index} target="__blank">
           {resource.text}
         </Singleresource>
-        ))}
+      ))}
     </Botresources>
   );
 };

@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
     pass: EMAIL_PASSWORD,
   },
 });
-
+// email sent if error with database
 const databaseEmail = (str, dbErr) => {
   const mailOptions = {
     from: `${EMAIL_ACCOUNT}`,

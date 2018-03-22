@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const Container = styled.div`
-  height: 20%;
+  height: 15%;
 `;
 
 const StyledInput = styled.input`
@@ -34,7 +34,6 @@ const StyledSubmitInput = styled.input`
   padding: 0;
   font-family: 'Source Code Pro', monospace;
   font-size: 16px;
-
 `;
 
 const Form = styled.form`
@@ -57,10 +56,13 @@ export default class Input extends Component {
     this.state = { term: '' };
   }
 
+  // sets the state to what is currently in the input field.
   onInputChange(term) {
     this.setState({ term });
   }
 
+  // handle submit sends the data to dialogflow, adds the message to the message
+  // array, and sets the input field back to an empty string.
   handleSubmit(e) {
     e.preventDefault();
 
@@ -76,6 +78,9 @@ export default class Input extends Component {
   }
 
   render() {
+    if (this.props.minimise) {
+      return null
+    }
     return (
       <Container>
         <Form onSubmit={this.handleSubmit.bind(this)}>
