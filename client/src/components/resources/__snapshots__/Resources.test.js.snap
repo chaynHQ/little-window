@@ -4,13 +4,20 @@ exports[`Renders correctly with one resource 1`] = `
 <div
   className="sc-bdVaJa kHsrTA"
 >
-  <a
-    className="sc-bwzfXH kGGnuj"
-    href="www.chayn.co"
-    target="__blank"
-  >
-    Test 1
-  </a>
+  <div>
+    <p
+      className="sc-bwzfXH kGGnuj"
+    >
+      Test 1
+      <a
+        className="sc-htpNat gPKckf"
+        href="www.chayn.co"
+        target="__blank"
+      >
+        View
+      </a>
+    </p>
+  </div>
 </div>
 `;
 
@@ -18,19 +25,33 @@ exports[`Renders correctly with two resources 1`] = `
 <div
   className="sc-bdVaJa kHsrTA"
 >
-  <a
-    className="sc-bwzfXH kGGnuj"
-    href="www.chayn.co"
-    target="__blank"
-  >
-    Test 1
-  </a>
-  <a
-    className="sc-bwzfXH kGGnuj"
-    href="www.chayn.co"
-    target="__blank"
-  >
-    Test 1
-  </a>
+  <div>
+    <p
+      className="sc-bwzfXH kGGnuj"
+    >
+      Test 1
+      <a
+        className="sc-htpNat gPKckf"
+        href="www.chayn.co"
+        target="__blank"
+      >
+        View
+      </a>
+    </p>
+  </div>
+  <div>
+    <p
+      className="sc-bwzfXH kGGnuj"
+    >
+      Test 1
+      <a
+        className="sc-htpNat gPKckf"
+        href="www.chayn.co"
+        target="__blank"
+      >
+        View
+      </a>
+    </p>
+  </div>
 </div>
 `;
