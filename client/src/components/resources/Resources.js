@@ -14,11 +14,15 @@ const Botresources = styled.div`
   }
 `;
 
-const Singleresource = styled.a`
+const Singleresource = styled.p`
   padding: 0.5rem;
   margin: 5px;
   border: 2px #b0b0b0 solid;
   border-radius: 15px;
+`;
+
+const Singlelink = styled.a`
+  margin-left: 10px;
 `;
 
 // Resources renders the resources from the props passed down, from the
@@ -30,9 +34,11 @@ const Resources = (props) => {
   return (
     <Botresources>
       {props.resources.map((resource, index) => (
-        <Singleresource href={resource.href} key={index} target="__blank">
-          {resource.text}
-        </Singleresource>
+        <div>
+          <Singleresource key={index}>{resource.text}
+            <Singlelink href={resource.href} key={index} target="__blank">View</Singlelink>
+          </Singleresource>
+        </div>
       ))}
     </Botresources>
   );

@@ -10,12 +10,13 @@ const gSheetLookup = {
   AsylumGermany: 'Q2:R',
   AsylumUSA: 'S2:T',
   AsylumAustralia: 'U2:V',
-  ProtectingOnline: 'W2:X',
-  CollectingEvidence: 'Y2:Z',
-  MentalHealth: 'AA2:AB',
-  RecognisingAbuse: 'AC2:AD',
-  HelpingFriend: 'AE2:AF',
-  AdditionalResources: 'AG2:AH',
+  AsylumFrance: 'W2:X',
+  ProtectingOnline: 'Y2:Z',
+  CollectingEvidence: 'AA2:AB',
+  MentalHealth: 'AC2:AD',
+  RecognisingAbuse: 'AE2:AF',
+  HelpingFriend: 'AG2:AH',
+  AdditionalResources: 'AI2:AJ',
 };
 
 module.exports = gSheetLookup;
