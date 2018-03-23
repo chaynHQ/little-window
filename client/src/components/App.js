@@ -16,7 +16,7 @@ const Container = styled.div`
   font-family: 'Source Code Pro', monospace;
   @media (max-width: 700px) {
     width: 100vw;
-    height: 50vh;
+    height: 65vh;
     position: fixed;
     bottom: 0;
   }
@@ -30,7 +30,7 @@ const Container = styled.div`
       @media (max-width: 700px) {
         height: 10%;
       }
-    `}  
+    `}
 `;
 
 const speed = {
