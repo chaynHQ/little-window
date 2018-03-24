@@ -10,6 +10,7 @@ const messages = [{
 const addMessage = () => {};
 const sendMessage = () => {};
 const uniqueId = '1234';
+const minimise = true;
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -18,6 +19,7 @@ it('renders without crashing', () => {
     sendMessage={sendMessage}
     uniqueId={uniqueId}
     messages={messages}
+    minimise={minimise}
   />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
