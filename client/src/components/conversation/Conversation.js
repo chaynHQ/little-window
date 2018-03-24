@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Message from '../message/Message';
+const { detect } = require('detect-browser');
 
 
 const Container = styled.div`
@@ -60,6 +61,7 @@ export default class Conversation extends Component {
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
     uniqueId: PropTypes.string.isRequired,
+    minimise: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -71,11 +73,16 @@ export default class Conversation extends Component {
     if (!this.props.minimise) {
       this.scrollToBottom();
     }
-}
+  }
 
   // scroll function for scrolling to the end.
   scrollToBottom = () => {
-    this.scrollTarget.scrollIntoView({ behavior: 'smooth' });
+    const browser = detect().name;
+    if (browser === 'chrome') {
+      this.scrollTarget.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      this.scrollTarget.scrollIntoView(false);
+    }
   };
 
   // mapping through the messages to render them one by one
