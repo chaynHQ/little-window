@@ -53,6 +53,7 @@ const SubmitButton = styled.button.attrs({
   padding-top: 3px;
   padding-bottom: 4px;
   width: 5rem;
+  text-align: center;
 
   &:hover {
     cursor: pointer;
