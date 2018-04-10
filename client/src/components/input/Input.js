@@ -34,6 +34,8 @@ const StyledSubmitInput = styled.input`
   padding: 0;
   font-family: 'Source Code Pro', monospace;
   font-size: 16px;
+  -webkit-appearance: none;
+  border-radius: 0;
 `;
 
 const Form = styled.form`
@@ -49,8 +51,8 @@ export default class Input extends Component {
     sendMessage: PropTypes.func.isRequired,
     inputStatus: PropTypes.bool.isRequired,
     inputMessage: PropTypes.string.isRequired,
-    uniqueId: PropTypes.string.isRequired,
-  }
+    uniqueId: PropTypes.string.isRequired
+  };
   constructor(props) {
     super(props);
     this.state = { term: '' };
@@ -69,7 +71,7 @@ export default class Input extends Component {
     const data = {
       isUser: true,
       uniqueId: this.props.uniqueId,
-      speech: this.state.term,
+      speech: this.state.term
     };
 
     this.props.sendMessage(data);
@@ -79,7 +81,7 @@ export default class Input extends Component {
 
   render() {
     if (this.props.minimise) {
-      return null
+      return null;
     }
     return (
       <Container>
@@ -87,6 +89,7 @@ export default class Input extends Component {
           <StyledInput
             type="text"
             name="speech"
+            autoComplete="off"
             placeholder={
               this.props.inputStatus ? this.props.inputMessage : 'Type here...'
             }
