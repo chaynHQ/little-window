@@ -51,7 +51,7 @@ export default class Input extends Component {
     sendMessage: PropTypes.func.isRequired,
     inputStatus: PropTypes.bool.isRequired,
     inputMessage: PropTypes.string.isRequired,
-    uniqueId: PropTypes.string.isRequired
+    uniqueId: PropTypes.string.isRequired,
   };
   constructor(props) {
     super(props);
@@ -71,7 +71,7 @@ export default class Input extends Component {
     const data = {
       isUser: true,
       uniqueId: this.props.uniqueId,
-      speech: this.state.term
+      speech: this.state.term,
     };
 
     this.props.sendMessage(data);
