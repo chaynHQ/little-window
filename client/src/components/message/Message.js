@@ -90,8 +90,7 @@ export default class Message extends Component {
 
   // speaker function determines if the message is from a user or from the bot,
   // and renders the appropriate message & styling
-  speaker = (messageObj) => {
-    return messageObj.isUser ? (
+  speaker = (messageObj) => messageObj.isUser ? (
       <Usermessage>{messageObj.speech}</Usermessage>
     ) : (
         <StyledKittyContainer>
@@ -100,8 +99,7 @@ export default class Message extends Component {
             {messageObj.speech}
           </Botmessage>
         </StyledKittyContainer>
-      );
-  }
+      )
 
   render() {
     const {

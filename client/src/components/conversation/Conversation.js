@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Message from '../message/Message';
+
 const { detect } = require('detect-browser');
 
 

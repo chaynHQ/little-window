@@ -40,7 +40,7 @@ const Basicbutton = styled.button`
 `;
 
 // Styled button applies to yes/no
-const Styledbutton = styled(Basicbutton) `
+const Styledbutton = styled(Basicbutton)`
   margin: 5%;
   margin-right: 0%;
   padding-top: 3px;
@@ -49,7 +49,7 @@ const Styledbutton = styled(Basicbutton) `
 `;
 
 // Applies to other buttons
-const Multiplebutton = styled(Basicbutton) `
+const Multiplebutton = styled(Basicbutton)`
   margin: 0.5%;
 `;
 
