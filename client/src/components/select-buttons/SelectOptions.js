@@ -12,6 +12,7 @@ const SelectOptionsDiv = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  width: 90%;
 `;
 
 const CountryOptionDiv = styled.div`
@@ -23,6 +24,8 @@ const CountryOptionDiv = styled.div`
   padding: 5px;
   border-radius: 15px;
   font-size: 1rem;
+  flex-grow: 1;
+  text-align: center;
 
   &:hover {
     cursor: pointer;
