@@ -34,6 +34,8 @@ const StyledSubmitInput = styled.input`
   padding: 0;
   font-family: 'Source Code Pro', monospace;
   font-size: 16px;
+  -webkit-appearance: none;
+  border-radius: 0;
 `;
 
 const Form = styled.form`
