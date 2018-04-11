@@ -2,9 +2,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
+import smoothscroll from 'smoothscroll-polyfill';
 import Message from '../message/Message';
 
-const { detect } = require('detect-browser');
+// polyfill enables smooth scrollIntoView on browsers that don't yet support { behaviour: smooth }
+smoothscroll.polyfill();
 
 // overscroll-behaviour: contain prevents the website from scrolling when the chat is scrolled.
 // -webkit-overflow-scrolling: touch enables momentum scrolling on Safari
@@ -88,12 +90,7 @@ export default class Conversation extends Component {
 
   // scroll function for scrolling to the end.
   scrollToBottom = () => {
-    const browser = detect().name;
-    if (browser === 'chrome') {
-      this.scrollTarget.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      this.scrollTarget.scrollIntoView(false);
-    }
+    this.scrollTarget.scrollIntoView({ behavior: 'smooth' });
   };
 
   // mapping through the messages to render them one by one
