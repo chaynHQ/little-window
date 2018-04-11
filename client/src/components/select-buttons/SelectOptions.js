@@ -13,6 +13,7 @@ const SelectOptionsDiv = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   width: 90%;
+  margin-bottom: 10px;
 `;
 
 const CountryOptionDiv = styled.div`
@@ -52,6 +53,7 @@ const SubmitButton = styled.button.attrs({
   font-family: 'Source Code Pro', monospace;
   padding-top: 3px;
   padding-bottom: 4px;
+  margin-bottom: 10px;
   width: 5rem;
   text-align: center;
 

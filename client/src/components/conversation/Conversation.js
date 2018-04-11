@@ -6,10 +6,14 @@ import Message from '../message/Message';
 
 const { detect } = require('detect-browser');
 
+// overscroll-behaviour: contain prevents the website from scrolling when the chat is scrolled.
+// -webkit-overflow-scrolling: touch enables momentum scrolling on Safari
+
 const Container = styled.div`
   height: 65%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   background: #f8f5f1;
   position: relative;
 `;

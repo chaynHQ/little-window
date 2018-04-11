@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
 // div is container where there are multiple buttons.
@@ -17,6 +17,7 @@ const Multiplebuttonsdiv = styled.div`
   padding-left: 5%;
   padding-right: 5%;
   box-sizing: border-box;
+  margin-bottom: 10px;
 `;
 
 // div is container where there are only 2, or more than 4 buttons.
@@ -29,6 +30,7 @@ const Styledbuttonsdiv = styled.div`
   flex-wrap: wrap;
   margin-left: 5%;
   width: 90%;
+  margin-bottom: 10px;
 `;
 
 // Basic button
@@ -56,6 +58,12 @@ const Styledbutton = styled(Basicbutton)`
 const Multiplebutton = styled(Basicbutton)`
   margin: 0.5%;
   height: 6rem;
+
+  ${props =>
+    props.children.length === 1 &&
+    css`
+      height: 3rem;
+    `};
 `;
 
 // Button component for all buttons
