@@ -68,13 +68,35 @@ export default class App extends React.Component {
   // speech to bring back first message and sending the unique id.  The
   // next two messages appear through retriggers in the payload
   componentDidMount = () => {
-    this.sendMessage({
-      speech: 'Little window welcome',
-      uniqueId: this.props.uniqueId
-    });
-    this.setState({
-      uniqueId: this.props.uniqueId
-    });
+    if (!this.state.minimise) {
+      this.sendMessage({
+        speech: 'Little window welcome',
+        uniqueId: this.props.uniqueId
+      });
+      this.setState({
+        uniqueId: this.props.uniqueId
+      });
+    }
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    console.log('prevprops', prevProps);
+    console.log('prevState', prevState);
+    console.log('thisprops', this.props);
+    console.log('thisState', this.state);
+    if (
+      prevState.minimise === true &&
+      prevState.messages.length === 0 &&
+      this.state.minimise === false
+    ) {
+      this.sendMessage({
+        speech: 'Little window welcome',
+        uniqueId: this.props.uniqueId
+      });
+      this.setState({
+        uniqueId: this.props.uniqueId
+      });
+    }
   };
 
   // Add message and set the text on the disabled input to either choose
