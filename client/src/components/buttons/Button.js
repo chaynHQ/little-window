@@ -13,6 +13,7 @@ const Multiplebuttonsdiv = styled.div`
   width: 90%;
   max-width: 90%;
   overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
   padding-left: 5%;
   padding-right: 5%;
   box-sizing: border-box;

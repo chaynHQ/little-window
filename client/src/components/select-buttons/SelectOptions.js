@@ -155,8 +155,9 @@ export default class SelectOptions extends Component {
     ));
 
   render() {
-    if (this.props.selectOptions.length === 0 || this.state.disabled)
+    if (this.props.selectOptions.length === 0 || this.state.disabled) {
       return null;
+    }
 
     const optionSelectedBool = this.state.activeOptions.some(Boolean);
 
