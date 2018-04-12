@@ -8,11 +8,11 @@ const Multiplebuttonsdiv = styled.div`
   float: left;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   cursor: pointer;
   margin-left: 5%;
   width: 90%;
   max-width: 90%;
-  overflow-x: scroll;
   padding-left: 5%;
   padding-right: 5%;
   box-sizing: border-box;
@@ -54,7 +54,8 @@ const Styledbutton = styled(Basicbutton)`
 // Applies to other buttons
 const Multiplebutton = styled(Basicbutton)`
   margin: 0.5%;
-  height: 6rem;
+  min-height: 3rem;
+  height: fit-content;
 `;
 
 // Button component for all buttons
