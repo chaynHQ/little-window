@@ -38,7 +38,7 @@ const CountryOptionDiv = styled.div`
 
 const SubmitButton = styled.button.attrs({
   disabled: props => props.disabled,
-}) `
+})`
   margin: auto;
   border: 2px #b0b0b0 solid;
   color: white;
