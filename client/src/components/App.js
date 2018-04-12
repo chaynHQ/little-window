@@ -51,6 +51,8 @@ export default class App extends React.Component {
     uniqueIdGenerator: PropTypes.func.isRequired
   };
 
+// the value passed to minimise on load - window.navigator.userAgent - contains information 
+// about the name, version and platform of the browser
   constructor(props) {
     super(props);
     this.state = {
@@ -80,10 +82,6 @@ export default class App extends React.Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    console.log('prevprops', prevProps);
-    console.log('prevState', prevState);
-    console.log('thisprops', this.props);
-    console.log('thisState', this.state);
     if (
       prevState.minimise === true &&
       prevState.messages.length === 0 &&
