@@ -12,6 +12,7 @@ const SelectOptionsDiv = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  width: 90%;
 `;
 
 const CountryOptionDiv = styled.div`
@@ -23,6 +24,8 @@ const CountryOptionDiv = styled.div`
   padding: 5px;
   border-radius: 15px;
   font-size: 1rem;
+  flex-grow: 1;
+  text-align: center;
 
   &:hover {
     cursor: pointer;
@@ -31,24 +34,26 @@ const CountryOptionDiv = styled.div`
   ${props =>
     props.active &&
     css`
-      background: #DB5759;
+      background: #db5759;
       color: white;
     `};
 `;
 
 const SubmitButton = styled.button.attrs({
-  disabled: props => props.disabled,
-}) `
+  disabled: props => props.disabled
+})`
   margin: auto;
   border: 2px #b0b0b0 solid;
   color: white;
-  background: #7CAC95;
+  background: #7cac95;
   display: block;
   border-radius: 15px;
   font-size: 1rem;
+  font-family: 'Source Code Pro', monospace;
   padding-top: 3px;
   padding-bottom: 4px;
   width: 5rem;
+  text-align: center;
 
   &:hover {
     cursor: pointer;
@@ -63,18 +68,20 @@ const SubmitButton = styled.button.attrs({
 
 export default class SelectOptions extends Component {
   static propTypes = {
-    selectOptions: PropTypes.arrayOf(PropTypes.shape({
-      text: PropTypes.string.isRequired,
-      postback: PropTypes.string.isRequired,
-      lookup: PropTypes.string,
-    })),
+    selectOptions: PropTypes.arrayOf(
+      PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        postback: PropTypes.string.isRequired,
+        lookup: PropTypes.string
+      })
+    ),
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
-    uniqueId: PropTypes.string.isRequired,
-  }
+    uniqueId: PropTypes.string.isRequired
+  };
 
   static defaultProps = {
-    selectOptions: [],
+    selectOptions: []
   };
 
   // activeOptions set to an array of false values initially as no options
@@ -86,7 +93,7 @@ export default class SelectOptions extends Component {
     super(props);
     this.state = {
       disabled: false,
-      activeOptions: props.selectOptions.map(() => false),
+      activeOptions: props.selectOptions.map(() => false)
     };
   }
 
@@ -94,7 +101,7 @@ export default class SelectOptions extends Component {
   // index to be false if it had been true, and vice versa. If 'none of the above'
   // is selected, all the other buttons in activeOptions are set to false.
   countryOptionClickHandler = (selectOption, index) => {
-    this.setState((prevState) => {
+    this.setState(prevState => {
       let newActiveOptions = Array.from(prevState.activeOptions);
       newActiveOptions[index] = !newActiveOptions[index];
 
@@ -117,11 +124,11 @@ export default class SelectOptions extends Component {
 
     // Add the country to messages in App state so that the countries render on the
     // screen as answers.
-    selectedCountries.forEach((countryObj) => {
+    selectedCountries.forEach(countryObj => {
       const data = {
         isUser: true,
         speech: countryObj.text,
-        uniqueId: this.props.uniqueId,
+        uniqueId: this.props.uniqueId
       };
 
       this.props.addMessage(data);
@@ -130,7 +137,7 @@ export default class SelectOptions extends Component {
     this.props.sendMessage({
       speech: selectedCountries[0].postback,
       uniqueId: this.props.uniqueId,
-      selectedCountries,
+      selectedCountries
     });
     // setState disabled to true so buttons don't render once submitted.
     this.setState({ disabled: true });
@@ -148,14 +155,18 @@ export default class SelectOptions extends Component {
     ));
 
   render() {
-    if (this.props.selectOptions.length === 0 || this.state.disabled) return null;
+    if (this.props.selectOptions.length === 0 || this.state.disabled)
+      return null;
 
     const optionSelectedBool = this.state.activeOptions.some(Boolean);
 
     return (
       <div>
         <SelectOptionsDiv>{this.renderSelectOptions()}</SelectOptionsDiv>
-        <SubmitButton disabled={optionSelectedBool ? '' : 'disabled'} onClick={this.submitHandler}>
+        <SubmitButton
+          disabled={optionSelectedBool ? '' : 'disabled'}
+          onClick={this.submitHandler}
+        >
           Submit
         </SubmitButton>
       </div>
