@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="height:100%; overflow-y:scroll; -webkit-overflow-scrolling:touch;">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -12,6 +12,23 @@
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
   <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+  <style>
+    .lw-stuff {
+      height: 85vh;
+      margin-top: 16vh;
+      position: fixed;
+      z-index: 1000;
+      width: 100vw;
+    }
+
+    @media screen and (max-width: 700px) {
+      .lw-stuff {
+        bottom: 0;
+        height: 100%;
+        margin-top: 0;
+      }
+    }
+  </style>
   <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -25,7 +42,7 @@
   <title>Little Window</title>
 </head>
 
-<body style="height:100%; overflow-y:scroll; -webkit-overflow-scrolling:touch;">
+<body class="lw-stuff">
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>

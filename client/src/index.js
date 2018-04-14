@@ -13,5 +13,8 @@ const uuidv4 = require('uuid/v4');
 const uniqueId = uuidv4();
 const uniqueIdGenerator = () => uuidv4();
 
-ReactDOM.render(<App uniqueId={uniqueId} uniqueIdGenerator={uniqueIdGenerator} />, document.getElementById('root'));
+ReactDOM.render(
+  <App uniqueId={uniqueId} uniqueIdGenerator={uniqueIdGenerator} />,
+  document.getElementById('root')
+);
 registerServiceWorker();
