@@ -16,7 +16,7 @@ const Container = styled.div`
   font-family: 'Source Code Pro', monospace;
   @media (max-width: 700px) {
     width: 100vw;
-    height: 65vh;
+    height: 80vh;
     position: fixed;
     bottom: 0;
   }
@@ -51,8 +51,8 @@ export default class App extends React.Component {
     uniqueIdGenerator: PropTypes.func.isRequired
   };
 
-// the value passed to minimise on load - window.navigator.userAgent - contains information 
-// about the name, version and platform of the browser
+  // the value passed to minimise on load - window.navigator.userAgent - contains information
+  // about the name, version and platform of the browser
   constructor(props) {
     super(props);
     this.state = {
