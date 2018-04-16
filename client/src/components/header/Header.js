@@ -24,7 +24,7 @@ const StyledHeader = styled.div`
 
 const RefreshButton = styled.button`
   margin-left: auto;
-  // background: white;
+  background: white;
   padding: 5px;
   border-radius: 100%;
   border: none;
@@ -35,10 +35,6 @@ const RefreshButton = styled.button`
   cursor: pointer;
   height: 30px;
   width: 30px;
-`;
-
-const Icon = styled.i`
-
 `;
 
 const HeadingText = styled.div`
@@ -65,19 +61,18 @@ const MinimiseButton = styled.button`
   cursor: pointer;
 `;
 
+const Icon = styled.img``;
+
 // RefreshButton refreshes the conversation in App. The property of
 // refreshDisabled property disables the refresh button while the bot is typing.
 const Header = props => (
   <StyledHeader minSize={props.minimise === true ? 'minSize' : ''}>
-    {/* <MinimiseButton onClick={props.minimiseFunc}><i className="fas fa-sort fa-2x" />
 
-    </MinimiseButton> */}
     <MinimiseButton onClick={props.minimiseFunc} >
-      <img src={props.minimise ? Maximise : Minimise} alt={props.minimise ? 'Maximise' : 'Minimise'} />
+      <Icon src={props.minimise ? Maximise : Minimise} alt={props.minimise ? 'Maximise' : 'Minimise'} />
     </MinimiseButton>
     <RefreshButton onClick={props.refresh} disabled={props.refreshDisabled}>
-      {/* <Icon className="fas fa-sync-alt fa-2x" /> */}
-      <img src={Refresh} alt="refresh" />
+      <Icon src={Refresh} alt="refresh" />
     </RefreshButton>
 
     <HeadingText>
