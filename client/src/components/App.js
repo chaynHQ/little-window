@@ -62,7 +62,8 @@ export default class App extends React.Component {
       timedelay: '',
       refreshDisabled: true,
       delayDisabled: false,
-      minimise: window.navigator.userAgent.toLowerCase().includes('mobi')
+      minimise: window.navigator.userAgent.toLowerCase().includes('mobi'),
+      lang: 'fr'
     };
   }
 
@@ -73,7 +74,8 @@ export default class App extends React.Component {
     if (!this.state.minimise) {
       this.sendMessage({
         speech: 'Little window welcome',
-        uniqueId: this.props.uniqueId
+        uniqueId: this.props.uniqueId,
+        lang: this.state.lang
       });
       this.setState({
         uniqueId: this.props.uniqueId
@@ -89,7 +91,8 @@ export default class App extends React.Component {
     ) {
       this.sendMessage({
         speech: 'Little window welcome',
-        uniqueId: this.props.uniqueId
+        uniqueId: this.props.uniqueId,
+        lang: this.state.lang
       });
       this.setState({
         uniqueId: this.props.uniqueId
@@ -107,12 +110,12 @@ export default class App extends React.Component {
         if (message.options.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: 'Choose a button...'
+            inputMessage: this.buttonMessageLang(this.state.lang)
           });
         } else if (message.selectOptions.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: 'Pick one or more options...'
+            inputMessage: this.optionsLang(this.state.lang)
           });
         } else if (message.retrigger) {
           this.setState({ inputStatus: true });
@@ -168,7 +171,8 @@ export default class App extends React.Component {
             setTimeout(() => {
               this.sendMessage({
                 speech: resData.retrigger,
-                uniqueId: this.state.uniqueId
+                uniqueId: this.state.uniqueId,
+                lang: this.state.lang
               });
             }, this.state.timedelay);
           }
@@ -178,7 +182,7 @@ export default class App extends React.Component {
           } else {
             this.setState({
               inputStatus: true,
-              inputMessage: 'Choose a button...'
+              inputMessage: this.optionsLang(this.state.lang)
             });
           }
 
@@ -186,7 +190,10 @@ export default class App extends React.Component {
           const newMessage = Object.assign({}, resData);
 
           newMessage.isUser = false;
-          this.setState({ inputStatus: true, inputMessage: 'typing...' });
+          this.setState({
+            inputStatus: true,
+            inputMessage: this.typingMessageLang(this.state.lang)
+          });
           // Add dots
           this.addMessage({
             speech: '',
@@ -207,6 +214,34 @@ export default class App extends React.Component {
       body: JSON.stringify(data)
     });
 
+  typingMessageLang = lang => {
+    if (lang === 'en') {
+      return 'typing...';
+    } else if (lang === 'fr') {
+      return 'en train de taper...';
+    }
+  };
+
+  buttonMessageLang = lang => {
+    if (lang === 'en') {
+      return 'Choose a button';
+    } else if (lang === 'fr') {
+      return 'Choisissez un bouton';
+    }
+  };
+
+  optionsLang = lang => {
+    if (lang === 'en') {
+      return 'Pick one or more options';
+    } else if (lang === 'fr') {
+      return 'Choisissez une ou plusieurs options';
+    }
+  };
+
+  submitTextLang = lang => {
+    if (lang === 'en') return 'Submit';
+    else if (lang === 'fr') return 'Soumettre';
+  };
   // Refresh resets the conversation so sets a new id and sends first message again.
   // It disables the refresh button so it can't be clicked multiple times (refreshDisabled:true).
   // To enable it again, the third message in Dialog Flow has refresh property in the payload.
@@ -223,7 +258,8 @@ export default class App extends React.Component {
     });
     this.sendMessage({
       speech: 'Little window welcome',
-      uniqueId: newId
+      uniqueId: newId,
+      lang: this.props.lang
     });
   };
 
@@ -251,6 +287,7 @@ export default class App extends React.Component {
           refreshDisabled={this.state.refreshDisabled}
           minimiseFunc={this.minimiseFunc}
           minimise={this.state.minimise}
+          lang={this.state.lang}
         />
         <Conversation
           messages={this.state.messages}
@@ -258,6 +295,8 @@ export default class App extends React.Component {
           sendMessage={this.sendMessage}
           uniqueId={this.state.uniqueId || this.props.uniqueId}
           minimise={this.state.minimise}
+          lang={this.state.lang}
+          submitTextLang={this.state.submitTextLang}
         />
 
         <Input
@@ -267,6 +306,8 @@ export default class App extends React.Component {
           inputMessage={this.state.inputMessage}
           uniqueId={this.state.uniqueId || this.props.uniqueId}
           minimise={this.state.minimise}
+          lang={this.state.lang}
+          submitTextLang={this.state.submitTextLang}
         />
       </Container>
     );

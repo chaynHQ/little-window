@@ -71,10 +71,12 @@ export default class Conversation extends Component {
         )
       })
     ),
+    submitTextLang: PropTypes.func.isRequired,
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
     uniqueId: PropTypes.string.isRequired,
-    minimise: PropTypes.string.isRequired
+    minimise: PropTypes.string.isRequired,
+    lang: PropTypes.string.isRequired
   };
 
   static defaultProps = {
@@ -102,6 +104,8 @@ export default class Conversation extends Component {
         addMessage={this.props.addMessage}
         sendMessage={this.props.sendMessage}
         uniqueId={this.props.uniqueId}
+        lang={this.props.lang}
+        submitTextLang={this.props.submitTextLang}
       />
     ));
 

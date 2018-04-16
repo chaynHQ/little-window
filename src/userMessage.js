@@ -9,10 +9,13 @@ const app = apiai(DF_KEY);
 // the call to Dialog Flow
 const apiaiCall = (req, res, speech) => {
   const requestdf = app.textRequest(speech, {
-    sessionId: req.body.uniqueId,
+    sessionId: req.body.uniqueId
   });
 
-  requestdf.on('response', (response) => {
+  requestdf.language = req.body.lang;
+
+  requestdf.on('response', response => {
+    console.log('response', response);
     const { messages } = response.result.fulfillment;
     const data = {
       speech: messages[0].speech,
@@ -21,13 +24,15 @@ const apiaiCall = (req, res, speech) => {
       selectOptions: [],
       retrigger: '',
       timedelay: '',
-      refresh: '',
+      refresh: ''
     };
     // save message to database
     saveMessage(data.speech, response.sessionId);
 
     const payload = messages[1] ? messages[1].payload : {};
     // check if refresh exists in payload (it's only in one message)
+
+    console.log('payload', payload);
     if (payload.refresh) {
       data.refresh = payload.refresh;
     }
@@ -45,32 +50,39 @@ const apiaiCall = (req, res, speech) => {
       const resourceLink = selectedCountries || [{ lookup: lookupVal }];
       const promiseArray = googleCall(resourceLink);
       Promise.all(promiseArray)
-        .then((resources2dArray) => {
+        .then(resources2dArray => {
           data.resources = [].concat(...resources2dArray);
           res.send(data);
         })
         .catch(() => {
-          data.resources = [{ text: 'Chayn Website', href: 'https://chayn.co' }];
+          data.resources = [
+            { text: 'Chayn Website', href: 'https://chayn.co' }
+          ];
           data.retrigger = '';
-          data.speech = "Sorry there's a problem getting the information, please check the Chayn website or try again later";
+          data.speech =
+            "Sorry there's a problem getting the information, please check the Chayn website or try again later";
           res.send(data);
         });
-    // if no resources then set the right type of buttons
+      // if no resources then set the right type of buttons
     } else {
       data.options = payload.options ? [...payload.options] : data.options;
-      data.selectOptions = payload.selectOptions ? [...payload.selectOptions] : data.selectOptions;
+      data.selectOptions = payload.selectOptions
+        ? [...payload.selectOptions]
+        : data.selectOptions;
       res.send(data);
     }
   });
 
   requestdf.on('error', () => {
+    console.log('error');
     const data = {
       options: [],
       selectOptions: [],
       timedelay: '',
       resources: [{ text: 'Chayn Website', href: 'https://chayn.co' }],
       retrigger: '',
-      speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later",
+      speech:
+        "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later"
     };
     res.send(data);
   });
@@ -81,7 +93,10 @@ const apiaiCall = (req, res, speech) => {
 // if it is the first input from user, save the conversation id in database
 const userMessage = (req, res) => {
   const { speech, uniqueId } = req.body;
-  if (speech === 'Yes, I know what I am looking for today' || speech === 'No, I don\'t know what I am looking for today') {
+  if (
+    speech === 'Yes, I know what I am looking for today' ||
+    speech === "No, I don't know what I am looking for today"
+  ) {
     saveConversation(uniqueId);
   }
   saveMessage(speech, uniqueId);

@@ -10,11 +10,14 @@ const uniqueId = 'test';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<SelectOptions
-    selectOptions={selectOptions}
-    addMessage={addMessage}
-    sendMessage={sendMessage}
-    uniqueId={uniqueId}
-  />, div);
+  ReactDOM.render(
+    <SelectOptions
+      selectOptions={selectOptions}
+      addMessage={addMessage}
+      sendMessage={sendMessage}
+      uniqueId={uniqueId}
+    />,
+    div
+  );
   ReactDOM.unmountComponentAtNode(div);
 });

@@ -64,6 +64,7 @@ export default class Button extends Component {
   // prop-types module used to specify the types of the props
   static propTypes = {
     uniqueId: PropTypes.string.isRequired,
+    lang: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(
       PropTypes.shape({
         text: PropTypes.string.isRequired,
@@ -96,10 +97,15 @@ export default class Button extends Component {
     const data = {
       isUser: true,
       speech,
-      uniqueId: this.props.uniqueId
+      uniqueId: this.props.uniqueId,
+      lang: this.props.lang
     };
     this.props.addMessage(data);
-    this.props.sendMessage({ speech: postback, uniqueId: this.props.uniqueId });
+    this.props.sendMessage({
+      speech: postback,
+      uniqueId: this.props.uniqueId,
+      lang: this.props.lang
+    });
     this.setState({ disabled: true });
   }
 
@@ -107,6 +113,7 @@ export default class Button extends Component {
   // or if state.disabled is set to false.
 
   render() {
+    console.log('in button', this.props);
     if (!this.props.options || this.state.disabled) return null;
 
     const ButtonName =
