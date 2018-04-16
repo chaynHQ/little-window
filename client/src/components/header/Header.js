@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled, { css } from 'styled-components';
+import Maximise from '../../assets/maximise.svg';
+import Minimise from '../../assets/minimise.svg';
+import Refresh from '../../assets/refresh.svg';
 
 const StyledHeader = styled.div`
   height: 20%;
@@ -24,6 +27,7 @@ const StyledHeader = styled.div`
 
 const RefreshButton = styled.button`
   margin-left: auto;
+  align-self: flex-start;
   background: white;
   padding: 5px;
   border-radius: 100%;
@@ -33,11 +37,11 @@ const RefreshButton = styled.button`
   align-items: center;
   margin-right: 15px;
   cursor: pointer;
-  height: 30px;
-  width: 30px;
-`;
 
-const Icon = styled.i``;
+  &:focus {
+    outline: 0;
+  }
+`;
 
 const HeadingText = styled.div`
   position: absolute;
@@ -63,21 +67,26 @@ const MinimiseButton = styled.button`
   display: flex;
   justify-content: center;
   margin-left: 15px;
-  height: 30px;
-  width: 30px;
   cursor: pointer;
-  transform: rotate(45deg);
+  &:focus {
+    outline: 0;
+  }
 `;
+
+const Icon = styled.img``;
 
 // RefreshButton refreshes the conversation in App. The property of
 // refreshDisabled property disables the refresh button while the bot is typing.
 const Header = props => (
   <StyledHeader minSize={props.minimise === true ? 'minSize' : ''}>
     <MinimiseButton onClick={props.minimiseFunc}>
-      <i className="fas fa-sort fa-2x" />
+      <Icon
+        src={props.minimise ? Maximise : Minimise}
+        alt={props.minimise ? 'Maximise' : 'Minimise'}
+      />
     </MinimiseButton>
     <RefreshButton onClick={props.refresh} disabled={props.refreshDisabled}>
-      <Icon className="fas fa-sync-alt fa-2x" />
+      <Icon src={Refresh} alt="refresh" />
     </RefreshButton>
 
     <HeadingText>
