@@ -8,6 +8,9 @@ import Refresh from '../../assets/refresh.svg';
 const StyledHeader = styled.div`
   height: 20%;
   padding-top: 15px;
+  @media (max-height: 535px) {
+    padding-top: 5px;
+  }
   background: #ffbdbd;
   display: flex;
   flex-direction: row;
@@ -19,7 +22,7 @@ const StyledHeader = styled.div`
     props.minSize &&
     css`
       height: 100%;
-      `}
+    `};
 `;
 
 const RefreshButton = styled.button`
@@ -47,6 +50,9 @@ const HeadingText = styled.div`
 const Styledh1 = styled.h1`
   margin: 0;
   font-size: 20px;
+  @media (max-width: 313px) {
+    font-size: 17px;
+  }
 `;
 
 const MinimiseButton = styled.button`
@@ -67,7 +73,6 @@ const Icon = styled.img``;
 // refreshDisabled property disables the refresh button while the bot is typing.
 const Header = props => (
   <StyledHeader minSize={props.minimise === true ? 'minSize' : ''}>
-
     <MinimiseButton onClick={props.minimiseFunc} >
       <Icon src={props.minimise ? Maximise : Minimise} alt={props.minimise ? 'Maximise' : 'Minimise'} />
     </MinimiseButton>
