@@ -2,14 +2,20 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
+import smoothscroll from 'smoothscroll-polyfill';
 import Message from '../message/Message';
 
-const { detect } = require('detect-browser');
+// polyfill enables smooth scrollIntoView on browsers that don't yet support { behaviour: smooth }
+smoothscroll.polyfill();
 
+// overscroll-behaviour: contain prevents the website from scrolling when the chat is scrolled.
+// -webkit-overflow-scrolling: touch enables momentum scrolling on Safari
 
 const Container = styled.div`
   height: 65%;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   background: #f8f5f1;
   position: relative;
 `;
@@ -33,7 +39,7 @@ const spin = keyframes`
 
 // Loader to display where page slow to display
 const Loader = styled.div`
-  border: 8px solid #E2DFDC;
+  border: 8px solid #e2dfdc;
   border-top: 8px solid grey;
   border-radius: 50%;
   width: 75px;
@@ -47,26 +53,32 @@ const Loader = styled.div`
 export default class Conversation extends Component {
   // prop-types module used to specify the types of the props
   static propTypes = {
-    messages: PropTypes.arrayOf(PropTypes.shape({
-      isUser: PropTypes.bool,
-      options: PropTypes.arrayOf(PropTypes.shape({
-        text: PropTypes.string.isRequired,
-        postback: PropTypes.string.isRequired,
-        lookup: PropTypes.string,
-      })),
-      resources: PropTypes.arrayOf(PropTypes.shape({
-        text: PropTypes.string.isRequired,
-        href: PropTypes.string.isRequired,
-      })),
-    })),
+    messages: PropTypes.arrayOf(
+      PropTypes.shape({
+        isUser: PropTypes.bool,
+        options: PropTypes.arrayOf(
+          PropTypes.shape({
+            text: PropTypes.string.isRequired,
+            postback: PropTypes.string.isRequired,
+            lookup: PropTypes.string
+          })
+        ),
+        resources: PropTypes.arrayOf(
+          PropTypes.shape({
+            text: PropTypes.string.isRequired,
+            href: PropTypes.string.isRequired
+          })
+        )
+      })
+    ),
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
     uniqueId: PropTypes.string.isRequired,
-    minimise: PropTypes.string.isRequired,
+    minimise: PropTypes.string.isRequired
   };
 
   static defaultProps = {
-    messages: [],
+    messages: []
   };
 
   // chat window scrolls to bottom each time it updates
@@ -78,12 +90,7 @@ export default class Conversation extends Component {
 
   // scroll function for scrolling to the end.
   scrollToBottom = () => {
-    const browser = detect().name;
-    if (browser === 'chrome') {
-      this.scrollTarget.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      this.scrollTarget.scrollIntoView(false);
-    }
+    this.scrollTarget.scrollIntoView({ behavior: 'smooth' });
   };
 
   // mapping through the messages to render them one by one
@@ -108,7 +115,7 @@ export default class Conversation extends Component {
       <Container>
         {messages.length ? this.renderMessages() : <Loader />}
         <ScrollToDiv
-          innerRef={(el) => {
+          innerRef={el => {
             this.scrollTarget = el;
           }}
         />

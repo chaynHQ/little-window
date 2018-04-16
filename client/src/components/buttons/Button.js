@@ -8,9 +8,12 @@ const Multiplebuttonsdiv = styled.div`
   float: left;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   cursor: pointer;
-  justify-content: space-around;
-  width: 100%;
+  margin-left: 5%;
+  width: 90%;
+  max-width: 90%;
+  -webkit-overflow-scrolling: touch;
   padding-left: 5%;
   padding-right: 5%;
   box-sizing: border-box;
@@ -21,11 +24,11 @@ const Multiplebuttonsdiv = styled.div`
 const Styledbuttonsdiv = styled.div`
   float: left;
   display: flex;
-  margin-left: 5%;
   flex-direction: row;
   cursor: pointer;
   flex-wrap: wrap;
-  min-width: 90%;
+  margin-left: 5%;
+  width: 90%;
 `;
 
 // Basic button
@@ -36,41 +39,45 @@ const Basicbutton = styled.button`
   border-radius: 15px;
   font-size: 1rem;
   cursor: pointer;
+  flex-grow: 1;
   font-family: 'Source Code Pro', monospace;
 `;
 
 // Styled button applies to yes/no
 const Styledbutton = styled(Basicbutton)`
   margin: 5%;
-  margin-right: 0%;
   padding-top: 3px;
   padding-bottom: 4px;
-  width: 5rem;
+  min-width: 5rem;
+  flex-grow: 1;
 `;
 
 // Applies to other buttons
 const Multiplebutton = styled(Basicbutton)`
   margin: 0.5%;
+  min-height: 3rem;
+  height: fit-content;
 `;
-
 
 // Button component for all buttons
 export default class Button extends Component {
   // prop-types module used to specify the types of the props
   static propTypes = {
     uniqueId: PropTypes.string.isRequired,
-    options: PropTypes.arrayOf(PropTypes.shape({
-      text: PropTypes.string.isRequired,
-      postback: PropTypes.string.isRequired,
-      lookup: PropTypes.string,
-    })),
+    options: PropTypes.arrayOf(
+      PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        postback: PropTypes.string.isRequired,
+        lookup: PropTypes.string
+      })
+    ),
     addMessage: PropTypes.func.isRequired,
-    sendMessage: PropTypes.func.isRequired,
+    sendMessage: PropTypes.func.isRequired
   };
 
   // default props are required when prop does not have isRequired property
   static defaultProps = {
-    options: [],
+    options: []
   };
 
   // disabled property determines if buttons are displayed or not.
@@ -89,7 +96,7 @@ export default class Button extends Component {
     const data = {
       isUser: true,
       speech,
-      uniqueId: this.props.uniqueId,
+      uniqueId: this.props.uniqueId
     };
     this.props.addMessage(data);
     this.props.sendMessage({ speech: postback, uniqueId: this.props.uniqueId });
@@ -105,8 +112,9 @@ export default class Button extends Component {
     const ButtonName =
       this.props.options.length > 2 ? Multiplebutton : Styledbutton;
     const ButtonDiv =
-      this.props.options.length > 2 && this.props.options.length < 5 ?
-        Multiplebuttonsdiv : Styledbuttonsdiv;
+      this.props.options.length > 2 && this.props.options.length < 5
+        ? Multiplebuttonsdiv
+        : Styledbuttonsdiv;
     return (
       <ButtonDiv>
         {this.props.options.map((option, index) => (

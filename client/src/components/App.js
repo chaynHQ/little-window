@@ -16,7 +16,7 @@ const Container = styled.div`
   font-family: 'Source Code Pro', monospace;
   @media (max-width: 700px) {
     width: 100vw;
-    height: 65vh;
+    height: 80vh;
     position: fixed;
     bottom: 0;
   }
@@ -30,13 +30,13 @@ const Container = styled.div`
       @media (max-width: 700px) {
         height: 10%;
       }
-    `}
+    `};
 `;
 
 const speed = {
   fast: 1500,
   slow: 5000,
-  superslow: 8000,
+  superslow: 8000
 };
 
 injectGlobal`
@@ -48,9 +48,11 @@ margin: 0;
 export default class App extends React.Component {
   static propTypes = {
     uniqueId: PropTypes.string.isRequired,
-    uniqueIdGenerator: PropTypes.func.isRequired,
+    uniqueIdGenerator: PropTypes.func.isRequired
   };
 
+  // the value passed to minimise on load - window.navigator.userAgent - contains information
+  // about the name, version and platform of the browser
   constructor(props) {
     super(props);
     this.state = {
@@ -60,7 +62,7 @@ export default class App extends React.Component {
       timedelay: '',
       refreshDisabled: true,
       delayDisabled: false,
-      minimise: false,
+      minimise: window.navigator.userAgent.toLowerCase().includes('mobi')
     };
   }
 
@@ -68,31 +70,49 @@ export default class App extends React.Component {
   // speech to bring back first message and sending the unique id.  The
   // next two messages appear through retriggers in the payload
   componentDidMount = () => {
-    this.sendMessage({
-      speech: 'Little window welcome',
-      uniqueId: this.props.uniqueId,
-    });
-    this.setState({
-      uniqueId: this.props.uniqueId,
-    });
+    if (!this.state.minimise) {
+      this.sendMessage({
+        speech: 'Little window welcome',
+        uniqueId: this.props.uniqueId
+      });
+      this.setState({
+        uniqueId: this.props.uniqueId
+      });
+    }
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (
+      prevState.minimise === true &&
+      prevState.messages.length === 0 &&
+      this.state.minimise === false
+    ) {
+      this.sendMessage({
+        speech: 'Little window welcome',
+        uniqueId: this.props.uniqueId
+      });
+      this.setState({
+        uniqueId: this.props.uniqueId
+      });
+    }
   };
 
   // Add message and set the text on the disabled input to either choose
   // buttons/options.  If retrigger (waiting for next message to arrive)
   // input also disabled.  Otherwise input is enabled. Dots are removed
   // and message added to messages in state
-  addMessage = (message) => {
+  addMessage = message => {
     if (!message.isUser && !message.isDot) {
       setTimeout(() => {
         if (message.options.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: 'Choose a button...',
+            inputMessage: 'Choose a button...'
           });
         } else if (message.selectOptions.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: 'Pick one or more options...',
+            inputMessage: 'Pick one or more options...'
           });
         } else if (message.retrigger) {
           this.setState({ inputStatus: true });
@@ -101,12 +121,12 @@ export default class App extends React.Component {
         }
         this.removeWaitingDots();
         this.setState(prevState => ({
-          messages: [...prevState.messages, message],
+          messages: [...prevState.messages, message]
         }));
       }, this.state.timedelay);
     } else {
       this.setState(prevState => ({
-        messages: [...prevState.messages, message],
+        messages: [...prevState.messages, message]
       }));
     }
   };
@@ -118,13 +138,13 @@ export default class App extends React.Component {
     if (this.state.messages.length > 0) {
       if (this.state.messages[this.state.messages.length - 1].speech === '') {
         this.setState(prevState => ({
-          messages: [...prevState.messages.slice(0, -1)],
+          messages: [...prevState.messages.slice(0, -1)]
         }));
       }
     }
     if (this.state.delayDisabled) {
       this.setState({
-        refreshDisabled: false,
+        refreshDisabled: false
       });
     }
   };
@@ -132,23 +152,23 @@ export default class App extends React.Component {
   // Send the speech to backend, on response check if there is a retrigger property
   // if so send another message to backend (for a string of messages in a row
   // with no input from user)
-  sendMessage = (data) => {
+  sendMessage = data => {
     this.sendToServer(data)
       .then(res => res.json())
-      .then((resData) => {
+      .then(resData => {
         if (this.state.uniqueId === data.uniqueId) {
           if (resData.refresh) {
             this.setState({ delayDisabled: resData.refresh });
           }
           this.setState({
             refreshDisabled: true,
-            timedelay: speed[resData.timedelay],
+            timedelay: speed[resData.timedelay]
           });
           if (resData.retrigger) {
             setTimeout(() => {
               this.sendMessage({
                 speech: resData.retrigger,
-                uniqueId: this.state.uniqueId,
+                uniqueId: this.state.uniqueId
               });
             }, this.state.timedelay);
           }
@@ -158,7 +178,7 @@ export default class App extends React.Component {
           } else {
             this.setState({
               inputStatus: true,
-              inputMessage: 'Choose a button...',
+              inputMessage: 'Choose a button...'
             });
           }
 
@@ -171,20 +191,20 @@ export default class App extends React.Component {
           this.addMessage({
             speech: '',
             isUser: false,
-            isDot: true,
+            isDot: true
           });
 
           this.addMessage(newMessage);
         }
       });
-  }
+  };
 
   sendToServer = data =>
     fetch('/usermessage', {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
       credentials: 'same-origin',
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     });
 
   // Refresh resets the conversation so sets a new id and sends first message again.
@@ -199,11 +219,11 @@ export default class App extends React.Component {
       messages: [],
       uniqueId: newId,
       refreshDisabled: true,
-      delayDisabled: false,
+      delayDisabled: false
     });
     this.sendMessage({
       speech: 'Little window welcome',
-      uniqueId: newId,
+      uniqueId: newId
     });
   };
 
@@ -214,11 +234,11 @@ export default class App extends React.Component {
   minimiseFunc = () => {
     if (!this.state.minimise) {
       this.setState({
-        minimise: true,
+        minimise: true
       });
     } else {
       this.setState({
-        minimise: false,
+        minimise: false
       });
     }
   };
