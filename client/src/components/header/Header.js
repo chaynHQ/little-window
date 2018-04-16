@@ -27,6 +27,7 @@ const StyledHeader = styled.div`
 
 const RefreshButton = styled.button`
   margin-left: auto;
+  align-self: flex-start;
   background: white;
   padding: 5px;
   border-radius: 100%;
@@ -36,8 +37,10 @@ const RefreshButton = styled.button`
   align-items: center;
   margin-right: 15px;
   cursor: pointer;
-  height: 30px;
-  width: 30px;
+
+  &:focus {
+    outline: 0;
+  }
 `;
 
 const HeadingText = styled.div`
@@ -65,6 +68,9 @@ const MinimiseButton = styled.button`
   justify-content: center;
   margin-left: 15px;
   cursor: pointer;
+  &:focus {
+    outline: 0;
+  }
 `;
 
 const Icon = styled.img``;
@@ -73,8 +79,11 @@ const Icon = styled.img``;
 // refreshDisabled property disables the refresh button while the bot is typing.
 const Header = props => (
   <StyledHeader minSize={props.minimise === true ? 'minSize' : ''}>
-    <MinimiseButton onClick={props.minimiseFunc} >
-      <Icon src={props.minimise ? Maximise : Minimise} alt={props.minimise ? 'Maximise' : 'Minimise'} />
+    <MinimiseButton onClick={props.minimiseFunc}>
+      <Icon
+        src={props.minimise ? Maximise : Minimise}
+        alt={props.minimise ? 'Maximise' : 'Minimise'}
+      />
     </MinimiseButton>
     <RefreshButton onClick={props.refresh} disabled={props.refreshDisabled}>
       <Icon src={Refresh} alt="refresh" />
@@ -90,7 +99,7 @@ Header.propTypes = {
   refresh: PropTypes.func.isRequired,
   refreshDisabled: PropTypes.bool.isRequired,
   minimise: PropTypes.bool.isRequired,
-  minimiseFunc: PropTypes.func.isRequired,
+  minimiseFunc: PropTypes.func.isRequired
 };
 
 export default Header;
