@@ -71,7 +71,6 @@ export default class Conversation extends Component {
         )
       })
     ),
-    submitTextLang: PropTypes.func.isRequired,
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
     uniqueId: PropTypes.string.isRequired,
@@ -105,7 +104,6 @@ export default class Conversation extends Component {
         sendMessage={this.props.sendMessage}
         uniqueId={this.props.uniqueId}
         lang={this.props.lang}
-        submitTextLang={this.props.submitTextLang}
       />
     ));
 

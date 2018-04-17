@@ -8,6 +8,8 @@ const app = apiai(DF_KEY);
 
 // the call to Dialog Flow
 const apiaiCall = (req, res, speech) => {
+  console.log('request', req);
+  console.log('speech', speech);
   const requestdf = app.textRequest(speech, {
     sessionId: req.body.uniqueId
   });
@@ -65,6 +67,7 @@ const apiaiCall = (req, res, speech) => {
         });
       // if no resources then set the right type of buttons
     } else {
+      console.log('data', data);
       data.options = payload.options ? [...payload.options] : data.options;
       data.selectOptions = payload.selectOptions
         ? [...payload.selectOptions]

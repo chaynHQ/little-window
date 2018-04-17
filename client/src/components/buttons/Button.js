@@ -113,7 +113,6 @@ export default class Button extends Component {
   // or if state.disabled is set to false.
 
   render() {
-    console.log('in button', this.props);
     if (!this.props.options || this.state.disabled) return null;
 
     const ButtonName =

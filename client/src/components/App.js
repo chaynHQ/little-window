@@ -63,7 +63,7 @@ export default class App extends React.Component {
       refreshDisabled: true,
       delayDisabled: false,
       minimise: window.navigator.userAgent.toLowerCase().includes('mobi'),
-      lang: 'fr'
+      lang: 'en'
     };
   }
 
@@ -238,10 +238,6 @@ export default class App extends React.Component {
     }
   };
 
-  submitTextLang = lang => {
-    if (lang === 'en') return 'Submit';
-    else if (lang === 'fr') return 'Soumettre';
-  };
   // Refresh resets the conversation so sets a new id and sends first message again.
   // It disables the refresh button so it can't be clicked multiple times (refreshDisabled:true).
   // To enable it again, the third message in Dialog Flow has refresh property in the payload.
@@ -296,7 +292,6 @@ export default class App extends React.Component {
           uniqueId={this.state.uniqueId || this.props.uniqueId}
           minimise={this.state.minimise}
           lang={this.state.lang}
-          submitTextLang={this.state.submitTextLang}
         />
 
         <Input
@@ -307,7 +302,6 @@ export default class App extends React.Component {
           uniqueId={this.state.uniqueId || this.props.uniqueId}
           minimise={this.state.minimise}
           lang={this.state.lang}
-          submitTextLang={this.state.submitTextLang}
         />
       </Container>
     );
