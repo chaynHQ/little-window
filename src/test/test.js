@@ -4,6 +4,7 @@ const saveConversation = require('../database/queries/save_conversation');
 const saveMessage = require('../database/queries/save_message');
 const test = require('tape');
 const runDbBuild = require('../database/db_build');
+const dbConnection = require('../database/db_connections');
 const checkChat = require('./checkChat');
 const checkMessages = require('./checkMessages');
 const nock = require('nock');
@@ -53,3 +54,10 @@ test('Google Sheets API', (t) => {
     t.end();
   });
 });
+
+
+// ends database connection to stop tests from hanging
+test.onFinish(() => {
+  dbConnection.$pool.end();
+});
+
