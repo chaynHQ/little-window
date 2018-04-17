@@ -16,7 +16,7 @@ const Container = styled.div`
   font-family: 'Source Code Pro', monospace;
   @media (max-width: 700px) {
     width: 100vw;
-    height: 100vh;
+    height: 80vh;
     position: fixed;
     bottom: 0;
   }
