@@ -6,13 +6,32 @@ const googleCall = require('./googleCall');
 
 const app = apiai(DF_KEY);
 
+//error messages in french or english
+
+const errResources = lang => {
+  if (lang === 'en') {
+    return "Sorry there's a problem getting the information, please check the Chayn website or try again later";
+  } else if (lang === 'fr') {
+    return "Désolé, il y a un problème pour obtenir l'information, s'il vous plaît consulter le site Web de Chayn ou réessayer plus tard";
+  }
+};
+
+const errTechnical = lang => {
+  if (lang === 'en') {
+    return "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later";
+  } else if (lang === 'fr') {
+    return "Je suis vraiment désolé, mais je ne peux pas discuter maintenant en raison de problèmes techniques, s'il vous plaît consulter le site Web Chayn pour toute information que vous cherchez ou réessayez plus tard";
+  }
+};
+
 // the call to Dialog Flow
 const apiaiCall = (req, res, speech) => {
   const requestdf = app.textRequest(speech, {
     sessionId: req.body.uniqueId
   });
 
-  requestdf.language = req.body.lang;
+  const selectedLang = req.body.lang;
+  requestdf.language = selectedLang;
 
   requestdf.on('response', response => {
     const { messages } = response.result.fulfillment;
@@ -37,12 +56,6 @@ const apiaiCall = (req, res, speech) => {
     // check if timedelay exists (slow, very slow and fast)
     data.timedelay = payload.timedelay ? payload.timedelay : 'fast';
 
-    // check if language has been sent (as happens in first messages)
-    if (payload.lang && payload.retrigger) {
-      data.lang = payload.lang;
-      data.retrigger = payload.retrigger;
-      res.send(data);
-    }
     // check if retrigger exists so next message gets sent without user input
     // (needed to display several messages in a row)
     if (payload.retrigger) {
@@ -54,6 +67,8 @@ const apiaiCall = (req, res, speech) => {
       const lookupVal = speech || 'Global';
       const resourceLink = selectedCountries || [{ lookup: lookupVal }];
       const promiseArray = googleCall(resourceLink);
+
+      console.log('lookupVal', lookupVal, 'resourceLink', resourceLink);
       Promise.all(promiseArray)
         .then(resources2dArray => {
           data.resources = [].concat(...resources2dArray);
@@ -64,8 +79,7 @@ const apiaiCall = (req, res, speech) => {
             { text: 'Chayn Website', href: 'https://chayn.co' }
           ];
           data.retrigger = '';
-          data.speech =
-            "Sorry there's a problem getting the information, please check the Chayn website or try again later";
+          data.speech = errorResources(selectedLang);
           res.send(data);
         });
       // if no resources then set the right type of buttons
@@ -85,8 +99,7 @@ const apiaiCall = (req, res, speech) => {
       timedelay: '',
       resources: [{ text: 'Chayn Website', href: 'https://chayn.co' }],
       retrigger: '',
-      speech:
-        "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later"
+      speech: errorTechnical(selectedLang)
     };
     res.send(data);
   });

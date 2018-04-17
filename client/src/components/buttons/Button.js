@@ -112,6 +112,7 @@ export default class Button extends Component {
           lang: option.lang
         });
       });
+      this.setState({ disabled: true });
     } else {
       const data = {
         isUser: true,
