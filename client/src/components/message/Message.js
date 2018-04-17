@@ -88,6 +88,7 @@ export default class Message extends Component {
       speech: PropTypes.string.isRequired,
       timedelay: PropTypes.string
     }).isRequired,
+    updateLang: PropTypes.func.isRequired,
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
     uniqueId: PropTypes.string.isRequired,
@@ -109,13 +110,21 @@ export default class Message extends Component {
     );
 
   render() {
-    const { messageObj, addMessage, sendMessage, uniqueId, lang } = this.props;
+    const {
+      messageObj,
+      updateLang,
+      addMessage,
+      sendMessage,
+      uniqueId,
+      lang
+    } = this.props;
     const speaker = this.speaker(messageObj);
     return (
       <div>
         {speaker}
         <Buttons
           options={messageObj.options}
+          updateLang={updateLang}
           addMessage={addMessage}
           sendMessage={sendMessage}
           uniqueId={uniqueId}

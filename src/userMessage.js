@@ -8,8 +8,6 @@ const app = apiai(DF_KEY);
 
 // the call to Dialog Flow
 const apiaiCall = (req, res, speech) => {
-  console.log('request', req);
-  console.log('speech', speech);
   const requestdf = app.textRequest(speech, {
     sessionId: req.body.uniqueId
   });
@@ -17,7 +15,6 @@ const apiaiCall = (req, res, speech) => {
   requestdf.language = req.body.lang;
 
   requestdf.on('response', response => {
-    console.log('response', response);
     const { messages } = response.result.fulfillment;
     const data = {
       speech: messages[0].speech,
@@ -32,14 +29,21 @@ const apiaiCall = (req, res, speech) => {
     saveMessage(data.speech, response.sessionId);
 
     const payload = messages[1] ? messages[1].payload : {};
-    // check if refresh exists in payload (it's only in one message)
-
     console.log('payload', payload);
+    // check if refresh exists in payload (it's only in one message)
     if (payload.refresh) {
       data.refresh = payload.refresh;
     }
+
     // check if timedelay exists (slow, very slow and fast)
     data.timedelay = payload.timedelay ? payload.timedelay : 'fast';
+
+    // check if language has been sent (as happens in first messages)
+    if (payload.lang && payload.retrigger) {
+      data.lang = payload.lang;
+      data.retrigger = payload.retrigger;
+      res.send(data);
+    }
     // check if retrigger exists so next message gets sent without user input
     // (needed to display several messages in a row)
     if (payload.retrigger) {
@@ -67,7 +71,6 @@ const apiaiCall = (req, res, speech) => {
         });
       // if no resources then set the right type of buttons
     } else {
-      console.log('data', data);
       data.options = payload.options ? [...payload.options] : data.options;
       data.selectOptions = payload.selectOptions
         ? [...payload.selectOptions]
@@ -77,7 +80,6 @@ const apiaiCall = (req, res, speech) => {
   });
 
   requestdf.on('error', () => {
-    console.log('error');
     const data = {
       options: [],
       selectOptions: [],

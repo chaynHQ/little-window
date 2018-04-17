@@ -68,17 +68,17 @@ export default class App extends React.Component {
   }
 
   // On loading the page the first message is sent to Dialog Flow with
-  // speech to bring back first message and sending the unique id.  The
-  // next two messages appear through retriggers in the payload
+  // speech to bring back first message and sending the unique id.
   componentDidMount = () => {
     if (!this.state.minimise) {
       this.sendMessage({
-        speech: 'Little window welcome',
+        speech: 'Little Window language selection',
         uniqueId: this.props.uniqueId,
         lang: this.state.lang
       });
       this.setState({
-        uniqueId: this.props.uniqueId
+        uniqueId: this.props.uniqueId,
+        lang: this.state.lang
       });
     }
   };
@@ -90,7 +90,7 @@ export default class App extends React.Component {
       this.state.minimise === false
     ) {
       this.sendMessage({
-        speech: 'Little window welcome',
+        speech: 'Little Window language selection',
         uniqueId: this.props.uniqueId,
         lang: this.state.lang
       });
@@ -152,6 +152,11 @@ export default class App extends React.Component {
     }
   };
 
+  // Update the language in the state from the button selected
+  updateLang = (selectedLang, cb) => {
+    this.setState({ lang: selectedLang }, cb());
+  };
+
   // Send the speech to backend, on response check if there is a retrigger property
   // if so send another message to backend (for a string of messages in a row
   // with no input from user)
@@ -167,6 +172,16 @@ export default class App extends React.Component {
             refreshDisabled: true,
             timedelay: speed[resData.timedelay]
           });
+          if (resData.lang && resData.retrigger) {
+            this.setState({ lang: resData.lang });
+            setTimeout(() => {
+              this.sendMessage({
+                speech: resData.retrigger,
+                uniqueId: this.state.uniqueId,
+                lang: this.state.lang
+              });
+            }, this.state.timedelay);
+          }
           if (resData.retrigger) {
             setTimeout(() => {
               this.sendMessage({
@@ -246,6 +261,7 @@ export default class App extends React.Component {
   // enabling the refresh button again.
   refresh = () => {
     const newId = this.props.uniqueIdGenerator();
+
     this.setState({
       messages: [],
       uniqueId: newId,
@@ -253,9 +269,9 @@ export default class App extends React.Component {
       delayDisabled: false
     });
     this.sendMessage({
-      speech: 'Little window welcome',
+      speech: 'Little Window language selection',
       uniqueId: newId,
-      lang: this.props.lang
+      lang: 'en'
     });
   };
 
@@ -287,6 +303,7 @@ export default class App extends React.Component {
         />
         <Conversation
           messages={this.state.messages}
+          updateLang={this.updateLang}
           addMessage={this.addMessage}
           sendMessage={this.sendMessage}
           uniqueId={this.state.uniqueId || this.props.uniqueId}

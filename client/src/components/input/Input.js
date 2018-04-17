@@ -83,7 +83,7 @@ export default class Input extends Component {
       isUser: true,
       uniqueId: this.props.uniqueId,
       speech: this.state.term,
-      lang: this.state.lang
+      lang: this.props.lang
     };
 
     this.props.sendMessage(data);
