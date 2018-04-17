@@ -29,7 +29,6 @@ const apiaiCall = (req, res, speech) => {
     saveMessage(data.speech, response.sessionId);
 
     const payload = messages[1] ? messages[1].payload : {};
-    console.log('payload', payload);
     // check if refresh exists in payload (it's only in one message)
     if (payload.refresh) {
       data.refresh = payload.refresh;
