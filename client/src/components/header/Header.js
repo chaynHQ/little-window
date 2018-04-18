@@ -7,15 +7,11 @@ import Refresh from '../../assets/refresh.svg';
 
 const StyledHeader = styled.div`
   height: 20%;
-  padding-top: 15px;
-  @media (max-height: 535px) {
-    padding-top: 5px;
-  }
+
   background: #ffbdbd;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  border-bottom: 1px solid black;
   box-sizing: border-box;
   position: relative;
   ${props =>
@@ -27,7 +23,7 @@ const StyledHeader = styled.div`
 
 const RefreshButton = styled.button`
   margin-left: auto;
-  align-self: flex-start;
+  align-self: center;
   background: white;
   padding: 5px;
   border-radius: 100%;
@@ -52,14 +48,14 @@ const HeadingText = styled.div`
 
 const Styledh1 = styled.h1`
   margin: 0;
-  font-size: 20px;
+  font-size: 19px;
   @media (max-width: 361px) {
     font-size: 17px;
   }
 `;
 
 const MinimiseButton = styled.button`
-  align-self: flex-start;
+  align-self: center;
   background: white;
   padding: 5px;
   border-radius: 100%;
