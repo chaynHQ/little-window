@@ -78,7 +78,7 @@ const apiaiCall = (req, res, speech) => {
             { text: 'Chayn Website', href: 'https://chayn.co' }
           ];
           data.retrigger = '';
-          data.speech = errorResources(selectedLang);
+          data.speech = errResources(selectedLang);
           res.send(data);
         });
       // if no resources then set the right type of buttons
@@ -98,7 +98,7 @@ const apiaiCall = (req, res, speech) => {
       timedelay: '',
       resources: [{ text: 'Chayn Website', href: 'https://chayn.co' }],
       retrigger: '',
-      speech: errorTechnical(selectedLang)
+      speech: errTechnical(selectedLang)
     };
     res.send(data);
   });
