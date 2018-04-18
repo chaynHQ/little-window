@@ -1,5 +1,3 @@
-import React from 'react';
-
 // when more languages are added these should be changed to objects
 // with key value pairs.
 
