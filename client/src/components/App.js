@@ -7,6 +7,11 @@ import PropTypes from 'prop-types';
 import Header from './header/Header';
 import Conversation from './conversation/Conversation';
 import Input from './input/Input';
+import {
+  typingMessageLang,
+  buttonMessageLang,
+  optionsLang
+} from './resources/Languages';
 
 const Container = styled.div`
   width: 500px;
@@ -62,18 +67,19 @@ export default class App extends React.Component {
       timedelay: '',
       refreshDisabled: true,
       delayDisabled: false,
-      minimise: window.navigator.userAgent.toLowerCase().includes('mobi')
+      minimise: window.navigator.userAgent.toLowerCase().includes('mobi'),
+      lang: 'en'
     };
   }
 
   // On loading the page the first message is sent to Dialog Flow with
-  // speech to bring back first message and sending the unique id.  The
-  // next two messages appear through retriggers in the payload
+  // speech to bring back first message and sending the unique id.
   componentDidMount = () => {
     if (!this.state.minimise) {
       this.sendMessage({
-        speech: 'Little window welcome',
-        uniqueId: this.props.uniqueId
+        speech: 'Little Window language selection',
+        uniqueId: this.props.uniqueId,
+        lang: this.state.lang
       });
       this.setState({
         uniqueId: this.props.uniqueId
@@ -88,8 +94,9 @@ export default class App extends React.Component {
       this.state.minimise === false
     ) {
       this.sendMessage({
-        speech: 'Little window welcome',
-        uniqueId: this.props.uniqueId
+        speech: 'Little Window language selection',
+        uniqueId: this.props.uniqueId,
+        lang: this.state.lang
       });
       this.setState({
         uniqueId: this.props.uniqueId
@@ -107,12 +114,12 @@ export default class App extends React.Component {
         if (message.options.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: 'Choose a button...'
+            inputMessage: buttonMessageLang(this.state.lang)
           });
         } else if (message.selectOptions.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: 'Pick one or more options...'
+            inputMessage: optionsLang(this.state.lang)
           });
         } else if (message.retrigger) {
           this.setState({ inputStatus: true });
@@ -149,6 +156,11 @@ export default class App extends React.Component {
     }
   };
 
+  // Update the language in the state from the button selected
+  updateLang = (selectedLang, cb) => {
+    this.setState({ lang: selectedLang }, cb());
+  };
+
   // Send the speech to backend, on response check if there is a retrigger property
   // if so send another message to backend (for a string of messages in a row
   // with no input from user)
@@ -164,11 +176,22 @@ export default class App extends React.Component {
             refreshDisabled: true,
             timedelay: speed[resData.timedelay]
           });
+          if (resData.lang && resData.retrigger) {
+            this.setState({ lang: resData.lang });
+            setTimeout(() => {
+              this.sendMessage({
+                speech: resData.retrigger,
+                uniqueId: this.state.uniqueId,
+                lang: this.state.lang
+              });
+            }, this.state.timedelay);
+          }
           if (resData.retrigger) {
             setTimeout(() => {
               this.sendMessage({
                 speech: resData.retrigger,
-                uniqueId: this.state.uniqueId
+                uniqueId: this.state.uniqueId,
+                lang: this.state.lang
               });
             }, this.state.timedelay);
           }
@@ -178,7 +201,7 @@ export default class App extends React.Component {
           } else {
             this.setState({
               inputStatus: true,
-              inputMessage: 'Choose a button...'
+              inputMessage: optionsLang(this.state.lang)
             });
           }
 
@@ -186,7 +209,10 @@ export default class App extends React.Component {
           const newMessage = Object.assign({}, resData);
 
           newMessage.isUser = false;
-          this.setState({ inputStatus: true, inputMessage: 'typing...' });
+          this.setState({
+            inputStatus: true,
+            inputMessage: typingMessageLang(this.state.lang)
+          });
           // Add dots
           this.addMessage({
             speech: '',
@@ -215,6 +241,7 @@ export default class App extends React.Component {
   // enabling the refresh button again.
   refresh = () => {
     const newId = this.props.uniqueIdGenerator();
+
     this.setState({
       messages: [],
       uniqueId: newId,
@@ -222,8 +249,9 @@ export default class App extends React.Component {
       delayDisabled: false
     });
     this.sendMessage({
-      speech: 'Little window welcome',
-      uniqueId: newId
+      speech: 'Little Window language selection',
+      uniqueId: newId,
+      lang: 'en'
     });
   };
 
@@ -251,13 +279,16 @@ export default class App extends React.Component {
           refreshDisabled={this.state.refreshDisabled}
           minimiseFunc={this.minimiseFunc}
           minimise={this.state.minimise}
+          lang={this.state.lang}
         />
         <Conversation
           messages={this.state.messages}
+          updateLang={this.updateLang}
           addMessage={this.addMessage}
           sendMessage={this.sendMessage}
           uniqueId={this.state.uniqueId || this.props.uniqueId}
           minimise={this.state.minimise}
+          lang={this.state.lang}
         />
 
         <Input
@@ -267,6 +298,7 @@ export default class App extends React.Component {
           inputMessage={this.state.inputMessage}
           uniqueId={this.state.uniqueId || this.props.uniqueId}
           minimise={this.state.minimise}
+          lang={this.state.lang}
         />
       </Container>
     );

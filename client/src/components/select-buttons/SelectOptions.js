@@ -54,7 +54,6 @@ const SubmitButton = styled.button.attrs({
   padding-top: 3px;
   padding-bottom: 4px;
   margin-bottom: 10px;
-  width: 5rem;
   text-align: center;
 
   &:hover {
@@ -79,7 +78,8 @@ export default class SelectOptions extends Component {
     ),
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
-    uniqueId: PropTypes.string.isRequired
+    uniqueId: PropTypes.string.isRequired,
+    lang: PropTypes.string.isRequired
   };
 
   static defaultProps = {
@@ -130,7 +130,8 @@ export default class SelectOptions extends Component {
       const data = {
         isUser: true,
         speech: countryObj.text,
-        uniqueId: this.props.uniqueId
+        uniqueId: this.props.uniqueId,
+        lang: this.props.lang
       };
 
       this.props.addMessage(data);
@@ -139,10 +140,16 @@ export default class SelectOptions extends Component {
     this.props.sendMessage({
       speech: selectedCountries[0].postback,
       uniqueId: this.props.uniqueId,
+      lang: this.props.lang,
       selectedCountries
     });
     // setState disabled to true so buttons don't render once submitted.
     this.setState({ disabled: true });
+  };
+
+  submitTextLang = lang => {
+    if (lang === 'en') return 'Submit';
+    else if (lang === 'fr') return 'Soumettre';
   };
 
   renderSelectOptions = () =>
@@ -170,7 +177,7 @@ export default class SelectOptions extends Component {
           disabled={optionSelectedBool ? '' : 'disabled'}
           onClick={this.submitHandler}
         >
-          Submit
+          {this.submitTextLang(this.props.lang)}
         </SubmitButton>
       </div>
     );

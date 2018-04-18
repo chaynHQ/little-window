@@ -6,13 +6,34 @@ const googleCall = require('./googleCall');
 
 const app = apiai(DF_KEY);
 
+//error messages in french or english
+
+const errResources = lang => {
+  if (lang === 'en') {
+    return "Sorry there's a problem getting the information, please check the Chayn website or try again later";
+  } else if (lang === 'fr') {
+    return "Désolé, il y a un problème pour obtenir l'information, s'il vous plaît consulter le site Web de Chayn ou réessayer plus tard";
+  }
+};
+
+const errTechnical = lang => {
+  if (lang === 'en') {
+    return "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later";
+  } else if (lang === 'fr') {
+    return "Je suis vraiment désolé, mais je ne peux pas discuter maintenant en raison de problèmes techniques, s'il vous plaît consulter le site Web Chayn pour toute information que vous cherchez ou réessayez plus tard";
+  }
+};
+
 // the call to Dialog Flow
 const apiaiCall = (req, res, speech) => {
   const requestdf = app.textRequest(speech, {
-    sessionId: req.body.uniqueId,
+    sessionId: req.body.uniqueId
   });
 
-  requestdf.on('response', (response) => {
+  const selectedLang = req.body.lang;
+  requestdf.language = selectedLang;
+
+  requestdf.on('response', response => {
     const { messages } = response.result.fulfillment;
     const data = {
       speech: messages[0].speech,
@@ -21,7 +42,7 @@ const apiaiCall = (req, res, speech) => {
       selectOptions: [],
       retrigger: '',
       timedelay: '',
-      refresh: '',
+      refresh: ''
     };
     // save message to database
     saveMessage(data.speech, response.sessionId);
@@ -31,8 +52,10 @@ const apiaiCall = (req, res, speech) => {
     if (payload.refresh) {
       data.refresh = payload.refresh;
     }
+
     // check if timedelay exists (slow, very slow and fast)
     data.timedelay = payload.timedelay ? payload.timedelay : 'fast';
+
     // check if retrigger exists so next message gets sent without user input
     // (needed to display several messages in a row)
     if (payload.retrigger) {
@@ -44,21 +67,26 @@ const apiaiCall = (req, res, speech) => {
       const lookupVal = speech || 'Global';
       const resourceLink = selectedCountries || [{ lookup: lookupVal }];
       const promiseArray = googleCall(resourceLink);
+
       Promise.all(promiseArray)
-        .then((resources2dArray) => {
+        .then(resources2dArray => {
           data.resources = [].concat(...resources2dArray);
           res.send(data);
         })
         .catch(() => {
-          data.resources = [{ text: 'Chayn Website', href: 'https://chayn.co' }];
+          data.resources = [
+            { text: 'Chayn Website', href: 'https://chayn.co' }
+          ];
           data.retrigger = '';
-          data.speech = "Sorry there's a problem getting the information, please check the Chayn website or try again later";
+          data.speech = errResources(selectedLang);
           res.send(data);
         });
-    // if no resources then set the right type of buttons
+      // if no resources then set the right type of buttons
     } else {
       data.options = payload.options ? [...payload.options] : data.options;
-      data.selectOptions = payload.selectOptions ? [...payload.selectOptions] : data.selectOptions;
+      data.selectOptions = payload.selectOptions
+        ? [...payload.selectOptions]
+        : data.selectOptions;
       res.send(data);
     }
   });
@@ -70,7 +98,7 @@ const apiaiCall = (req, res, speech) => {
       timedelay: '',
       resources: [{ text: 'Chayn Website', href: 'https://chayn.co' }],
       retrigger: '',
-      speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later",
+      speech: errTechnical(selectedLang)
     };
     res.send(data);
   });
@@ -81,7 +109,10 @@ const apiaiCall = (req, res, speech) => {
 // if it is the first input from user, save the conversation id in database
 const userMessage = (req, res) => {
   const { speech, uniqueId } = req.body;
-  if (speech === 'Yes, I know what I am looking for today' || speech === 'No, I don\'t know what I am looking for today') {
+  if (
+    speech === 'Yes, I know what I am looking for today' ||
+    speech === "No, I don't know what I am looking for today"
+  ) {
     saveConversation(uniqueId);
   }
   saveMessage(speech, uniqueId);

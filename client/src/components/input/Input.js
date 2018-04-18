@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { inputPlaceholderLang, submitTextLang } from '../resources/Languages';
 
 const Container = styled.div`
   height: 15%;
@@ -52,6 +53,7 @@ export default class Input extends Component {
     inputStatus: PropTypes.bool.isRequired,
     inputMessage: PropTypes.string.isRequired,
     uniqueId: PropTypes.string.isRequired,
+    lang: PropTypes.string.isRequired
   };
   constructor(props) {
     super(props);
@@ -72,6 +74,7 @@ export default class Input extends Component {
       isUser: true,
       uniqueId: this.props.uniqueId,
       speech: this.state.term,
+      lang: this.props.lang
     };
 
     this.props.sendMessage(data);
@@ -83,6 +86,9 @@ export default class Input extends Component {
     if (this.props.minimise) {
       return null;
     }
+
+    const submitText = submitTextLang(this.props.lang);
+
     return (
       <Container>
         <Form onSubmit={this.handleSubmit.bind(this)}>
@@ -91,14 +97,16 @@ export default class Input extends Component {
             name="speech"
             autoComplete="off"
             placeholder={
-              this.props.inputStatus ? this.props.inputMessage : 'Type here...'
+              this.props.inputStatus
+                ? this.props.inputMessage
+                : inputPlaceholderLang(this.props.lang)
             }
             value={this.state.term}
             onChange={event => this.onInputChange(event.target.value)}
             disabled={this.props.inputStatus}
           />
           {this.props.inputStatus ? null : (
-            <StyledSubmitInput type="submit" value="Submit" />
+            <StyledSubmitInput type="submit" value={submitText} />
           )}
         </Form>
       </Container>

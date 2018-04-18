@@ -53,7 +53,7 @@ const HeadingText = styled.div`
 const Styledh1 = styled.h1`
   margin: 0;
   font-size: 20px;
-  @media (max-width: 313px) {
+  @media (max-width: 361px) {
     font-size: 17px;
   }
 `;
@@ -90,7 +90,9 @@ const Header = props => (
     </RefreshButton>
 
     <HeadingText>
-      <Styledh1>Little Window</Styledh1>
+      <Styledh1>
+        {props.minimise === true ? 'Can I help you?' : 'Little Window'}
+      </Styledh1>
     </HeadingText>
   </StyledHeader>
 );
