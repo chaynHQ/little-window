@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { inputPlaceholderLang, submitTextLang } from '../resources/Languages';
 
 const Container = styled.div`
   height: 15%;
@@ -64,16 +65,6 @@ export default class Input extends Component {
     this.setState({ term });
   }
 
-  inputPlaceholderLang = lang => {
-    if (lang === 'en') return 'Type here...';
-    else if (lang === 'fr') return 'Tapez ici...';
-  };
-
-  submitTextLang = lang => {
-    if (lang === 'en') return 'Submit';
-    else if (lang === 'fr') return 'Soumettre';
-  };
-
   // handle submit sends the data to dialogflow, adds the message to the message
   // array, and sets the input field back to an empty string.
   handleSubmit(e) {
@@ -96,7 +87,7 @@ export default class Input extends Component {
       return null;
     }
 
-    const submitText = this.submitTextLang(this.props.lang);
+    const submitText = submitTextLang(this.props.lang);
 
     return (
       <Container>
@@ -108,7 +99,7 @@ export default class Input extends Component {
             placeholder={
               this.props.inputStatus
                 ? this.props.inputMessage
-                : this.inputPlaceholderLang(this.props.lang)
+                : inputPlaceholderLang(this.props.lang)
             }
             value={this.state.term}
             onChange={event => this.onInputChange(event.target.value)}

@@ -7,6 +7,11 @@ import PropTypes from 'prop-types';
 import Header from './header/Header';
 import Conversation from './conversation/Conversation';
 import Input from './input/Input';
+import {
+  typingMessageLang,
+  buttonMessageLang,
+  optionsLang
+} from './resources/Languages';
 
 const Container = styled.div`
   width: 500px;
@@ -77,8 +82,7 @@ export default class App extends React.Component {
         lang: this.state.lang
       });
       this.setState({
-        uniqueId: this.props.uniqueId,
-        lang: this.state.lang
+        uniqueId: this.props.uniqueId
       });
     }
   };
@@ -110,12 +114,12 @@ export default class App extends React.Component {
         if (message.options.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: this.buttonMessageLang(this.state.lang)
+            inputMessage: buttonMessageLang(this.state.lang)
           });
         } else if (message.selectOptions.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: this.optionsLang(this.state.lang)
+            inputMessage: optionsLang(this.state.lang)
           });
         } else if (message.retrigger) {
           this.setState({ inputStatus: true });
@@ -197,7 +201,7 @@ export default class App extends React.Component {
           } else {
             this.setState({
               inputStatus: true,
-              inputMessage: this.optionsLang(this.state.lang)
+              inputMessage: optionsLang(this.state.lang)
             });
           }
 
@@ -207,7 +211,7 @@ export default class App extends React.Component {
           newMessage.isUser = false;
           this.setState({
             inputStatus: true,
-            inputMessage: this.typingMessageLang(this.state.lang)
+            inputMessage: typingMessageLang(this.state.lang)
           });
           // Add dots
           this.addMessage({
@@ -228,30 +232,6 @@ export default class App extends React.Component {
       credentials: 'same-origin',
       body: JSON.stringify(data)
     });
-
-  typingMessageLang = lang => {
-    if (lang === 'en') {
-      return 'typing...';
-    } else if (lang === 'fr') {
-      return 'en train de taper...';
-    }
-  };
-
-  buttonMessageLang = lang => {
-    if (lang === 'en') {
-      return 'Choose a button';
-    } else if (lang === 'fr') {
-      return 'Choisissez un bouton';
-    }
-  };
-
-  optionsLang = lang => {
-    if (lang === 'en') {
-      return 'Pick one or more options';
-    } else if (lang === 'fr') {
-      return 'Choisissez une ou plusieurs options';
-    }
-  };
 
   // Refresh resets the conversation so sets a new id and sends first message again.
   // It disables the refresh button so it can't be clicked multiple times (refreshDisabled:true).
