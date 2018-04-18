@@ -1,5 +1,8 @@
 import React from 'react';
 
+// when more languages are added these should be changed to objects
+// with key value pairs.
+
 export function typingMessageLang(lang) {
   if (lang === 'en') return 'typing...';
   else if (lang === 'fr') return 'en train de taper...';
