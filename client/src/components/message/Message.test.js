@@ -13,7 +13,9 @@ const messageObj = {
 
 const addMessage = () => {};
 const sendMessage = () => {};
+const updateLang = () => {};
 const uniqueId = '1234';
+const lang = 'en'
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -22,6 +24,8 @@ it('renders without crashing', () => {
     sendMessage={sendMessage}
     messageObj={messageObj}
     uniqueId={uniqueId}
+    lang={lang}
+    updateLang={updateLang}
   />, div);
   ReactDOM.unmountComponentAtNode(div);
 });

@@ -57,6 +57,8 @@ const Multiplebutton = styled(Basicbutton)`
   margin: 0.5%;
   min-height: 3rem;
   height: fit-content;
+  outline: 0;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
 
 // Button component for all buttons
@@ -64,6 +66,7 @@ export default class Button extends Component {
   // prop-types module used to specify the types of the props
   static propTypes = {
     uniqueId: PropTypes.string.isRequired,
+    lang: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(
       PropTypes.shape({
         text: PropTypes.string.isRequired,
@@ -71,6 +74,7 @@ export default class Button extends Component {
         lookup: PropTypes.string
       })
     ),
+    updateLang: PropTypes.func.isRequired,
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired
   };
@@ -92,15 +96,38 @@ export default class Button extends Component {
   // sendMessage sends the message to dialogflow
   // once a button is clicked, state is set to disabled so that buttons don't
   // appear
-  clickHandler(speech, postback) {
-    const data = {
-      isUser: true,
-      speech,
-      uniqueId: this.props.uniqueId
-    };
-    this.props.addMessage(data);
-    this.props.sendMessage({ speech: postback, uniqueId: this.props.uniqueId });
-    this.setState({ disabled: true });
+  clickHandler(option) {
+    if (option.lang) {
+      this.props.updateLang(option.lang, () => {
+        const data = {
+          isUser: true,
+          speech: option.text,
+          uniqueId: this.props.uniqueId,
+          lang: option.lang
+        };
+        this.props.addMessage(data);
+        this.props.sendMessage({
+          speech: option.postback,
+          uniqueId: this.props.uniqueId,
+          lang: option.lang
+        });
+      });
+      this.setState({ disabled: true });
+    } else {
+      const data = {
+        isUser: true,
+        speech: option.text,
+        uniqueId: this.props.uniqueId,
+        lang: this.props.lang
+      };
+      this.props.addMessage(data);
+      this.props.sendMessage({
+        speech: option.postback,
+        uniqueId: this.props.uniqueId,
+        lang: this.props.lang
+      });
+      this.setState({ disabled: true });
+    }
   }
 
   // render button component function. Not rendered if there are no option,
@@ -121,7 +148,7 @@ export default class Button extends Component {
           <ButtonName
             value={option.postback}
             key={index}
-            onClick={() => this.clickHandler(option.text, option.postback)}
+            onClick={() => this.clickHandler(option)}
           >
             {option.text}
           </ButtonName>

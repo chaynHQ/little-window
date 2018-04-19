@@ -6,7 +6,6 @@ import Resources from '../resources/Resources';
 import SelectOptions from '../select-buttons/SelectOptions';
 import catAvatar from '../../assets/catbot.png';
 
-
 const ellipsis = keyframes`
   to {
     width: 3em;
@@ -66,44 +65,58 @@ export default class Message extends Component {
   static propTypes = {
     messageObj: PropTypes.shape({
       isUser: PropTypes.bool,
-      options: PropTypes.arrayOf(PropTypes.shape({
-        text: PropTypes.string.isRequired,
-        postback: PropTypes.string.isRequired,
-        lookup: PropTypes.string,
-      })),
-      resources: PropTypes.arrayOf(PropTypes.shape({
-        text: PropTypes.string.isRequired,
-        href: PropTypes.string.isRequired,
-      })),
-      selectOptions: PropTypes.arrayOf(PropTypes.shape({
-        text: PropTypes.string.isRequired,
-        postback: PropTypes.string.isRequired,
-        lookup: PropTypes.string,
-      })),
+      options: PropTypes.arrayOf(
+        PropTypes.shape({
+          text: PropTypes.string.isRequired,
+          postback: PropTypes.string.isRequired,
+          lookup: PropTypes.string
+        })
+      ),
+      resources: PropTypes.arrayOf(
+        PropTypes.shape({
+          text: PropTypes.string.isRequired,
+          href: PropTypes.string.isRequired
+        })
+      ),
+      selectOptions: PropTypes.arrayOf(
+        PropTypes.shape({
+          text: PropTypes.string.isRequired,
+          postback: PropTypes.string.isRequired,
+          lookup: PropTypes.string
+        })
+      ),
       speech: PropTypes.string.isRequired,
-      timedelay: PropTypes.string,
+      timedelay: PropTypes.string
     }).isRequired,
+    updateLang: PropTypes.func.isRequired,
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
     uniqueId: PropTypes.string.isRequired,
-  }
+    lang: PropTypes.string.isRequired
+  };
 
   // speaker function determines if the message is from a user or from the bot,
   // and renders the appropriate message & styling
-  speaker = (messageObj) => messageObj.isUser ? (
+  speaker = messageObj =>
+    messageObj.isUser ? (
       <Usermessage>{messageObj.speech}</Usermessage>
     ) : (
-        <StyledKittyContainer>
-          <StyledImg src={catAvatar} />
-          <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
-            {messageObj.speech}
-          </Botmessage>
-        </StyledKittyContainer>
-      )
+      <StyledKittyContainer>
+        <StyledImg src={catAvatar} />
+        <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
+          {messageObj.speech}
+        </Botmessage>
+      </StyledKittyContainer>
+    );
 
   render() {
     const {
-      messageObj, addMessage, sendMessage, uniqueId,
+      messageObj,
+      updateLang,
+      addMessage,
+      sendMessage,
+      uniqueId,
+      lang
     } = this.props;
     const speaker = this.speaker(messageObj);
     return (
@@ -111,9 +124,11 @@ export default class Message extends Component {
         {speaker}
         <Buttons
           options={messageObj.options}
+          updateLang={updateLang}
           addMessage={addMessage}
           sendMessage={sendMessage}
           uniqueId={uniqueId}
+          lang={lang}
         />
         <Resources resources={messageObj.resources} />
 
@@ -122,8 +137,8 @@ export default class Message extends Component {
           addMessage={addMessage}
           sendMessage={sendMessage}
           uniqueId={uniqueId}
+          lang={lang}
         />
-
       </div>
     );
   }

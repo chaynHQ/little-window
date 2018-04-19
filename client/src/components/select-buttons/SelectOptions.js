@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
+import { submitTextLang } from '../resources/Languages';
 
 // SelectOptions used for countrybuttons as multiple buttons can be selected
 // and then the result submitted.
@@ -35,8 +36,7 @@ const CountryOptionDiv = styled.div`
   ${props =>
     props.active &&
     css`
-      background: #db5759;
-      color: white;
+      background: #f4dfa4;
     `};
 `;
 
@@ -45,8 +45,8 @@ const SubmitButton = styled.button.attrs({
 })`
   margin: auto;
   border: 2px #b0b0b0 solid;
-  color: white;
-  background: #7cac95;
+  color: black;
+  background: #c0d9cbff;
   display: block;
   border-radius: 15px;
   font-size: 1rem;
@@ -54,7 +54,6 @@ const SubmitButton = styled.button.attrs({
   padding-top: 3px;
   padding-bottom: 4px;
   margin-bottom: 10px;
-  width: 5rem;
   text-align: center;
 
   &:hover {
@@ -79,7 +78,8 @@ export default class SelectOptions extends Component {
     ),
     addMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
-    uniqueId: PropTypes.string.isRequired
+    uniqueId: PropTypes.string.isRequired,
+    lang: PropTypes.string.isRequired
   };
 
   static defaultProps = {
@@ -130,7 +130,8 @@ export default class SelectOptions extends Component {
       const data = {
         isUser: true,
         speech: countryObj.text,
-        uniqueId: this.props.uniqueId
+        uniqueId: this.props.uniqueId,
+        lang: this.props.lang
       };
 
       this.props.addMessage(data);
@@ -139,6 +140,7 @@ export default class SelectOptions extends Component {
     this.props.sendMessage({
       speech: selectedCountries[0].postback,
       uniqueId: this.props.uniqueId,
+      lang: this.props.lang,
       selectedCountries
     });
     // setState disabled to true so buttons don't render once submitted.
@@ -170,7 +172,7 @@ export default class SelectOptions extends Component {
           disabled={optionSelectedBool ? '' : 'disabled'}
           onClick={this.submitHandler}
         >
-          Submit
+          {submitTextLang(this.props.lang)}
         </SubmitButton>
       </div>
     );
