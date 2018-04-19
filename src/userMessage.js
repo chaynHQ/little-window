@@ -12,7 +12,7 @@ const errResources = lang => {
   if (lang === 'en') {
     return "Sorry there's a problem getting the information, please check the Chayn website or try again later";
   } else if (lang === 'fr') {
-    return "Désolé, il y a un problème pour obtenir l'information, s'il vous plaît consulter le site Web de Chayn ou réessayer plus tard";
+    return "Je rencontre un souci technique et j'ai du mal à trouver l'information que tu recherches. N'hésite pas à consulter le site de Chayn ou reviens me voir plus tard ! Merci";
   }
 };
 
@@ -20,7 +20,7 @@ const errTechnical = lang => {
   if (lang === 'en') {
     return "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later";
   } else if (lang === 'fr') {
-    return "Je suis vraiment désolé, mais je ne peux pas discuter maintenant en raison de problèmes techniques, s'il vous plaît consulter le site Web Chayn pour toute information que vous cherchez ou réessayez plus tard";
+    return "Je rencontre un souci technique et j'ai bien peur de ne pas pouvoir discuter dans l'immédiat. En attendant que je sois de retour sur pattes, n'hésite pas à consulter le site de Chayn, et reviens me voir plus tard ! Merci";
   }
 };
 
