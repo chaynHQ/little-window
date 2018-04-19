@@ -2,18 +2,18 @@
 // with key value pairs.
 
 export function typingMessageLang(lang) {
-  if (lang === 'en') return 'typing...';
+  if (lang === 'en') return 'Typing...';
   else if (lang === 'fr') return 'Un petit moment...';
 }
 
 export function buttonMessageLang(lang) {
   if (lang === 'en') return 'Choose a button';
-  else if (lang === 'fr') return 'Choisis une option :';
+  else if (lang === 'fr') return 'Choisis une option';
 }
 
 export function optionsLang(lang) {
   if (lang === 'en') return 'Pick one or more options';
-  else if (lang === 'fr') return 'Choisis une ou plusieurs options :';
+  else if (lang === 'fr') return 'Choisis une ou plusieurs options';
 }
 
 export function inputPlaceholderLang(lang) {

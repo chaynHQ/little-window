@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
+import { submitTextLang } from '../resources/Languages';
 
 // SelectOptions used for countrybuttons as multiple buttons can be selected
 // and then the result submitted.
@@ -35,8 +36,7 @@ const CountryOptionDiv = styled.div`
   ${props =>
     props.active &&
     css`
-      background: #db5759;
-      color: white;
+      background: #f4dfa4;
     `};
 `;
 
@@ -45,8 +45,8 @@ const SubmitButton = styled.button.attrs({
 })`
   margin: auto;
   border: 2px #b0b0b0 solid;
-  color: white;
-  background: #7cac95;
+  color: black;
+  background: #c0d9cbff;
   display: block;
   border-radius: 15px;
   font-size: 1rem;
@@ -147,11 +147,6 @@ export default class SelectOptions extends Component {
     this.setState({ disabled: true });
   };
 
-  submitTextLang = lang => {
-    if (lang === 'en') return 'Submit';
-    else if (lang === 'fr') return 'Soumettre';
-  };
-
   renderSelectOptions = () =>
     this.props.selectOptions.map((selectOption, index) => (
       <CountryOptionDiv
@@ -177,7 +172,7 @@ export default class SelectOptions extends Component {
           disabled={optionSelectedBool ? '' : 'disabled'}
           onClick={this.submitHandler}
         >
-          {this.submitTextLang(this.props.lang)}
+          {submitTextLang(this.props.lang)}
         </SubmitButton>
       </div>
     );

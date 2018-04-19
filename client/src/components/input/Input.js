@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 import { inputPlaceholderLang, submitTextLang } from '../resources/Languages';
 
@@ -9,13 +9,21 @@ const Container = styled.div`
 
 const StyledInput = styled.input`
   width: 75%;
-  height: 100%;
-  border: none;
+  border: 0px;
+  height: 99%;
   padding: 0;
   font-family: 'Source Code Pro', monospace;
   font-size: 16px;
   box-sizing: content-box;
   padding-left: 5%;
+  @media (max-width: 350px) {
+   font-size: 14px;
+   ${props =>
+    props.showInput && 
+    css`
+    width: 94%;
+    `};
+  }
 
   &:disabled {
     background-color: white;
@@ -37,7 +45,20 @@ const StyledSubmitInput = styled.input`
   font-size: 16px;
   -webkit-appearance: none;
   border-radius: 0;
-`;
+  @media (max-width: 350px) {
+    ${props =>
+    props.showInput && 
+      css`
+      display: none;
+      `};
+    
+    ${props =>
+    props.greaterThan6 && 
+      css`
+      font-size: 13px;
+      `};
+  }
+  `;
 
 const Form = styled.form`
   height: 100%;
@@ -96,6 +117,7 @@ export default class Input extends Component {
             type="text"
             name="speech"
             autoComplete="off"
+            showInput={this.props.inputStatus}
             placeholder={
               this.props.inputStatus
                 ? this.props.inputMessage
@@ -105,9 +127,7 @@ export default class Input extends Component {
             onChange={event => this.onInputChange(event.target.value)}
             disabled={this.props.inputStatus}
           />
-          {this.props.inputStatus ? null : (
-            <StyledSubmitInput type="submit" value={submitText} />
-          )}
+          <StyledSubmitInput showInput={this.props.inputStatus} type="submit" value={submitText} greaterThan6={submitText.length > 6}/>
         </Form>
       </Container>
     );
