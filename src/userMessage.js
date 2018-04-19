@@ -66,7 +66,7 @@ const apiaiCall = (req, res, speech) => {
       const { selectedCountries, speech } = req.body;
       const lookupVal = speech || 'Global';
       const resourceLink = selectedCountries || [{ lookup: lookupVal }];
-      const promiseArray = googleCall(resourceLink);
+      const promiseArray = googleCall(resourceLink, selectedLang);
 
       Promise.all(promiseArray)
         .then(resources2dArray => {
