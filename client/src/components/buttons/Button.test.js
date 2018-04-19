@@ -6,8 +6,10 @@ import Buttons from './Button';
 
 const uniqueId = '1234';
 const options = [{ text: 'test', postback: 'postback' }];
+const lang = 'en';
 const addMessage = () => {};
 const sendMessage = () => {};
+const updateLang = () => {};
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -16,6 +18,8 @@ it('renders without crashing', () => {
     options={options}
     addMessage={addMessage}
     sendMessage={sendMessage}
+    lang={lang}
+    updateLang={updateLang}
   />, div);
   ReactDOM.unmountComponentAtNode(div);
 });

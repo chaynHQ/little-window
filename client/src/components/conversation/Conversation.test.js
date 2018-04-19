@@ -9,8 +9,12 @@ const messages = [{
 }];
 const addMessage = () => {};
 const sendMessage = () => {};
+const updateLang = () => {};
+
+
 const uniqueId = '1234';
 const minimise = true;
+const lang = 'en';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -20,6 +24,8 @@ it('renders without crashing', () => {
     uniqueId={uniqueId}
     messages={messages}
     minimise={minimise}
+    lang={lang}
+    updateLang={updateLang}
   />, div);
   ReactDOM.unmountComponentAtNode(div);
 });

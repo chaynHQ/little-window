@@ -7,6 +7,7 @@ const selectOptions = [{ text: 'text', postback: 'postback' }];
 const addMessage = () => {};
 const sendMessage = () => {};
 const uniqueId = 'test';
+const lang = 'en';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -16,6 +17,7 @@ it('renders without crashing', () => {
       addMessage={addMessage}
       sendMessage={sendMessage}
       uniqueId={uniqueId}
+      lang={lang}
     />,
     div
   );

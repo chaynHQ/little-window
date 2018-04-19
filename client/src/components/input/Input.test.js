@@ -8,6 +8,7 @@ const sendMessage = () => { };
 const inputStatus = false;
 const inputMessage = 'abcd';
 const uniqueId = '1234';
+const lang = 'en';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -17,6 +18,7 @@ it('renders without crashing', () => {
     inputStatus={inputStatus}
     inputMessage={inputMessage}
     uniqueId={uniqueId}
+    lang={lang}
   />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
