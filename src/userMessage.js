@@ -109,8 +109,6 @@ const apiaiCall = (req, res, speech) => {
 // if it is the first input from user, save the conversation id in database
 const userMessage = (req, res) => {
   const { speech, uniqueId } = req.body;
-  console.log('speech ', speech);
-
   if (
     speech === 'Little Window language selection'
   ) {
