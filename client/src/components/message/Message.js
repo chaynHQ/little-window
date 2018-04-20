@@ -130,8 +130,10 @@ export default class Message extends Component {
           uniqueId={uniqueId}
           lang={lang}
         />
-        <Resources resources={messageObj.resources} />
-
+        <Resources 
+          resources={messageObj.resources}
+          lang={lang} 
+        />
         <SelectOptions
           selectOptions={messageObj.selectOptions}
           addMessage={addMessage}
