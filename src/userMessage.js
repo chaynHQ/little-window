@@ -6,9 +6,9 @@ const googleCall = require('./googleCall');
 
 const app = apiai(DF_KEY);
 
-//error messages in french or english
+// error messages in french or english
 
-const errResources = lang => {
+const errResources = (lang) => {
   if (lang === 'en') {
     return "Sorry there's a problem getting the information, please check the Chayn website or try again later";
   } else if (lang === 'fr') {
@@ -16,7 +16,7 @@ const errResources = lang => {
   }
 };
 
-const errTechnical = lang => {
+const errTechnical = (lang) => {
   if (lang === 'en') {
     return "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later";
   } else if (lang === 'fr') {
@@ -27,13 +27,13 @@ const errTechnical = lang => {
 // the call to Dialog Flow
 const apiaiCall = (req, res, speech) => {
   const requestdf = app.textRequest(speech, {
-    sessionId: req.body.uniqueId
+    sessionId: req.body.uniqueId,
   });
 
   const selectedLang = req.body.lang;
   requestdf.language = selectedLang;
 
-  requestdf.on('response', response => {
+  requestdf.on('response', (response) => {
     const { messages } = response.result.fulfillment;
     const data = {
       speech: messages[0].speech,
@@ -42,7 +42,7 @@ const apiaiCall = (req, res, speech) => {
       selectOptions: [],
       retrigger: '',
       timedelay: '',
-      refresh: ''
+      refresh: '',
     };
     // save message to database
     saveMessage(data.speech, response.sessionId);
@@ -69,13 +69,13 @@ const apiaiCall = (req, res, speech) => {
       const promiseArray = googleCall(resourceLink, selectedLang);
 
       Promise.all(promiseArray)
-        .then(resources2dArray => {
+        .then((resources2dArray) => {
           data.resources = [].concat(...resources2dArray);
           res.send(data);
         })
         .catch(() => {
           data.resources = [
-            { text: 'Chayn Website', href: 'https://chayn.co' }
+            { text: 'Chayn Website', href: 'https://chayn.co' },
           ];
           data.retrigger = '';
           data.speech = errResources(selectedLang);
@@ -98,7 +98,7 @@ const apiaiCall = (req, res, speech) => {
       timedelay: '',
       resources: [{ text: 'Chayn Website', href: 'https://chayn.co' }],
       retrigger: '',
-      speech: errTechnical(selectedLang)
+      speech: errTechnical(selectedLang),
     };
     res.send(data);
   });
@@ -109,9 +109,10 @@ const apiaiCall = (req, res, speech) => {
 // if it is the first input from user, save the conversation id in database
 const userMessage = (req, res) => {
   const { speech, uniqueId } = req.body;
+  console.log('speech ', speech);
+
   if (
-    speech === 'Yes, I know what I am looking for today' ||
-    speech === "No, I don't know what I am looking for today"
+    speech === 'Little Window language selection'
   ) {
     saveConversation(uniqueId);
   }
