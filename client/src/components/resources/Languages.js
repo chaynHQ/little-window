@@ -25,3 +25,8 @@ export function submitTextLang(lang) {
   if (lang === 'en') return 'Submit';
   else if (lang === 'fr') return 'Envoyer';
 }
+
+export function viewLang(lang) {
+  if (lang === 'en') return 'View';
+  else if (lang === 'fr') return 'Voir';
+}

@@ -10,7 +10,7 @@ const app = apiai(DF_KEY);
 
 const errResources = lang => {
   if (lang === 'en') {
-    return "Sorry there's a problem getting the information, please check the Chayn website or try again later";
+    return "Sorry, there's been a problem getting the information. Please check the Chayn website or try again later!";
   } else if (lang === 'fr') {
     return "Je rencontre un souci technique et j'ai du mal à trouver l'information que tu recherches. N'hésite pas à consulter le site de Chayn ou reviens me voir plus tard ! Merci";
   }
