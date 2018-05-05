@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { viewLang } from './Languages'
 
 const Botresources = styled.div`
   float: left;
@@ -28,6 +29,9 @@ const Singlelink = styled.a`
 // Resources renders the resources from the props passed down, from the
 // text and href properties within the array of resources.
 const Resources = (props) => {
+
+  console.log("props", props)
+  console.log("viewLang props", viewLang(props.lang))
   if (!props.resources) {
     return null;
   }
@@ -36,7 +40,7 @@ const Resources = (props) => {
       {props.resources.map((resource, index) => (
         <div>
           <Singleresource key={index}>{resource.text}
-            <Singlelink href={resource.href} key={index} target="__blank">View</Singlelink>
+            <Singlelink href={resource.href} key={index} target="__blank">{viewLang(props.lang)}</Singlelink>
           </Singleresource>
         </div>
       ))}
