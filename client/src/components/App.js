@@ -22,7 +22,7 @@ const Container = styled.div`
   ${props =>
     props.min &&
     css`
-      height: 10%;
+      height: 10vh;
       position: absolute;
       bottom: 0;
       left: 0;      
@@ -252,10 +252,16 @@ export default class App extends React.Component {
   // also checked to change CSS in Header and App
   minimiseFunc = () => {
     if (!this.state.minimise) {
+      if ('parentIFrame' in window) {
+        window.parentIFrame.size('10vh');
+      }
       this.setState({
         minimise: true
       });
     } else {
+      if ('parentIFrame' in window) {
+        window.parentIFrame.size('100vh');
+      }
       this.setState({
         minimise: false
       });
