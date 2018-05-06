@@ -254,7 +254,7 @@ export default class App extends React.Component {
     if (!this.state.minimise) {
       if ('parentIFrame' in window) {
         console.log('REDUCING IFRAME SIZE');
-        window.parentIFrame.size('10vh');
+        window.parentIFrame.size(100);
       }
       this.setState({
         minimise: true
@@ -262,7 +262,7 @@ export default class App extends React.Component {
     } else {
       if ('parentIFrame' in window) {
         console.log('RESTORING IFRAME SIZE');
-        window.parentIFrame.size('100vh');
+        window.parentIFrame.size(500);
       }
       this.setState({
         minimise: false
