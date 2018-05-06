@@ -14,27 +14,18 @@ import {
 } from './resources/Languages';
 
 const Container = styled.div`
-  width: 500px;
+  width: 100vw;
   height: 100vh;
   box-sizing: border-box;
   border: 1px solid black;
   font-family: 'Source Code Pro', monospace;
-  @media (max-width: 700px) {
-    width: 100vw;
-    height: 80vh;
-    position: fixed;
-    bottom: 0;
-  }
   ${props =>
     props.min &&
     css`
       height: 10%;
       position: absolute;
       bottom: 0;
-      left: 0;
-      @media (max-width: 700px) {
-        height: 10%;
-      }
+      left: 0;      
     `};
 `;
 
