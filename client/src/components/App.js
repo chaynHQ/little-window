@@ -254,7 +254,8 @@ export default class App extends React.Component {
     if (!this.state.minimise) {
       if ('parentIFrame' in window) {
         console.log('REDUCING IFRAME SIZE');
-        window.parentIFrame.size(100);
+        const vhToPxValue = document.documentElement.clientHeight * 0.1;
+        window.parentIFrame.size(vhToPxValue);
       }
       this.setState({
         minimise: true
@@ -262,7 +263,8 @@ export default class App extends React.Component {
     } else {
       if ('parentIFrame' in window) {
         console.log('RESTORING IFRAME SIZE');
-        window.parentIFrame.size(500);
+        const vhToPxValue = document.documentElement.clientHeight;
+        window.parentIFrame.size(vhToPxValue);
       }
       this.setState({
         minimise: false
