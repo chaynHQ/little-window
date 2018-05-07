@@ -253,8 +253,11 @@ export default class App extends React.Component {
     if (!this.state.minimise) {
       if ('parentIFrame' in window) {
         console.log('REDUCING IFRAME SIZE');
-        const vhToPxValue = document.documentElement.clientHeight * 0.1;
-        window.parentIFrame.size(vhToPxValue);
+        // const vhToPxValue = document.documentElement.clientHeight * 0.1;
+        // window.parentIFrame.size(vhToPxValue);
+        window.parentIFrame.getPageInfo(({ clientHeight }) => {
+          window.parentIFrame.size(clientHeight * 0.1);
+        });
       }
       this.setState({
         minimise: true
@@ -262,8 +265,11 @@ export default class App extends React.Component {
     } else {
       if ('parentIFrame' in window) {
         console.log('RESTORING IFRAME SIZE');
-        const vhToPxValue = document.documentElement.clientHeight * 10;
-        window.parentIFrame.size(vhToPxValue);
+        // const vhToPxValue = document.documentElement.clientHeight * 10;
+        // window.parentIFrame.size(vhToPxValue);
+        window.parentIFrame.getPageInfo(({ clientHeight }) => {
+          window.parentIFrame.size(clientHeight * 0.6);
+        });
       }
       this.setState({
         minimise: false
