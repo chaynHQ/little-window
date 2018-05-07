@@ -21,8 +21,7 @@ const Container = styled.div`
   font-family: 'Source Code Pro', monospace;
   ${props =>
     props.min &&
-    css`
-      height: 10vh;
+    css`      
       position: absolute;
       bottom: 0;
       left: 0;      
@@ -263,7 +262,7 @@ export default class App extends React.Component {
     } else {
       if ('parentIFrame' in window) {
         console.log('RESTORING IFRAME SIZE');
-        const vhToPxValue = document.documentElement.clientHeight;
+        const vhToPxValue = document.documentElement.clientHeight * 10;
         window.parentIFrame.size(vhToPxValue);
       }
       this.setState({
