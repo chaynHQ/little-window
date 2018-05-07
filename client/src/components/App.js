@@ -268,7 +268,7 @@ export default class App extends React.Component {
         // const vhToPxValue = document.documentElement.clientHeight * 10;
         // window.parentIFrame.size(vhToPxValue);
         window.parentIFrame.getPageInfo(({ clientHeight }) => {
-          window.parentIFrame.size(clientHeight * 0.6);
+          window.parentIFrame.size(clientHeight * 0.8);
         });
       }
       this.setState({
