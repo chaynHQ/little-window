@@ -29,9 +29,6 @@ const Singlelink = styled.a`
 // Resources renders the resources from the props passed down, from the
 // text and href properties within the array of resources.
 const Resources = (props) => {
-
-  console.log("props", props)
-  console.log("viewLang props", viewLang(props.lang))
   if (!props.resources) {
     return null;
   }
