@@ -18,10 +18,7 @@ const Container = styled.div`
   height: 100vh;
   box-sizing: border-box;
   border: 1px solid black;
-  font-family: 'Source Code Pro', monospace;
-  position: absolute;
-  bottom: 0;
-  left: 0;      
+  font-family: 'Source Code Pro', monospace;     
   ${props =>
     props.min &&
     css`      
