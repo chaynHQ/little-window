@@ -251,11 +251,16 @@ export default class App extends React.Component {
   // also checked to change CSS in Header and App
   minimiseFunc = () => {
     if (!this.state.minimise) {
+      // If parentIframe exists on window object
       if ('parentIFrame' in window) {
         console.log('REDUCING IFRAME SIZE');
-        // const vhToPxValue = document.documentElement.clientHeight * 0.1;
-        // window.parentIFrame.size(vhToPxValue);
+        // getPageInfo() gives you a load of data about the parent site
+        // You pass in a cb function, which is provided the data as an arguement
+        // Here we're only using clientHeight (the height of viewport in px)
         window.parentIFrame.getPageInfo(({ clientHeight }) => {
+          // size() is a function which allows you to manually set the size of the iframe 
+          // You have to provide a Number which is set as a px value 
+          // Here we're setting size to 1/10 of the viewport
           window.parentIFrame.size(clientHeight * 0.1);
         });
       }
@@ -264,10 +269,9 @@ export default class App extends React.Component {
       });
     } else {
       if ('parentIFrame' in window) {
-        console.log('RESTORING IFRAME SIZE');
-        // const vhToPxValue = document.documentElement.clientHeight * 10;
-        // window.parentIFrame.size(vhToPxValue);
+        console.log('RESTORING IFRAME SIZE');        
         window.parentIFrame.getPageInfo(({ clientHeight }) => {
+          // Setting iframe height back to equivalent of 80vh
           window.parentIFrame.size(clientHeight * 0.8);
         });
       }
