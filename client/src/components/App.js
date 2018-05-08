@@ -14,27 +14,17 @@ import {
 } from './resources/Languages';
 
 const Container = styled.div`
-  width: 500px;
+  width: 100vw;
   height: 100vh;
   box-sizing: border-box;
   border: 1px solid black;
-  font-family: 'Source Code Pro', monospace;
-  @media (max-width: 700px) {
-    width: 100vw;
-    height: 80vh;
-    position: fixed;
-    bottom: 0;
-  }
+  font-family: 'Source Code Pro', monospace;     
   ${props =>
     props.min &&
-    css`
-      height: 10%;
+    css`      
       position: absolute;
       bottom: 0;
-      left: 0;
-      @media (max-width: 700px) {
-        height: 10%;
-      }
+      left: 0;      
     `};
 `;
 
@@ -261,10 +251,30 @@ export default class App extends React.Component {
   // also checked to change CSS in Header and App
   minimiseFunc = () => {
     if (!this.state.minimise) {
+      // If parentIframe exists on window object
+      if ('parentIFrame' in window) {
+        console.log('REDUCING IFRAME SIZE');
+        // getPageInfo() gives you a load of data about the parent site
+        // You pass in a cb function, which is provided the data as an arguement
+        // Here we're only using clientHeight (the height of viewport in px)
+        window.parentIFrame.getPageInfo(({ clientHeight }) => {
+          // size() is a function which allows you to manually set the size of the iframe 
+          // You have to provide a Number which is set as a px value 
+          // Here we're setting size to 1/10 of the viewport
+          window.parentIFrame.size(clientHeight * 0.1);
+        });
+      }
       this.setState({
         minimise: true
       });
     } else {
+      if ('parentIFrame' in window) {
+        console.log('RESTORING IFRAME SIZE');        
+        window.parentIFrame.getPageInfo(({ clientHeight }) => {
+          // Setting iframe height back to equivalent of 80vh
+          window.parentIFrame.size(clientHeight * 0.8);
+        });
+      }
       this.setState({
         minimise: false
       });
