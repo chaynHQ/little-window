@@ -58,7 +58,7 @@ export default class App extends React.Component {
       refreshDisabled: true,
       delayDisabled: false,
       minimise: window.navigator.userAgent.toLowerCase().includes('mobi'),
-      lang: 'en'
+      lang: 'en',
     };
   }
 
