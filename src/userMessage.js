@@ -43,6 +43,7 @@ const dialogFlow = (req, res, speech) => {
       retrigger: '',
       timedelay: '',
       refresh: '',
+      GDPROptOut: false,
     };
     // save message to database
     saveMessage(data.speech, response.sessionId);
@@ -61,6 +62,12 @@ const dialogFlow = (req, res, speech) => {
     if (payload.retrigger) {
       data.retrigger = payload.retrigger;
     }
+
+    // check if GDPROptOut flag has been set (see A_OptOutConfirm in Dialog Flow)
+    if (payload.GDPROptOut) {
+      data.GDPROptOut = true;
+    }
+
     // check if resources exist and if so do the call to Google Sheets
     if (payload.resources) {
       const { selectedCountries } = req.body;

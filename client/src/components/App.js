@@ -10,7 +10,7 @@ import Input from './input/Input';
 import {
   typingMessageLang,
   buttonMessageLang,
-  optionsLang
+  optionsLang,
 } from './resources/Languages';
 
 const Container = styled.div`
@@ -18,20 +18,20 @@ const Container = styled.div`
   height: 100vh;
   box-sizing: border-box;
   border: 1px solid black;
-  font-family: 'Source Code Pro', monospace;     
-  ${props =>
+  font-family: 'Source Code Pro', monospace;
+  ${(props) =>
     props.min &&
-    css`      
+    css`
       position: absolute;
       bottom: 0;
-      left: 0;      
+      left: 0;
     `};
 `;
 
 const speed = {
   fast: 1500,
   slow: 5000,
-  superslow: 8000
+  superslow: 8000,
 };
 
 injectGlobal`
@@ -43,7 +43,7 @@ margin: 0;
 export default class App extends React.Component {
   static propTypes = {
     uniqueId: PropTypes.string.isRequired,
-    uniqueIdGenerator: PropTypes.func.isRequired
+    uniqueIdGenerator: PropTypes.func.isRequired,
   };
 
   // the value passed to minimise on load - window.navigator.userAgent - contains information
@@ -69,10 +69,10 @@ export default class App extends React.Component {
       this.sendMessage({
         speech: 'Little Window language selection',
         uniqueId: this.props.uniqueId,
-        lang: this.state.lang
+        lang: this.state.lang,
       });
       this.setState({
-        uniqueId: this.props.uniqueId
+        uniqueId: this.props.uniqueId,
       });
     }
   };
@@ -86,10 +86,10 @@ export default class App extends React.Component {
       this.sendMessage({
         speech: 'Little Window language selection',
         uniqueId: this.props.uniqueId,
-        lang: this.state.lang
+        lang: this.state.lang,
       });
       this.setState({
-        uniqueId: this.props.uniqueId
+        uniqueId: this.props.uniqueId,
       });
     }
   };
@@ -98,18 +98,18 @@ export default class App extends React.Component {
   // buttons/options.  If retrigger (waiting for next message to arrive)
   // input also disabled.  Otherwise input is enabled. Dots are removed
   // and message added to messages in state
-  addMessage = message => {
+  addMessage = (message) => {
     if (!message.isUser && !message.isDot) {
       setTimeout(() => {
         if (message.options.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: buttonMessageLang(this.state.lang)
+            inputMessage: buttonMessageLang(this.state.lang),
           });
         } else if (message.selectOptions.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: optionsLang(this.state.lang)
+            inputMessage: optionsLang(this.state.lang),
           });
         } else if (message.retrigger) {
           this.setState({ inputStatus: true });
@@ -117,13 +117,13 @@ export default class App extends React.Component {
           this.setState({ inputStatus: false });
         }
         this.removeWaitingDots();
-        this.setState(prevState => ({
-          messages: [...prevState.messages, message]
+        this.setState((prevState) => ({
+          messages: [...prevState.messages, message],
         }));
       }, this.state.timedelay);
     } else {
-      this.setState(prevState => ({
-        messages: [...prevState.messages, message]
+      this.setState((prevState) => ({
+        messages: [...prevState.messages, message],
       }));
     }
   };
@@ -134,14 +134,14 @@ export default class App extends React.Component {
   removeWaitingDots = () => {
     if (this.state.messages.length > 0) {
       if (this.state.messages[this.state.messages.length - 1].speech === '') {
-        this.setState(prevState => ({
-          messages: [...prevState.messages.slice(0, -1)]
+        this.setState((prevState) => ({
+          messages: [...prevState.messages.slice(0, -1)],
         }));
       }
     }
     if (this.state.delayDisabled) {
       this.setState({
-        refreshDisabled: false
+        refreshDisabled: false,
       });
     }
   };
@@ -154,73 +154,78 @@ export default class App extends React.Component {
   // Send the speech to backend, on response check if there is a retrigger property
   // if so send another message to backend (for a string of messages in a row
   // with no input from user)
-  sendMessage = data => {
+  sendMessage = (data) => {
     this.sendToServer(data)
-      .then(res => res.json())
-      .then(resData => {
+      .then((res) => res.json())
+      .then((resData) => {
         if (this.state.uniqueId === data.uniqueId) {
-          if (resData.refresh) {
-            this.setState({ delayDisabled: resData.refresh });
-          }
-          this.setState({
-            refreshDisabled: true,
-            timedelay: speed[resData.timedelay]
-          });
-          if (resData.lang && resData.retrigger) {
-            this.setState({ lang: resData.lang });
-            setTimeout(() => {
-              this.sendMessage({
-                speech: resData.retrigger,
-                uniqueId: this.state.uniqueId,
-                lang: this.state.lang
-              });
-            }, this.state.timedelay);
-          }
-          if (resData.retrigger) {
-            setTimeout(() => {
-              this.sendMessage({
-                speech: resData.retrigger,
-                uniqueId: this.state.uniqueId,
-                lang: this.state.lang
-              });
-            }, this.state.timedelay);
-          }
-
-          if (resData.options.length === 0) {
-            this.setState({ inputStatus: false });
+          if (resData.GDPROptOut) {
+            this.refresh();
+            this.minimiseFunc();
           } else {
+            if (resData.refresh) {
+              this.setState({ delayDisabled: resData.refresh });
+            }
+            this.setState({
+              refreshDisabled: true,
+              timedelay: speed[resData.timedelay],
+            });
+            if (resData.lang && resData.retrigger) {
+              this.setState({ lang: resData.lang });
+              setTimeout(() => {
+                this.sendMessage({
+                  speech: resData.retrigger,
+                  uniqueId: this.state.uniqueId,
+                  lang: this.state.lang,
+                });
+              }, this.state.timedelay);
+            }
+            if (resData.retrigger) {
+              setTimeout(() => {
+                this.sendMessage({
+                  speech: resData.retrigger,
+                  uniqueId: this.state.uniqueId,
+                  lang: this.state.lang,
+                });
+              }, this.state.timedelay);
+            }
+
+            if (resData.options.length === 0) {
+              this.setState({ inputStatus: false });
+            } else {
+              this.setState({
+                inputStatus: true,
+                inputMessage: optionsLang(this.state.lang),
+              });
+            }
+
+            // create copy of resData to avoid mutating it
+            const newMessage = Object.assign({}, resData);
+
+            newMessage.isUser = false;
             this.setState({
               inputStatus: true,
-              inputMessage: optionsLang(this.state.lang)
+              inputMessage: typingMessageLang(this.state.lang),
             });
+            // Add dots
+            this.addMessage({
+              speech: '',
+              isUser: false,
+              isDot: true,
+            });
+
+            this.addMessage(newMessage);
           }
-
-          // create copy of resData to avoid mutating it
-          const newMessage = Object.assign({}, resData);
-
-          newMessage.isUser = false;
-          this.setState({
-            inputStatus: true,
-            inputMessage: typingMessageLang(this.state.lang)
-          });
-          // Add dots
-          this.addMessage({
-            speech: '',
-            isUser: false,
-            isDot: true
-          });
-
-          this.addMessage(newMessage);
         }
       });
   };
 
-  sendToServer = data =>
+  sendToServer = (data) =>
     fetch('/usermessage', {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
       credentials: 'same-origin',
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
 
   // Refresh resets the conversation so sets a new id and sends first message again.
@@ -236,12 +241,12 @@ export default class App extends React.Component {
       messages: [],
       uniqueId: newId,
       refreshDisabled: true,
-      delayDisabled: false
+      delayDisabled: false,
     });
     this.sendMessage({
       speech: 'Little Window language selection',
       uniqueId: newId,
-      lang: 'en'
+      lang: 'en',
     });
   };
 
@@ -258,25 +263,25 @@ export default class App extends React.Component {
         // You pass in a cb function, which is provided the data as an arguement
         // Here we're only using clientHeight (the height of viewport in px)
         window.parentIFrame.getPageInfo(({ clientHeight }) => {
-          // size() is a function which allows you to manually set the size of the iframe 
-          // You have to provide a Number which is set as a px value 
+          // size() is a function which allows you to manually set the size of the iframe
+          // You have to provide a Number which is set as a px value
           // Here we're setting size to 1/10 of the viewport
           window.parentIFrame.size(clientHeight * 0.1);
         });
       }
       this.setState({
-        minimise: true
+        minimise: true,
       });
     } else {
       if ('parentIFrame' in window) {
-        console.log('RESTORING IFRAME SIZE');        
+        console.log('RESTORING IFRAME SIZE');
         window.parentIFrame.getPageInfo(({ clientHeight }) => {
           // Setting iframe height back to equivalent of 80vh
           window.parentIFrame.size(clientHeight * 0.8);
         });
       }
       this.setState({
-        minimise: false
+        minimise: false,
       });
     }
   };

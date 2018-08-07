@@ -17,6 +17,7 @@ const gSheetLookup = {
   RecognisingAbuse: 'AE2:AF',
   HelpingFriend: 'AG2:AH',
   AdditionalResources: 'AI2:AJ',
+  PrivacyPolicy: 'AK2:AL',
 };
 
 module.exports = gSheetLookup;
