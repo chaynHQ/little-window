@@ -35,9 +35,9 @@ const Resources = (props) => {
   return (
     <Botresources>
       {props.resources.map((resource, index) => (
-        <div>
-          <Singleresource key={index}>{resource.text}
-            <Singlelink href={resource.href} key={index} target="__blank">{viewLang(props.lang)}</Singlelink>
+        <div key={resource.text}>
+          <Singleresource>{resource.text}
+            <Singlelink href={resource.href} target="__blank">{viewLang(props.lang)}</Singlelink>
           </Singleresource>
         </div>
       ))}
