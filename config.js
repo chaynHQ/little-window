@@ -6,7 +6,8 @@ const {
   GOOGLE_API_2,
   EMAIL_PASSWORD,
   EMAIL_ACCOUNT,
-  EMAIL_TO
+  EMAIL_TO,
+  TRAVIS
 } = process.env;
 
 let { DATABASE_URL } = process.env;
@@ -26,5 +27,6 @@ module.exports = {
   GOOGLE_API_2,
   EMAIL_PASSWORD,
   EMAIL_ACCOUNT,
-  EMAIL_TO
+  EMAIL_TO,
+  TRAVIS
 };
