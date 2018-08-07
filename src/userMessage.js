@@ -8,7 +8,7 @@ const app = apiai(DF_KEY);
 
 //error messages in french or english
 
-const errResources = lang => {
+const errResources = (lang) => {
   if (lang === 'en') {
     return "Sorry, there's been a problem getting the information. Please check the Chayn website or try again later!";
   } else if (lang === 'fr') {
@@ -16,7 +16,7 @@ const errResources = lang => {
   }
 };
 
-const errTechnical = lang => {
+const errTechnical = (lang) => {
   if (lang === 'en') {
     return "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later";
   } else if (lang === 'fr') {
@@ -25,15 +25,15 @@ const errTechnical = lang => {
 };
 
 // the call to Dialog Flow
-const apiaiCall = (req, res, speech) => {
+const dialogFlow = (req, res, speech) => {
   const requestdf = app.textRequest(speech, {
-    sessionId: req.body.uniqueId
+    sessionId: req.body.uniqueId,
   });
 
   const selectedLang = req.body.lang;
   requestdf.language = selectedLang;
 
-  requestdf.on('response', response => {
+  requestdf.on('response', (response) => {
     const { messages } = response.result.fulfillment;
     const data = {
       speech: messages[0].speech,
@@ -42,7 +42,8 @@ const apiaiCall = (req, res, speech) => {
       selectOptions: [],
       retrigger: '',
       timedelay: '',
-      refresh: ''
+      refresh: '',
+      GDPROptOut: false,
     };
     // save message to database
     saveMessage(data.speech, response.sessionId);
@@ -61,21 +62,27 @@ const apiaiCall = (req, res, speech) => {
     if (payload.retrigger) {
       data.retrigger = payload.retrigger;
     }
+
+    // check if GDPROptOut flag has been set (see A_OptOutConfirm in Dialog Flow)
+    if (payload.GDPROptOut) {
+      data.GDPROptOut = true;
+    }
+
     // check if resources exist and if so do the call to Google Sheets
     if (payload.resources) {
-      const { selectedCountries, speech } = req.body;
+      const { selectedCountries } = req.body;
       const lookupVal = speech || 'Global';
       const resourceLink = selectedCountries || [{ lookup: lookupVal }];
       const promiseArray = googleCall(resourceLink, selectedLang);
 
       Promise.all(promiseArray)
-        .then(resources2dArray => {
+        .then((resources2dArray) => {
           data.resources = [].concat(...resources2dArray);
           res.send(data);
         })
         .catch(() => {
           data.resources = [
-            { text: 'Chayn Website', href: 'https://chayn.co' }
+            { text: 'Chayn Website', href: 'https://chayn.co' },
           ];
           data.retrigger = '';
           data.speech = errResources(selectedLang);
@@ -98,7 +105,7 @@ const apiaiCall = (req, res, speech) => {
       timedelay: '',
       resources: [{ text: 'Chayn Website', href: 'https://chayn.co' }],
       retrigger: '',
-      speech: errTechnical(selectedLang)
+      speech: errTechnical(selectedLang),
     };
     res.send(data);
   });
@@ -116,7 +123,7 @@ const userMessage = (req, res) => {
     saveConversation(uniqueId);
   }
   saveMessage(speech, uniqueId);
-  apiaiCall(req, res, speech);
+  dialogFlow(req, res, speech);
 };
 
 module.exports = userMessage;
