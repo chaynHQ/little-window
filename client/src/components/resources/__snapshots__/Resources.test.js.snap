@@ -39,7 +39,7 @@ exports[`Renders correctly with two resources 1`] = `
     <p
       className="sc-bwzfXH kGGnuj"
     >
-      Test 1
+      Test 2
       <a
         className="sc-htpNat gPKckf"
         href="www.chayn.co"

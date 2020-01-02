@@ -23,7 +23,7 @@ test('Renders correctly with one resource', () => {
 });
 
 test('Renders correctly with two resources', () => {
-  const testResources = [{ text: 'Test 1', href: 'www.chayn.co' }, { text: 'Test 1', href: 'www.chayn.co' }];
+  const testResources = [{ text: 'Test 1', href: 'www.chayn.co' }, { text: 'Test 2', href: 'www.chayn.co' }];
   const resourceTest = renderer.create(<Resources
     resources={testResources}
   />).toJSON();
