@@ -6,7 +6,7 @@ const googleCall = require('./googleCall');
 
 const app = apiai(DF_KEY);
 
-//error messages in french or english
+// error messages in french or english
 
 const errResources = (lang) => {
   if (lang === 'en') {
@@ -117,8 +117,7 @@ const dialogFlow = (req, res, speech) => {
 const userMessage = (req, res) => {
   const { speech, uniqueId } = req.body;
   if (
-    speech === 'Yes, I know what I am looking for today' ||
-    speech === "No, I don't know what I am looking for today"
+    speech === 'Little Window language selection'
   ) {
     saveConversation(uniqueId);
   }
