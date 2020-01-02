@@ -13,9 +13,7 @@ exports[`Renders correctly with one resource 1`] = `
         className="sc-htpNat gPKckf"
         href="www.chayn.co"
         target="__blank"
-      >
-        View
-      </a>
+      />
     </p>
   </div>
 </div>
@@ -34,9 +32,7 @@ exports[`Renders correctly with two resources 1`] = `
         className="sc-htpNat gPKckf"
         href="www.chayn.co"
         target="__blank"
-      >
-        View
-      </a>
+      />
     </p>
   </div>
   <div>
@@ -48,9 +44,7 @@ exports[`Renders correctly with two resources 1`] = `
         className="sc-htpNat gPKckf"
         href="www.chayn.co"
         target="__blank"
-      >
-        View
-      </a>
+      />
     </p>
   </div>
 </div>

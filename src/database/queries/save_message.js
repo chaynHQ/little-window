@@ -17,7 +17,7 @@ const saveMessage = (speech, conversationId) =>
   END $$;`,
       [speech, conversationId]
     )
-    .catch(error => {
+    .catch((error) => {
       databaseEmail('saving messages', error);
     });
 
