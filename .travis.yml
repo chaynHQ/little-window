@@ -10,3 +10,5 @@ before_script:
 script:
   - npm test
   - cd client && npm test
+  - npx eslint src/**
+  - npx eslint client/src
