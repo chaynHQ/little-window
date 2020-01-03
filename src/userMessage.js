@@ -1,5 +1,5 @@
-const { DF_KEY } = require('../config');
 const apiai = require('apiai');
+const { DF_KEY } = require('../config');
 const saveConversation = require('./database/queries/save_conversation');
 const saveMessage = require('./database/queries/save_message');
 const googleCall = require('./googleCall');
@@ -11,7 +11,7 @@ const app = apiai(DF_KEY);
 const errResources = (lang) => {
   if (lang === 'en') {
     return "Sorry, there's been a problem getting the information. Please check the Chayn website or try again later!";
-  } else if (lang === 'fr') {
+  } if (lang === 'fr') {
     return "Je rencontre un souci technique et j'ai du mal à trouver l'information que tu recherches. N'hésite pas à consulter le site de Chayn ou reviens me voir plus tard ! Merci";
   }
 };
@@ -19,7 +19,7 @@ const errResources = (lang) => {
 const errTechnical = (lang) => {
   if (lang === 'en') {
     return "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later";
-  } else if (lang === 'fr') {
+  } if (lang === 'fr') {
     return "Je rencontre un souci technique et j'ai bien peur de ne pas pouvoir discuter dans l'immédiat. En attendant que je sois de retour sur pattes, n'hésite pas à consulter le site de Chayn, et reviens me voir plus tard ! Merci";
   }
 };
