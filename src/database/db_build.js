@@ -13,7 +13,7 @@ const runDbBuild = (callback) => {
       callback(null);
     })
     .catch((err) => {
-      console.error('error db_build.js', err);
+      // console.error('error db_build.js', err);
       callback(err);
     });
 };

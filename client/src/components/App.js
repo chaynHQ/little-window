@@ -258,7 +258,6 @@ export default class App extends React.Component {
     if (!this.state.minimise) {
       // If parentIframe exists on window object
       if ('parentIFrame' in window) {
-        console.log('REDUCING IFRAME SIZE');
         // getPageInfo() gives you a load of data about the parent site
         // You pass in a cb function, which is provided the data as an arguement
         // Here we're only using clientHeight (the height of viewport in px)
@@ -274,7 +273,6 @@ export default class App extends React.Component {
       });
     } else {
       if ('parentIFrame' in window) {
-        console.log('RESTORING IFRAME SIZE');
         window.parentIFrame.getPageInfo(({ clientHeight }) => {
           // Setting iframe height back to equivalent of 80vh
           window.parentIFrame.size(clientHeight * 0.8);

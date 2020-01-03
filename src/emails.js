@@ -17,10 +17,11 @@ const databaseEmail = (str, dbErr) => {
     text: `There's been an error ${str} in Little Window's database, please see the error message: ${dbErr} `,
   };
 
-  transporter.sendMail(mailOptions, (error) => {
-    if (error) {
-      console.log(error);
-    }
+  transporter.sendMail(mailOptions, () => {
+    // TODO: Logging
+    // if (error) {
+    //   console.log(error);
+    // }
   });
 };
 

@@ -1,6 +1,5 @@
 const test = require('tape');
-const myApp = require('../app');
-const request = require('supertest')(myApp);
+const request = require('supertest');
 
 test('check /usermessage is returning correct resources', (t) => {
   request
