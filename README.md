@@ -1,7 +1,6 @@
-![logo](https://user-images.githubusercontent.com/24212625/37564924-8fc09424-2a97-11e8-90bf-32a0dc3255e1.png)
-
 # Little Window
-> A chatbot that directs users quickly and safely to resources.
+> Little window is a clever little cat chatbot that directs women to the information they are looking for as quickly as possible. Think of it like google search on turbo for all of Chayn’s resources and those provided by our friends too. We want to drastically reduce the time women take to search for information which in many cases can save lives.
+
 **Currently in active development**
 
 ![LWDemo](https://user-images.githubusercontent.com/24212625/37564932-9ac46b84-2a97-11e8-8087-127b9225db75.gif)
@@ -97,4 +96,4 @@ You can setup your conversation flow in Dialogflow using the following guideline
 - As in the above screenshot, each message can be given a `time delay` in the payload of `slow` (5secs) or `superslow` (8secs) to slow down the speed of a given bot response. The standard speed is 1.5secs.
 
 # Support Us
-Soul Medicine is created by Chayn a global volunteer network with over 400 volunteers from 15 countries. If you like what you see and you want to join our team of volunteers get in touch. Or you can [donate](https://www.paypal.me/chaynhq); all proceeds go to improving Soul Medicine and building more tools and resources at ChaynHQ.
+Little Window is created by Chayn a global volunteer network with over 400 volunteers from 15 countries. If you like what you see and you want to join our team of volunteers get in touch. Or you can [donate](https://www.paypal.me/chaynhq); all proceeds go to improving Little Window and building more tools and resources at ChaynHQ.
