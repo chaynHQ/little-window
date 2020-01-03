@@ -1,7 +1,6 @@
-![logo](https://user-images.githubusercontent.com/24212625/37564924-8fc09424-2a97-11e8-90bf-32a0dc3255e1.png)
-
 # Little Window
-> A chatbot that directs users quickly and safely to resources.
+> A chatbot that directs survivors quickly and safely to resources.
+
 **Currently in active development**
 
 ![LWDemo](https://user-images.githubusercontent.com/24212625/37564932-9ac46b84-2a97-11e8-8087-127b9225db75.gif)
