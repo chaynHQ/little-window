@@ -96,4 +96,4 @@ You can setup your conversation flow in Dialogflow using the following guideline
 - As in the above screenshot, each message can be given a `time delay` in the payload of `slow` (5secs) or `superslow` (8secs) to slow down the speed of a given bot response. The standard speed is 1.5secs.
 
 # Support Us
-Little Window is created by Chayn a global volunteer network with over 400 volunteers from 15 countries. If you like what you see and you want to join our team of volunteers get in touch. Or you can [donate](https://www.paypal.me/chaynhq); all proceeds go to improving Soul Medicine and building more tools and resources at ChaynHQ.
+Little Window is created by Chayn a global volunteer network with over 400 volunteers from 15 countries. If you like what you see and you want to join our team of volunteers get in touch. Or you can [donate](https://www.paypal.me/chaynhq); all proceeds go to improving Little Window and building more tools and resources at ChaynHQ.
