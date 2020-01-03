@@ -15,4 +15,7 @@ parserOptions:
   sourceType: module
 plugins:
   - react
+ignorePatterns:
+  - 'node_modules/'
+  - 'build/'
 rules: {}

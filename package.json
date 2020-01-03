@@ -10,7 +10,8 @@
     "test": "NODE_ENV=test tape ./src/test/*test.js | tap-spec && cd client && npm run test",
     "server": "NODE_ENV=dev nodemon ./src/server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "client": "cd client && npm start"
+    "client": "cd client && npm start",
+    "lint": "eslint '**/*.js'"
   },
   "repository": {
     "type": "git",
