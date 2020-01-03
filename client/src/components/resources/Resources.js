@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { viewLang } from './Languages'
+import { viewLang } from './Languages';
 
 const Botresources = styled.div`
   float: left;
@@ -36,7 +36,8 @@ const Resources = (props) => {
     <Botresources>
       {props.resources.map((resource, index) => (
         <div key={resource.text}>
-          <Singleresource>{resource.text}
+          <Singleresource>
+            {resource.text}
             <Singlelink href={resource.href} target="__blank">{viewLang(props.lang)}</Singlelink>
           </Singleresource>
         </div>

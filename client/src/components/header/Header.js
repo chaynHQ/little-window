@@ -14,9 +14,8 @@ const StyledHeader = styled.div`
   justify-content: flex-start;
   box-sizing: border-box;
   position: relative;
-  ${props =>
-    props.minSize &&
-    css`
+  ${(props) => props.minSize
+    && css`
       height: 100%;
     `};
 `;
@@ -73,7 +72,7 @@ const Icon = styled.img``;
 
 // RefreshButton refreshes the conversation in App. The property of
 // refreshDisabled property disables the refresh button while the bot is typing.
-const Header = props => (
+const Header = (props) => (
   <StyledHeader minSize={props.minimise === true ? 'minSize' : ''}>
     <MinimiseButton onClick={props.minimiseFunc}>
       <Icon
@@ -97,7 +96,7 @@ Header.propTypes = {
   refresh: PropTypes.func.isRequired,
   refreshDisabled: PropTypes.bool.isRequired,
   minimise: PropTypes.bool.isRequired,
-  minimiseFunc: PropTypes.func.isRequired
+  minimiseFunc: PropTypes.func.isRequired,
 };
 
 export default Header;

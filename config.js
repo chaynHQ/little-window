@@ -7,7 +7,7 @@ const {
   EMAIL_PASSWORD,
   EMAIL_ACCOUNT,
   EMAIL_TO,
-  TRAVIS
+  TRAVIS,
 } = process.env;
 
 let { DATABASE_URL } = process.env;
@@ -28,5 +28,5 @@ module.exports = {
   EMAIL_PASSWORD,
   EMAIL_ACCOUNT,
   EMAIL_TO,
-  TRAVIS
+  TRAVIS,
 };

@@ -19,3 +19,6 @@ ignorePatterns:
   - 'node_modules/'
   - 'build/'
 rules: {}
+settings:
+  react:
+    version: 'latest'

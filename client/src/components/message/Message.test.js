@@ -15,7 +15,7 @@ const addMessage = () => {};
 const sendMessage = () => {};
 const updateLang = () => {};
 const uniqueId = '1234';
-const lang = 'en'
+const lang = 'en';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

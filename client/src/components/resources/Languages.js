@@ -3,30 +3,30 @@
 
 export function typingMessageLang(lang) {
   if (lang === 'en') return 'Typing...';
-  else if (lang === 'fr') return 'Un petit moment...';
+  if (lang === 'fr') return 'Un petit moment...';
 }
 
 export function buttonMessageLang(lang) {
   if (lang === 'en') return 'Choose a button';
-  else if (lang === 'fr') return 'Choisis une option';
+  if (lang === 'fr') return 'Choisis une option';
 }
 
 export function optionsLang(lang) {
   if (lang === 'en') return 'Pick one or more options';
-  else if (lang === 'fr') return 'Choisis une ou plusieurs options';
+  if (lang === 'fr') return 'Choisis une ou plusieurs options';
 }
 
 export function inputPlaceholderLang(lang) {
   if (lang === 'en') return 'Type here...';
-  else if (lang === 'fr') return 'Écris ici';
+  if (lang === 'fr') return 'Écris ici';
 }
 
 export function submitTextLang(lang) {
   if (lang === 'en') return 'Submit';
-  else if (lang === 'fr') return 'Envoyer';
+  if (lang === 'fr') return 'Envoyer';
 }
 
 export function viewLang(lang) {
   if (lang === 'en') return 'View';
-  else if (lang === 'fr') return 'Voir';
+  if (lang === 'fr') return 'Voir';
 }

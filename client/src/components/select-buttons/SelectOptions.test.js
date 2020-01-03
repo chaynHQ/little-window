@@ -19,7 +19,7 @@ it('renders without crashing', () => {
       uniqueId={uniqueId}
       lang={lang}
     />,
-    div
+    div,
   );
   ReactDOM.unmountComponentAtNode(div);
 });
