@@ -1,36 +1,38 @@
-# Little Window
 ![logo](https://user-images.githubusercontent.com/24212625/37564924-8fc09424-2a97-11e8-90bf-32a0dc3255e1.png)
 
-The Little Window app is avaliable [here](https://little-window.herokuapp.com)
-
-## User Story
-‘Direct users quickly and safely to the correct resource so that users can feel informed and empowered to read further.’
-
-## Our Solution
-> A chat bot to help those who have suffered from domestic abuse to access resources quickly and safely
-
-#### The aims of the solution:
-- To provide information within a 15 minute window
-- To provide effective real-time service
-- Ensure a safer digital footprint
-- To provide accessible and engaging information
-- To raise awareness on domestic abuse
-
-___
-
-### The app
+# Little Window
+> A chatbot that directs users quickly and safely to resources.
+**Currently in active development**
 
 ![LWDemo](https://user-images.githubusercontent.com/24212625/37564932-9ac46b84-2a97-11e8-8087-127b9225db75.gif)
 
+## Installing / Getting started
+
+### Prerequisites
+- Dialogflow account & key
+- Googlesheets API key
+- PostgreSQL Database
+
+### Quick Start
+1. Clone the repo:
+`git clone git@github.com:chaynHQ/little-window.git`
+2. Move into your newly created folder and install dependencies:
+`npm install`
+3. Create a `.env` file in the root directory. This will need to include:
+- `DF_KEY=` [Your Dialogflow client key]  
+- `DATABASE_URL=` [Your PostgreSQL DB URL]
+- `GOOGLE_API_1=` https://sheets.googleapis.com/v4/spreadsheets/{your-sheet-id}/values/
+- `GOOGLE_API_2=` ?key={your-GSheet-apikey}
+4. Run the app in dev mode:
+`npm run dev`
+
+### Testing
+1. Run `npm test` from the root folder to run server tests.
+2. Run `cd client` then `npm test` to run React tests.
+
 ___
 
-### What it will look like on the Chayn website
-
-![figma](https://user-images.githubusercontent.com/24212625/37564928-95868bac-2a97-11e8-8e29-636986686a8a.png)
-
-___
-
-### Tech stack
+## Architecture
 - DialogFlow (Natural Language Processor)
 - GoogleSheets API
 - React
@@ -38,48 +40,17 @@ ___
 - PostgreSQL
 - Heroku
 
-___
-
-### Software Architecture
-<br>
-
 ![architecture](https://user-images.githubusercontent.com/24212625/37564922-8ba64078-2a97-11e8-82c6-172ca3a67a8d.png)
 
-___
-
-### Our Conversation Flow (Divorce Route Example)
-<br>
-
-![conversation](https://user-images.githubusercontent.com/24212625/37564925-9256652e-2a97-11e8-84ec-2bbb4637cd8e.png)
-
-## How to run locally
-You will need before hand:
-- Dialogflow account & key
-- Googlesheets API key
-- 2 x PostgreSQL Databases
-
-Steps:
-
-1. Clone the repo:
-`git clone https://github.com/fac-12/Little-Window.git`
-2. Install dependencies
-`npm install`
-3. Create a `config.env` in the root directory. This will need:
-- `DF_KEY = ` [Your Dialogflow client key]  
-- `DATABASE_URL = ` [Your PostgreSQL prod DB]
-- `HEROKU_POSTGRESQL_MAROON_URL` = [Your PostgreSQL dev DB]
-- `HEROKU_POSTGRESQL_OLIVE_URL = ` [Your PostgreSQL test DB]
-- `GOOGLE_API_1 = ` https://sheets.googleapis.com/v4/spreadsheets/{your-sheet-id}/values/
-- `GOOGLE_API_2 = ` ?key={your-GSheet-apikey}
-4. Login  to your prod db and run `db_build.sql`
-5. Run the app in dev mode:
-`npm run dev`
+_
 
 Testing:
 1. Run `npm test` in the command line
 2. Run `cd client` then `npm test` to run React tests
 
-## Setting up Dialogflow
+___
+
+## Dialogflow
 
 You can setup your conversation flow in Dialogflow using the following guidelines:
 
@@ -124,3 +95,6 @@ You can setup your conversation flow in Dialogflow using the following guideline
 ### Message speed
 
 - As in the above screenshot, each message can be given a `time delay` in the payload of `slow` (5secs) or `superslow` (8secs) to slow down the speed of a given bot response. The standard speed is 1.5secs.
+
+# Support Us
+Soul Medicine is created by Chayn a global volunteer network with over 400 volunteers from 15 countries. If you like what you see and you want to join our team of volunteers get in touch. Or you can [donate](https://www.paypal.me/chaynhq); all proceeds go to improving Soul Medicine and building more tools and resources at ChaynHQ.
