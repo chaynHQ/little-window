@@ -1,5 +1,5 @@
 # Little Window
-> A chatbot that directs survivors quickly and safely to resources.
+> Little window is a clever little cat chatbot that directs women to the information they are looking for as quickly as possible. Think of it like google search on turbo for all of Chayn’s resources and those provided by our friends too. We want to drastically reduce the time women take to search for information which in many cases can save lives.
 
 **Currently in active development**
 
