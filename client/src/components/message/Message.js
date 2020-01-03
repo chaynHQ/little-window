@@ -24,9 +24,8 @@ const Botmessage = styled.p`
   min-width: 2.2rem;
   max-width: 60%;
 
-  ${props =>
-    props.dotty &&
-    css`
+  ${(props) => props.dotty
+    && css`
       &:after {
         overflow: hidden;
         display: block;
@@ -61,53 +60,52 @@ const StyledKittyContainer = styled.div`
   width: 100%;
 `;
 
-export default class Message extends Component {
-  static propTypes = {
-    messageObj: PropTypes.shape({
-      isUser: PropTypes.bool,
-      options: PropTypes.arrayOf(
-        PropTypes.shape({
-          text: PropTypes.string.isRequired,
-          postback: PropTypes.string.isRequired,
-          lookup: PropTypes.string
-        })
-      ),
-      resources: PropTypes.arrayOf(
-        PropTypes.shape({
-          text: PropTypes.string.isRequired,
-          href: PropTypes.string.isRequired
-        })
-      ),
-      selectOptions: PropTypes.arrayOf(
-        PropTypes.shape({
-          text: PropTypes.string.isRequired,
-          postback: PropTypes.string.isRequired,
-          lookup: PropTypes.string
-        })
-      ),
-      speech: PropTypes.string.isRequired,
-      timedelay: PropTypes.string
-    }).isRequired,
-    updateLang: PropTypes.func.isRequired,
-    addMessage: PropTypes.func.isRequired,
-    sendMessage: PropTypes.func.isRequired,
-    uniqueId: PropTypes.string.isRequired,
-    lang: PropTypes.string.isRequired
-  };
+const propTypes = {
+  messageObj: PropTypes.shape({
+    isUser: PropTypes.bool,
+    options: PropTypes.arrayOf(
+      PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        postback: PropTypes.string.isRequired,
+        lookup: PropTypes.string,
+      }),
+    ),
+    resources: PropTypes.arrayOf(
+      PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        href: PropTypes.string.isRequired,
+      }),
+    ),
+    selectOptions: PropTypes.arrayOf(
+      PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        postback: PropTypes.string.isRequired,
+        lookup: PropTypes.string,
+      }),
+    ),
+    speech: PropTypes.string.isRequired,
+    timedelay: PropTypes.string,
+  }).isRequired,
+  updateLang: PropTypes.func.isRequired,
+  addMessage: PropTypes.func.isRequired,
+  sendMessage: PropTypes.func.isRequired,
+  uniqueId: PropTypes.string.isRequired,
+  lang: PropTypes.string.isRequired,
+};
 
+class Message extends Component {
   // speaker function determines if the message is from a user or from the bot,
   // and renders the appropriate message & styling
-  speaker = messageObj =>
-    messageObj.isUser ? (
-      <Usermessage>{messageObj.speech}</Usermessage>
-    ) : (
-      <StyledKittyContainer>
-        <StyledImg src={catAvatar} />
-        <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
-          {messageObj.speech}
-        </Botmessage>
-      </StyledKittyContainer>
-    );
+  speaker = (messageObj) => (messageObj.isUser ? (
+    <Usermessage>{messageObj.speech}</Usermessage>
+  ) : (
+    <StyledKittyContainer>
+      <StyledImg src={catAvatar} />
+      <Botmessage dotty={messageObj.speech === '' ? 'dotty' : ''}>
+        {messageObj.speech}
+      </Botmessage>
+    </StyledKittyContainer>
+  ));
 
   render() {
     const {
@@ -116,7 +114,7 @@ export default class Message extends Component {
       addMessage,
       sendMessage,
       uniqueId,
-      lang
+      lang,
     } = this.props;
     const speaker = this.speaker(messageObj);
     return (
@@ -130,9 +128,9 @@ export default class Message extends Component {
           uniqueId={uniqueId}
           lang={lang}
         />
-        <Resources 
+        <Resources
           resources={messageObj.resources}
-          lang={lang} 
+          lang={lang}
         />
         <SelectOptions
           selectOptions={messageObj.selectOptions}
@@ -145,3 +143,7 @@ export default class Message extends Component {
     );
   }
 }
+
+Message.propTypes = propTypes;
+
+export default Message;

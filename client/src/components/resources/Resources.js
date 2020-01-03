@@ -29,16 +29,18 @@ const Singlelink = styled.a`
 // Resources renders the resources from the props passed down, from the
 // text and href properties within the array of resources.
 const Resources = (props) => {
-  if (!props.resources) {
+  const { resources, lang } = props;
+
+  if (!resources) {
     return null;
   }
   return (
     <Botresources>
-      {props.resources.map((resource, index) => (
+      {resources.map((resource) => (
         <div key={resource.text}>
           <Singleresource>
             {resource.text}
-            <Singlelink href={resource.href} target="__blank">{viewLang(props.lang)}</Singlelink>
+            <Singlelink href={resource.href} target="__blank">{viewLang(lang)}</Singlelink>
           </Singleresource>
         </div>
       ))}
@@ -50,6 +52,7 @@ Resources.propTypes = {
   resources: PropTypes.arrayOf(PropTypes.shape({
     text: PropTypes.string.isRequired, href: PropTypes.string.isRequired,
   })),
+  lang: PropTypes.string.isRequired,
 };
 
 Resources.defaultProps = {

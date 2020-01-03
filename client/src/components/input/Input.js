@@ -18,9 +18,8 @@ const StyledInput = styled.input`
   padding-left: 5%;
   @media (max-width: 350px) {
    font-size: 14px;
-   ${props =>
-    props.showInput && 
-    css`
+   ${(props) => props.showInput
+    && css`
     width: 94%;
     `};
   }
@@ -46,15 +45,13 @@ const StyledSubmitInput = styled.input`
   -webkit-appearance: none;
   border-radius: 0;
   @media (max-width: 350px) {
-    ${props =>
-    props.showInput && 
-      css`
+    ${(props) => props.showInput
+      && css`
       display: none;
       `};
-    
-    ${props =>
-    props.greaterThan6 && 
-      css`
+
+    ${(props) => props.greaterThan6
+      && css`
       font-size: 13px;
       `};
   }
@@ -67,15 +64,17 @@ const Form = styled.form`
   background-color: white;
 `;
 
-export default class Input extends Component {
-  static propTypes = {
-    addMessage: PropTypes.func.isRequired,
-    sendMessage: PropTypes.func.isRequired,
-    inputStatus: PropTypes.bool.isRequired,
-    inputMessage: PropTypes.string.isRequired,
-    uniqueId: PropTypes.string.isRequired,
-    lang: PropTypes.string.isRequired
-  };
+const propTypes = {
+  addMessage: PropTypes.func.isRequired,
+  sendMessage: PropTypes.func.isRequired,
+  inputStatus: PropTypes.bool.isRequired,
+  inputMessage: PropTypes.string.isRequired,
+  uniqueId: PropTypes.string.isRequired,
+  lang: PropTypes.string.isRequired,
+  minimise: PropTypes.bool.isRequired,
+};
+
+class Input extends Component {
   constructor(props) {
     super(props);
     this.state = { term: '' };
@@ -89,26 +88,36 @@ export default class Input extends Component {
   // handle submit sends the data to dialogflow, adds the message to the message
   // array, and sets the input field back to an empty string.
   handleSubmit(e) {
+    const {
+      lang, uniqueId, sendMessage, addMessage,
+    } = this.props;
+    const { term } = this.state;
+
     e.preventDefault();
 
     const data = {
       isUser: true,
-      uniqueId: this.props.uniqueId,
-      speech: this.state.term,
-      lang: this.props.lang
+      uniqueId,
+      speech: term,
+      lang,
     };
 
-    this.props.sendMessage(data);
-    this.props.addMessage(data);
+    sendMessage(data);
+    addMessage(data);
     this.setState({ term: '' });
   }
 
   render() {
-    if (this.props.minimise) {
+    const {
+      lang, minimise, inputStatus, inputMessage,
+    } = this.props;
+    const { term } = this.state;
+
+    if (minimise) {
       return null;
     }
 
-    const submitText = submitTextLang(this.props.lang);
+    const submitText = submitTextLang(lang);
 
     return (
       <Container>
@@ -117,19 +126,23 @@ export default class Input extends Component {
             type="text"
             name="speech"
             autoComplete="off"
-            showInput={this.props.inputStatus}
+            showInput={inputStatus}
             placeholder={
-              this.props.inputStatus
-                ? this.props.inputMessage
-                : inputPlaceholderLang(this.props.lang)
+              inputStatus
+                ? inputMessage
+                : inputPlaceholderLang(lang)
             }
-            value={this.state.term}
-            onChange={event => this.onInputChange(event.target.value)}
-            disabled={this.props.inputStatus}
+            value={term}
+            onChange={(event) => this.onInputChange(event.target.value)}
+            disabled={inputStatus}
           />
-          <StyledSubmitInput showInput={this.props.inputStatus} type="submit" value={submitText} greaterThan6={submitText.length > 6}/>
+          <StyledSubmitInput showInput={inputStatus} type="submit" value={submitText} greaterThan6={submitText.length > 6} />
         </Form>
       </Container>
     );
   }
 }
+
+Input.propTypes = propTypes;
+
+export default Input;

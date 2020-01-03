@@ -2,12 +2,14 @@ env:
   browser: true
   es6: true
   node: true
+  jest: true
 extends:
   - 'plugin:react/recommended'
   - airbnb
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
+parser: "babel-eslint"
 parserOptions:
   ecmaFeatures:
     jsx: true
@@ -18,7 +20,7 @@ plugins:
 ignorePatterns:
   - 'node_modules/'
   - 'build/'
-rules: {}
+rules: { "react/jsx-filename-extension": [0] }
 settings:
   react:
     version: 'latest'

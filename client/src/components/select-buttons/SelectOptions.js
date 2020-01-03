@@ -33,15 +33,14 @@ const CountryOptionDiv = styled.div`
     cursor: pointer;
   }
 
-  ${props =>
-    props.active &&
-    css`
+  ${(props) => props.active
+    && css`
       background: #f4dfa4;
     `};
 `;
 
 const SubmitButton = styled.button.attrs({
-  disabled: props => props.disabled
+  disabled: (props) => props.disabled,
 })`
   margin: auto;
   border: 2px #b0b0b0 solid;
@@ -67,25 +66,25 @@ const SubmitButton = styled.button.attrs({
   }
 `;
 
-export default class SelectOptions extends Component {
-  static propTypes = {
-    selectOptions: PropTypes.arrayOf(
-      PropTypes.shape({
-        text: PropTypes.string.isRequired,
-        postback: PropTypes.string.isRequired,
-        lookup: PropTypes.string
-      })
-    ),
-    addMessage: PropTypes.func.isRequired,
-    sendMessage: PropTypes.func.isRequired,
-    uniqueId: PropTypes.string.isRequired,
-    lang: PropTypes.string.isRequired
-  };
+const propTypes = {
+  selectOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      postback: PropTypes.string.isRequired,
+      lookup: PropTypes.string,
+    }),
+  ),
+  addMessage: PropTypes.func.isRequired,
+  sendMessage: PropTypes.func.isRequired,
+  uniqueId: PropTypes.string.isRequired,
+  lang: PropTypes.string.isRequired,
+};
 
-  static defaultProps = {
-    selectOptions: []
-  };
+const defaultProps = {
+  selectOptions: [],
+};
 
+class SelectOptions extends Component {
   // activeOptions set to an array of false values initially as no options
   // are selected. ActiveOptions is an array of items of the same length as
   // selectOptions (the buttons on the page). The values in activeOptions
@@ -95,7 +94,7 @@ export default class SelectOptions extends Component {
     super(props);
     this.state = {
       disabled: false,
-      activeOptions: props.selectOptions.map(() => false)
+      activeOptions: props.selectOptions.map(() => false),
     };
   }
 
@@ -103,7 +102,7 @@ export default class SelectOptions extends Component {
   // index to be false if it had been true, and vice versa. If 'none of the above'
   // is selected, all the other buttons in activeOptions are set to false.
   countryOptionClickHandler = (selectOption, index) => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       let newActiveOptions = Array.from(prevState.activeOptions);
       newActiveOptions[index] = !newActiveOptions[index];
 
@@ -117,53 +116,66 @@ export default class SelectOptions extends Component {
       return { activeOptions: newActiveOptions };
     });
   };
+
   // onSubmit, selectedCountries is an array of selectOptions where the
   // corresponding position in activeOptions is true.
   submitHandler = () => {
-    const selectedCountries = this.state.activeOptions
-      .map((option, index) => (option ? this.props.selectOptions[index] : null))
+    const { activeOptions } = this.state;
+    const {
+      selectOptions, uniqueId, lang, addMessage, sendMessage,
+    } = this.props;
+
+    const selectedCountries = activeOptions
+      .map((option, index) => (option ? selectOptions[index] : null))
       .filter(Boolean);
 
     // Add the country to messages in App state so that the countries render on the
     // screen as answers.
-    selectedCountries.forEach(countryObj => {
+    selectedCountries.forEach((countryObj) => {
       const data = {
         isUser: true,
         speech: countryObj.text,
-        uniqueId: this.props.uniqueId,
-        lang: this.props.lang
+        uniqueId,
+        lang,
       };
 
-      this.props.addMessage(data);
+      addMessage(data);
     });
 
-    this.props.sendMessage({
+    sendMessage({
       speech: selectedCountries[0].postback,
-      uniqueId: this.props.uniqueId,
-      lang: this.props.lang,
-      selectedCountries
+      uniqueId,
+      lang,
+      selectedCountries,
     });
     // setState disabled to true so buttons don't render once submitted.
     this.setState({ disabled: true });
   };
 
-  renderSelectOptions = () =>
-    this.props.selectOptions.map((selectOption, index) => (
+  renderSelectOptions = () => {
+    const { activeOptions } = this.state;
+    const { selectOptions } = this.props;
+
+    return selectOptions.map((selectOption, index) => (
       <CountryOptionDiv
         key={selectOption.text}
-        active={this.state.activeOptions[index] ? 'active' : ''}
+        active={activeOptions[index] ? 'active' : ''}
         onClick={() => this.countryOptionClickHandler(selectOption, index)}
       >
         {selectOption.text}
       </CountryOptionDiv>
     ));
+  }
 
   render() {
-    if (this.props.selectOptions.length === 0 || this.state.disabled) {
+    const { disabled, activeOptions } = this.state;
+    const { selectOptions, lang } = this.props;
+
+    if (selectOptions.length === 0 || disabled) {
       return null;
     }
 
-    const optionSelectedBool = this.state.activeOptions.some(Boolean);
+    const optionSelectedBool = activeOptions.some(Boolean);
 
     return (
       <div>
@@ -172,9 +184,14 @@ export default class SelectOptions extends Component {
           disabled={optionSelectedBool ? '' : 'disabled'}
           onClick={this.submitHandler}
         >
-          {submitTextLang(this.props.lang)}
+          {submitTextLang(lang)}
         </SubmitButton>
       </div>
     );
   }
 }
+
+SelectOptions.propTypes = propTypes;
+SelectOptions.defaultProps = defaultProps;
+
+export default SelectOptions;

@@ -19,9 +19,8 @@ const Container = styled.div`
   box-sizing: border-box;
   border: 1px solid black;
   font-family: 'Source Code Pro', monospace;
-  ${(props) =>
-    props.min &&
-    css`
+  ${(props) => props.min
+    && css`
       position: absolute;
       bottom: 0;
       left: 0;
@@ -40,12 +39,12 @@ margin: 0;
 }
 `;
 
-export default class App extends React.Component {
-  static propTypes = {
-    uniqueId: PropTypes.string.isRequired,
-    uniqueIdGenerator: PropTypes.func.isRequired,
-  };
+const propTypes = {
+  uniqueId: PropTypes.string.isRequired,
+  uniqueIdGenerator: PropTypes.func.isRequired,
+};
 
+class App extends React.Component {
   // the value passed to minimise on load - window.navigator.userAgent - contains information
   // about the name, version and platform of the browser
   constructor(props) {
@@ -65,31 +64,35 @@ export default class App extends React.Component {
   // On loading the page the first message is sent to Dialog Flow with
   // speech to bring back first message and sending the unique id.
   componentDidMount = () => {
-    if (!this.state.minimise) {
+    const { minimise, lang } = this.state;
+    const { uniqueId } = this.props;
+    if (!minimise) {
       this.sendMessage({
         speech: 'Little Window language selection',
-        uniqueId: this.props.uniqueId,
-        lang: this.state.lang,
+        uniqueId,
+        lang,
       });
       this.setState({
-        uniqueId: this.props.uniqueId,
+        uniqueId,
       });
     }
   };
 
   componentDidUpdate = (prevProps, prevState) => {
+    const { lang, minimise } = this.state;
+    const { uniqueId } = this.props;
     if (
-      prevState.minimise === true &&
-      prevState.messages.length === 0 &&
-      this.state.minimise === false
+      prevState.minimise === true
+      && prevState.messages.length === 0
+      && minimise === false
     ) {
       this.sendMessage({
         speech: 'Little Window language selection',
-        uniqueId: this.props.uniqueId,
-        lang: this.state.lang,
+        uniqueId,
+        lang,
       });
       this.setState({
-        uniqueId: this.props.uniqueId,
+        uniqueId,
       });
     }
   };
@@ -99,17 +102,18 @@ export default class App extends React.Component {
   // input also disabled.  Otherwise input is enabled. Dots are removed
   // and message added to messages in state
   addMessage = (message) => {
+    const { lang, timedelay } = this.state;
     if (!message.isUser && !message.isDot) {
       setTimeout(() => {
         if (message.options.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: buttonMessageLang(this.state.lang),
+            inputMessage: buttonMessageLang(lang),
           });
         } else if (message.selectOptions.length > 0) {
           this.setState({
             inputStatus: true,
-            inputMessage: optionsLang(this.state.lang),
+            inputMessage: optionsLang(lang),
           });
         } else if (message.retrigger) {
           this.setState({ inputStatus: true });
@@ -120,7 +124,7 @@ export default class App extends React.Component {
         this.setState((prevState) => ({
           messages: [...prevState.messages, message],
         }));
-      }, this.state.timedelay);
+      }, timedelay);
     } else {
       this.setState((prevState) => ({
         messages: [...prevState.messages, message],
@@ -132,14 +136,15 @@ export default class App extends React.Component {
   // (these are added with CSS with the dotty class).  Therefore we need to check
   // if last message is empty string to then remove the dots.
   removeWaitingDots = () => {
-    if (this.state.messages.length > 0) {
-      if (this.state.messages[this.state.messages.length - 1].speech === '') {
+    const {messages, delayDisabled} = this.state;
+    if (messages.length > 0) {
+      if (messages[messages.length - 1].speech === '') {
         this.setState((prevState) => ({
           messages: [...prevState.messages.slice(0, -1)],
         }));
       }
     }
-    if (this.state.delayDisabled) {
+    if (delayDisabled) {
       this.setState({
         refreshDisabled: false,
       });
@@ -155,6 +160,7 @@ export default class App extends React.Component {
   // if so send another message to backend (for a string of messages in a row
   // with no input from user)
   sendMessage = (data) => {
+    const {uniqueId} = this.state;
     this.sendToServer(data)
       .then((res) => res.json())
       .then((resData) => {
@@ -200,7 +206,7 @@ export default class App extends React.Component {
             }
 
             // create copy of resData to avoid mutating it
-            const newMessage = Object.assign({}, resData);
+            const newMessage = { ...resData };
 
             newMessage.isUser = false;
             this.setState({
@@ -220,13 +226,12 @@ export default class App extends React.Component {
       });
   };
 
-  sendToServer = (data) =>
-    fetch('/usermessage', {
-      method: 'POST',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-      credentials: 'same-origin',
-      body: JSON.stringify(data),
-    });
+  sendToServer = (data) => fetch('/usermessage', {
+    method: 'POST',
+    headers: new Headers({ 'Content-Type': 'application/json' }),
+    credentials: 'same-origin',
+    body: JSON.stringify(data),
+  });
 
   // Refresh resets the conversation so sets a new id and sends first message again.
   // It disables the refresh button so it can't be clicked multiple times (refreshDisabled:true).
@@ -317,3 +322,7 @@ export default class App extends React.Component {
     );
   }
 }
+
+App.propTypes = propTypes;
+
+export default App;

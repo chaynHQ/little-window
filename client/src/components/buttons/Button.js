@@ -61,29 +61,29 @@ const Multiplebutton = styled(Basicbutton)`
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
 
+// prop-types module used to specify the types of the props
+const propTypes = {
+  uniqueId: PropTypes.string.isRequired,
+  lang: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      postback: PropTypes.string.isRequired,
+      lookup: PropTypes.string,
+    }),
+  ),
+  updateLang: PropTypes.func.isRequired,
+  addMessage: PropTypes.func.isRequired,
+  sendMessage: PropTypes.func.isRequired,
+};
+
+// default props are required when prop does not have isRequired property
+const defaultProps = {
+  options: [],
+};
+
 // Button component for all buttons
-export default class Button extends Component {
-  // prop-types module used to specify the types of the props
-  static propTypes = {
-    uniqueId: PropTypes.string.isRequired,
-    lang: PropTypes.string.isRequired,
-    options: PropTypes.arrayOf(
-      PropTypes.shape({
-        text: PropTypes.string.isRequired,
-        postback: PropTypes.string.isRequired,
-        lookup: PropTypes.string
-      })
-    ),
-    updateLang: PropTypes.func.isRequired,
-    addMessage: PropTypes.func.isRequired,
-    sendMessage: PropTypes.func.isRequired
-  };
-
-  // default props are required when prop does not have isRequired property
-  static defaultProps = {
-    options: []
-  };
-
+class Button extends Component {
   // disabled property determines if buttons are displayed or not.
   // Buttons are displayed before one is clicked.
   constructor(props) {
@@ -97,19 +97,23 @@ export default class Button extends Component {
   // once a button is clicked, state is set to disabled so that buttons don't
   // appear
   clickHandler(option) {
+    const {
+      updateLang, uniqueId, addMessage, sendMessage, lang,
+    } = this.props;
+
     if (option.lang) {
-      this.props.updateLang(option.lang, () => {
+      updateLang(option.lang, () => {
         const data = {
           isUser: true,
           speech: option.text,
-          uniqueId: this.props.uniqueId,
-          lang: option.lang
+          uniqueId,
+          lang: option.lang,
         };
-        this.props.addMessage(data);
-        this.props.sendMessage({
+        addMessage(data);
+        sendMessage({
           speech: option.postback,
-          uniqueId: this.props.uniqueId,
-          lang: option.lang
+          uniqueId,
+          lang: option.lang,
         });
       });
       this.setState({ disabled: true });
@@ -117,14 +121,14 @@ export default class Button extends Component {
       const data = {
         isUser: true,
         speech: option.text,
-        uniqueId: this.props.uniqueId,
-        lang: this.props.lang
+        uniqueId,
+        lang,
       };
-      this.props.addMessage(data);
-      this.props.sendMessage({
+      addMessage(data);
+      sendMessage({
         speech: option.postback,
-        uniqueId: this.props.uniqueId,
-        lang: this.props.lang
+        uniqueId,
+        lang,
       });
       this.setState({ disabled: true });
     }
@@ -134,20 +138,20 @@ export default class Button extends Component {
   // or if state.disabled is set to false.
 
   render() {
-    if (!this.props.options || this.state.disabled) return null;
+    const { options } = this.props;
+    const { disabled } = this.state;
+    if (!options || disabled) return null;
 
-    const ButtonName =
-      this.props.options.length > 2 ? Multiplebutton : Styledbutton;
-    const ButtonDiv =
-      this.props.options.length > 2 && this.props.options.length < 5
-        ? Multiplebuttonsdiv
-        : Styledbuttonsdiv;
+    const ButtonName = options.length > 2 ? Multiplebutton : Styledbutton;
+    const ButtonDiv = options.length > 2 && options.length < 5
+      ? Multiplebuttonsdiv
+      : Styledbuttonsdiv;
     return (
       <ButtonDiv>
-        {this.props.options.map((option, index) => (
+        {options.map((option) => (
           <ButtonName
             value={option.postback}
-            key={index}
+            key={option.postback}
             onClick={() => this.clickHandler(option)}
           >
             {option.text}
@@ -157,3 +161,8 @@ export default class Button extends Component {
     );
   }
 }
+
+Button.propTypes = propTypes;
+Button.defaultProps = defaultProps;
+
+export default Button;

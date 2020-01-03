@@ -2,31 +2,43 @@
 // with key value pairs.
 
 export function typingMessageLang(lang) {
-  if (lang === 'en') return 'Typing...';
-  if (lang === 'fr') return 'Un petit moment...';
+  let message;
+  if (lang === 'en') message = 'Typing...';
+  if (lang === 'fr') message = 'Un petit moment...';
+  return message;
 }
 
 export function buttonMessageLang(lang) {
-  if (lang === 'en') return 'Choose a button';
-  if (lang === 'fr') return 'Choisis une option';
+  let message;
+  if (lang === 'en') message = 'Choose a button';
+  if (lang === 'fr') message = 'Choisis une option';
+  return message;
 }
 
 export function optionsLang(lang) {
-  if (lang === 'en') return 'Pick one or more options';
-  if (lang === 'fr') return 'Choisis une ou plusieurs options';
+  let message;
+  if (lang === 'en') message = 'Pick one or more options';
+  if (lang === 'fr') message = 'Choisis une ou plusieurs options';
+  return message;
 }
 
 export function inputPlaceholderLang(lang) {
-  if (lang === 'en') return 'Type here...';
-  if (lang === 'fr') return 'Écris ici';
+  let message;
+  if (lang === 'en') message = 'Type here...';
+  if (lang === 'fr') message = 'Écris ici';
+  return message;
 }
 
 export function submitTextLang(lang) {
-  if (lang === 'en') return 'Submit';
-  if (lang === 'fr') return 'Envoyer';
+  let message;
+  if (lang === 'en') message = 'Submit';
+  if (lang === 'fr') message = 'Envoyer';
+  return message;
 }
 
 export function viewLang(lang) {
-  if (lang === 'en') return 'View';
-  if (lang === 'fr') return 'Voir';
+  let message;
+  if (lang === 'en') message = 'View';
+  if (lang === 'fr') message = 'Voir';
+  return message;
 }

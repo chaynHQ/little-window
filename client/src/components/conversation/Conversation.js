@@ -50,42 +50,43 @@ const Loader = styled.div`
   animation: ${spin} 1s linear infinite;
 `;
 
-export default class Conversation extends Component {
-  // prop-types module used to specify the types of the props
-  static propTypes = {
-    messages: PropTypes.arrayOf(
-      PropTypes.shape({
-        isUser: PropTypes.bool,
-        options: PropTypes.arrayOf(
-          PropTypes.shape({
-            text: PropTypes.string.isRequired,
-            postback: PropTypes.string.isRequired,
-            lookup: PropTypes.string
-          })
-        ),
-        resources: PropTypes.arrayOf(
-          PropTypes.shape({
-            text: PropTypes.string.isRequired,
-            href: PropTypes.string.isRequired
-          })
-        )
-      })
-    ),
-    updateLang: PropTypes.func.isRequired,
-    addMessage: PropTypes.func.isRequired,
-    sendMessage: PropTypes.func.isRequired,
-    uniqueId: PropTypes.string.isRequired,
-    minimise: PropTypes.bool.isRequired,
-    lang: PropTypes.string.isRequired
-  };
+const propTypes = {
+  messages: PropTypes.arrayOf(
+    PropTypes.shape({
+      isUser: PropTypes.bool,
+      options: PropTypes.arrayOf(
+        PropTypes.shape({
+          text: PropTypes.string.isRequired,
+          postback: PropTypes.string.isRequired,
+          lookup: PropTypes.string,
+        }),
+      ),
+      resources: PropTypes.arrayOf(
+        PropTypes.shape({
+          text: PropTypes.string.isRequired,
+          href: PropTypes.string.isRequired,
+        }),
+      ),
+    }),
+  ),
+  updateLang: PropTypes.func.isRequired,
+  addMessage: PropTypes.func.isRequired,
+  sendMessage: PropTypes.func.isRequired,
+  uniqueId: PropTypes.string.isRequired,
+  minimise: PropTypes.bool.isRequired,
+  lang: PropTypes.string.isRequired,
+};
 
-  static defaultProps = {
-    messages: []
-  };
+const defaultProps = {
+  messages: [],
+};
 
+class Conversation extends Component {
   // chat window scrolls to bottom each time it updates
   componentDidUpdate() {
-    if (!this.props.minimise) {
+    const { minimise } = this.props;
+
+    if (!minimise) {
       this.scrollToBottom();
     }
   }
@@ -96,30 +97,35 @@ export default class Conversation extends Component {
   };
 
   // mapping through the messages to render them one by one
-  renderMessages = () =>
-    this.props.messages.map((messageObj, index) => (
+  renderMessages = () => {
+    const {
+      messages, updateLang, addMessage, sendMessage, uniqueId, lang,
+    } = this.props;
+
+    return messages.map((messageObj) => (
       <Message
         messageObj={messageObj}
-        key={index}
-        updateLang={this.props.updateLang}
-        addMessage={this.props.addMessage}
-        sendMessage={this.props.sendMessage}
-        uniqueId={this.props.uniqueId}
-        lang={this.props.lang}
+        key={uniqueId}
+        updateLang={updateLang}
+        addMessage={addMessage}
+        sendMessage={sendMessage}
+        uniqueId={uniqueId}
+        lang={lang}
       />
     ));
+  };
 
   // rendering the conversation. ScrollToDiv is purely for scrolling purposes.
   render() {
-    if (this.props.minimise) {
+    const { messages, minimise } = this.props;
+    if (minimise) {
       return null;
     }
-    const { messages } = this.props;
     return (
       <Container>
         {messages.length ? this.renderMessages() : <Loader />}
         <ScrollToDiv
-          innerRef={el => {
+          innerRef={(el) => {
             this.scrollTarget = el;
           }}
         />
@@ -127,3 +133,8 @@ export default class Conversation extends Component {
     );
   }
 }
+
+Conversation.propTypes = propTypes;
+Conversation.defaultProps = defaultProps;
+
+export default Conversation;

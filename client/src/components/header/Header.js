@@ -72,25 +72,30 @@ const Icon = styled.img``;
 
 // RefreshButton refreshes the conversation in App. The property of
 // refreshDisabled property disables the refresh button while the bot is typing.
-const Header = (props) => (
-  <StyledHeader minSize={props.minimise === true ? 'minSize' : ''}>
-    <MinimiseButton onClick={props.minimiseFunc}>
-      <Icon
-        src={props.minimise ? Maximise : Minimise}
-        alt={props.minimise ? 'Maximise' : 'Minimise'}
-      />
-    </MinimiseButton>
-    <RefreshButton onClick={props.refresh} disabled={props.refreshDisabled}>
-      <Icon src={Refresh} alt="refresh" />
-    </RefreshButton>
+const Header = (props) => {
+  const {
+    minimise, minimiseFunc, refresh, refreshDisabled,
+  } = props;
+  return (
+    <StyledHeader minSize={minimise === true ? 'minSize' : ''}>
+      <MinimiseButton onClick={minimiseFunc}>
+        <Icon
+          src={minimise ? Maximise : Minimise}
+          alt={minimise ? 'Maximise' : 'Minimise'}
+        />
+      </MinimiseButton>
+      <RefreshButton onClick={refresh} disabled={refreshDisabled}>
+        <Icon src={Refresh} alt="refresh" />
+      </RefreshButton>
 
-    <HeadingText>
-      <Styledh1>
-        {props.minimise === true ? 'Can I help you?' : 'Little Window'}
-      </Styledh1>
-    </HeadingText>
-  </StyledHeader>
-);
+      <HeadingText>
+        <Styledh1>
+          {minimise === true ? 'Can I help you?' : 'Little Window'}
+        </Styledh1>
+      </HeadingText>
+    </StyledHeader>
+  );
+};
 
 Header.propTypes = {
   refresh: PropTypes.func.isRequired,
