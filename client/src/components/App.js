@@ -40,8 +40,8 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const propTypes = {
-  uniqueId: PropTypes.string.isRequired,
-  uniqueIdGenerator: PropTypes.func.isRequired,
+  uniqueConversationId: PropTypes.string.isRequired,
+  uniqueConversationIdGenerator: PropTypes.func.isRequired,
 };
 
 class App extends React.Component {
@@ -65,11 +65,11 @@ class App extends React.Component {
   // speech to bring back first message and sending the unique id.
   componentDidMount = () => {
     const { minimise, lang } = this.state;
-    const { uniqueId } = this.props;
+    const { uniqueConversationId } = this.props;
     if (!minimise) {
       this.sendMessage({
         speech: 'Little Window language selection',
-        uniqueId,
+        uniqueConversationId,
         lang,
       });
     }
@@ -77,7 +77,7 @@ class App extends React.Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     const { lang, minimise } = this.state;
-    const { uniqueId } = this.props;
+    const { uniqueConversationId } = this.props;
     if (
       prevState.minimise === true
       && prevState.messages.length === 0
@@ -85,7 +85,7 @@ class App extends React.Component {
     ) {
       this.sendMessage({
         speech: 'Little Window language selection',
-        uniqueId,
+        uniqueConversationId,
         lang,
       });
     }
@@ -154,12 +154,12 @@ class App extends React.Component {
   // if so send another message to backend (for a string of messages in a row
   // with no input from user)
   sendMessage = (data) => {
-    const { uniqueId } = this.props;
+    const { uniqueConversationId } = this.props;
     const { lang, timedelay } = this.state;
     this.sendToServer(data)
       .then((res) => res.json())
       .then((resData) => {
-        if (uniqueId === data.uniqueId) {
+        if (uniqueConversationId === data.uniqueConversationId) {
           if (resData.GDPROptOut) {
             this.refresh();
             this.minimiseFunc();
@@ -176,7 +176,7 @@ class App extends React.Component {
               setTimeout(() => {
                 this.sendMessage({
                   speech: resData.retrigger,
-                  uniqueId,
+                  uniqueConversationId,
                   lang,
                 });
               }, timedelay);
@@ -185,7 +185,7 @@ class App extends React.Component {
               setTimeout(() => {
                 this.sendMessage({
                   speech: resData.retrigger,
-                  uniqueId,
+                  uniqueConversationId,
                   lang,
                 });
               }, timedelay);
@@ -235,8 +235,8 @@ class App extends React.Component {
   // removeWaitingDots checks if delayDisabled is true and if so sets refreshDisabled as false,
   // enabling the refresh button again.
   refresh = () => {
-    const { uniqueIdGenerator } = this.props;
-    const newId = uniqueIdGenerator();
+    const { uniqueConversationIdGenerator } = this.props;
+    const newId = uniqueConversationIdGenerator();
 
     this.setState({
       messages: [],
@@ -245,7 +245,7 @@ class App extends React.Component {
     });
     this.sendMessage({
       speech: 'Little Window language selection',
-      uniqueId: newId,
+      uniqueConversationId: newId,
       lang: 'en',
     });
   };
@@ -287,7 +287,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { uniqueId } = this.props;
+    const { uniqueConversationId } = this.props;
     const {
       minimise, refreshDisabled, lang, messages, inputStatus, inputMessage,
     } = this.state;
@@ -307,7 +307,7 @@ class App extends React.Component {
           updateLang={this.updateLang}
           addMessage={this.addMessage}
           sendMessage={this.sendMessage}
-          uniqueId={uniqueId}
+          uniqueConversationId={uniqueConversationId}
           minimise={minimise}
           lang={lang}
         />
@@ -316,7 +316,7 @@ class App extends React.Component {
           sendMessage={this.sendMessage}
           inputStatus={inputStatus}
           inputMessage={inputMessage}
-          uniqueId={uniqueId}
+          uniqueConversationId={uniqueConversationId}
           minimise={minimise}
           lang={lang}
         />

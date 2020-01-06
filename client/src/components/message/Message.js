@@ -89,7 +89,7 @@ const propTypes = {
   updateLang: PropTypes.func.isRequired,
   addMessage: PropTypes.func.isRequired,
   sendMessage: PropTypes.func.isRequired,
-  uniqueId: PropTypes.string.isRequired,
+  uniqueConversationId: PropTypes.string.isRequired,
   lang: PropTypes.string.isRequired,
 };
 
@@ -113,7 +113,7 @@ class Message extends Component {
       updateLang,
       addMessage,
       sendMessage,
-      uniqueId,
+      uniqueConversationId,
       lang,
     } = this.props;
     const speaker = this.speaker(messageObj);
@@ -125,7 +125,7 @@ class Message extends Component {
           updateLang={updateLang}
           addMessage={addMessage}
           sendMessage={sendMessage}
-          uniqueId={uniqueId}
+          uniqueConversationId={uniqueConversationId}
           lang={lang}
         />
         <Resources
@@ -136,7 +136,7 @@ class Message extends Component {
           selectOptions={messageObj.selectOptions}
           addMessage={addMessage}
           sendMessage={sendMessage}
-          uniqueId={uniqueId}
+          uniqueConversationId={uniqueConversationId}
           lang={lang}
         />
       </div>

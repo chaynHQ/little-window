@@ -76,7 +76,7 @@ const propTypes = {
   ),
   addMessage: PropTypes.func.isRequired,
   sendMessage: PropTypes.func.isRequired,
-  uniqueId: PropTypes.string.isRequired,
+  uniqueConversationId: PropTypes.string.isRequired,
   lang: PropTypes.string.isRequired,
 };
 
@@ -122,7 +122,7 @@ class SelectOptions extends Component {
   submitHandler = () => {
     const { activeOptions } = this.state;
     const {
-      selectOptions, uniqueId, lang, addMessage, sendMessage,
+      selectOptions, uniqueConversationId, lang, addMessage, sendMessage,
     } = this.props;
 
     const selectedCountries = activeOptions
@@ -135,7 +135,7 @@ class SelectOptions extends Component {
       const data = {
         isUser: true,
         speech: countryObj.text,
-        uniqueId,
+        uniqueConversationId,
         lang,
       };
 
@@ -144,7 +144,7 @@ class SelectOptions extends Component {
 
     sendMessage({
       speech: selectedCountries[0].postback,
-      uniqueId,
+      uniqueConversationId,
       lang,
       selectedCountries,
     });

@@ -14,7 +14,7 @@ const messageObj = {
 const addMessage = () => {};
 const sendMessage = () => {};
 const updateLang = () => {};
-const uniqueId = '1234';
+const uniqueConversationId = '1234';
 const lang = 'en';
 
 it('renders without crashing', () => {
@@ -23,7 +23,7 @@ it('renders without crashing', () => {
     addMessage={addMessage}
     sendMessage={sendMessage}
     messageObj={messageObj}
-    uniqueId={uniqueId}
+    uniqueConversationId={uniqueConversationId}
     lang={lang}
     updateLang={updateLang}
   />, div);

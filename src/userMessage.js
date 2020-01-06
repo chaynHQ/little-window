@@ -31,7 +31,7 @@ const errTechnical = (lang) => {
 // the call to Dialog Flow
 const dialogFlow = (req, res, speech) => {
   const requestdf = app.textRequest(speech, {
-    sessionId: req.body.uniqueId,
+    sessionId: req.body.uniqueConversationId,
   });
 
   const selectedLang = req.body.lang;
@@ -119,13 +119,13 @@ const dialogFlow = (req, res, speech) => {
 
 // if it is the first input from user, save the conversation id in database
 const userMessage = (req, res) => {
-  const { speech, uniqueId } = req.body;
+  const { speech, uniqueConversationId } = req.body;
   if (
     speech === 'Little Window language selection'
   ) {
-    saveConversation(uniqueId);
+    saveConversation(uniqueConversationId);
   }
-  saveMessage(speech, uniqueId);
+  saveMessage(speech, uniqueConversationId);
   dialogFlow(req, res, speech);
 };
 

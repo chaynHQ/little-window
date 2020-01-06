@@ -10,11 +10,11 @@ import registerServiceWorker from './registerServiceWorker';
 // here and then pass it down
 const uuidv4 = require('uuid/v4');
 
-const uniqueId = uuidv4();
-const uniqueIdGenerator = () => uuidv4();
+const uniqueConversationId = uuidv4();
+const uniqueConversationIdGenerator = () => uuidv4();
 
 ReactDOM.render(
-  <App uniqueId={uniqueId} uniqueIdGenerator={uniqueIdGenerator} />,
+  <App uniqueConversationId={uniqueConversationId} uniqueConversationIdGenerator={uniqueConversationIdGenerator} />,
   document.getElementById('root'),
 );
 registerServiceWorker();

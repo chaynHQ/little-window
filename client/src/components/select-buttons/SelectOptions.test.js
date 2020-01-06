@@ -6,7 +6,7 @@ import SelectOptions from './SelectOptions';
 const selectOptions = [{ text: 'text', postback: 'postback' }];
 const addMessage = () => {};
 const sendMessage = () => {};
-const uniqueId = 'test';
+const uniqueConversationId = 'test';
 const lang = 'en';
 
 it('renders without crashing', () => {
@@ -16,7 +16,7 @@ it('renders without crashing', () => {
       selectOptions={selectOptions}
       addMessage={addMessage}
       sendMessage={sendMessage}
-      uniqueId={uniqueId}
+      uniqueConversationId={uniqueConversationId}
       lang={lang}
     />,
     div,

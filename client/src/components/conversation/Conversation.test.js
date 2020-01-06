@@ -12,7 +12,7 @@ const sendMessage = () => {};
 const updateLang = () => {};
 
 
-const uniqueId = '1234';
+const uniqueConversationId = '1234';
 const minimise = true;
 const lang = 'en';
 
@@ -21,7 +21,7 @@ it('renders without crashing', () => {
   ReactDOM.render(<Conversation
     addMessage={addMessage}
     sendMessage={sendMessage}
-    uniqueId={uniqueId}
+    uniqueConversationId={uniqueConversationId}
     messages={messages}
     minimise={minimise}
     lang={lang}

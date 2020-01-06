@@ -63,7 +63,7 @@ const Multiplebutton = styled(Basicbutton)`
 
 // prop-types module used to specify the types of the props
 const propTypes = {
-  uniqueId: PropTypes.string.isRequired,
+  uniqueConversationId: PropTypes.string.isRequired,
   lang: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({
@@ -98,7 +98,7 @@ class Button extends Component {
   // appear
   clickHandler(option) {
     const {
-      updateLang, uniqueId, addMessage, sendMessage, lang,
+      updateLang, uniqueConversationId, addMessage, sendMessage, lang,
     } = this.props;
 
     if (option.lang) {
@@ -106,13 +106,13 @@ class Button extends Component {
         const data = {
           isUser: true,
           speech: option.text,
-          uniqueId,
+          uniqueConversationId,
           lang: option.lang,
         };
         addMessage(data);
         sendMessage({
           speech: option.postback,
-          uniqueId,
+          uniqueConversationId,
           lang: option.lang,
         });
       });
@@ -121,13 +121,13 @@ class Button extends Component {
       const data = {
         isUser: true,
         speech: option.text,
-        uniqueId,
+        uniqueConversationId,
         lang,
       };
       addMessage(data);
       sendMessage({
         speech: option.postback,
-        uniqueId,
+        uniqueConversationId,
         lang,
       });
       this.setState({ disabled: true });
@@ -151,7 +151,7 @@ class Button extends Component {
         {options.map((option) => (
           <ButtonName
             value={option.postback}
-            key={option.postback}
+            key={option.text}
             onClick={() => this.clickHandler(option)}
           >
             {option.text}

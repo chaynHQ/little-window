@@ -72,7 +72,7 @@ const propTypes = {
   updateLang: PropTypes.func.isRequired,
   addMessage: PropTypes.func.isRequired,
   sendMessage: PropTypes.func.isRequired,
-  uniqueId: PropTypes.string.isRequired,
+  uniqueConversationId: PropTypes.string.isRequired,
   minimise: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
 };
@@ -99,17 +99,17 @@ class Conversation extends Component {
   // mapping through the messages to render them one by one
   renderMessages = () => {
     const {
-      messages, updateLang, addMessage, sendMessage, uniqueId, lang,
+      messages, updateLang, addMessage, sendMessage, uniqueConversationId, lang,
     } = this.props;
 
     return messages.map((messageObj) => (
       <Message
         messageObj={messageObj}
-        key={uniqueId}
+        key={uniqueConversationId}
         updateLang={updateLang}
         addMessage={addMessage}
         sendMessage={sendMessage}
-        uniqueId={uniqueId}
+        uniqueConversationId={uniqueConversationId}
         lang={lang}
       />
     ));

@@ -69,7 +69,7 @@ const propTypes = {
   sendMessage: PropTypes.func.isRequired,
   inputStatus: PropTypes.bool.isRequired,
   inputMessage: PropTypes.string.isRequired,
-  uniqueId: PropTypes.string.isRequired,
+  uniqueConversationId: PropTypes.string.isRequired,
   lang: PropTypes.string.isRequired,
   minimise: PropTypes.bool.isRequired,
 };
@@ -89,7 +89,7 @@ class Input extends Component {
   // array, and sets the input field back to an empty string.
   handleSubmit(e) {
     const {
-      lang, uniqueId, sendMessage, addMessage,
+      lang, uniqueConversationId, sendMessage, addMessage,
     } = this.props;
     const { term } = this.state;
 
@@ -97,7 +97,7 @@ class Input extends Component {
 
     const data = {
       isUser: true,
-      uniqueId,
+      uniqueConversationId,
       speech: term,
       lang,
     };

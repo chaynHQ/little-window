@@ -7,7 +7,7 @@ const addMessage = () => { };
 const sendMessage = () => { };
 const inputStatus = false;
 const inputMessage = 'abcd';
-const uniqueId = '1234';
+const uniqueConversationId = '1234';
 const lang = 'en';
 
 it('renders without crashing', () => {
@@ -17,7 +17,7 @@ it('renders without crashing', () => {
     sendMessage={sendMessage}
     inputStatus={inputStatus}
     inputMessage={inputMessage}
-    uniqueId={uniqueId}
+    uniqueConversationId={uniqueConversationId}
     lang={lang}
   />, div);
   ReactDOM.unmountComponentAtNode(div);

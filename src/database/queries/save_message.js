@@ -7,11 +7,11 @@ const saveMessage = (speech, conversationId) => db
   .query(
     `
   DO $$
-  DECLARE conv_id integer := (SELECT id FROM conversation WHERE uniqueid = $2);
+  DECLARE conv_id integer := (SELECT id FROM conversation WHERE uniqueConversationId = $2);
   BEGIN
   IF (conv_id >= 0) THEN
   INSERT INTO messages (chat, conversation_id)
-  VALUES ($1, (SELECT id FROM conversation WHERE uniqueId = $2));
+  VALUES ($1, (SELECT id FROM conversation WHERE uniqueConversationId = $2));
   END IF;
   END $$;`,
     [speech, conversationId],

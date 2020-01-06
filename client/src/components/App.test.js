@@ -6,7 +6,7 @@ const testObj = {
   options: Array(0),
   resources: Array(0),
   retrigger: 'Welcome follow up',
-  json: () => ({ speech: 'hello', uniqueId: '1234', options: [] }),
+  json: () => ({ speech: 'hello', uniqueConversationId: '1234', options: [] }),
 };
 
 beforeEach(() => {
@@ -22,7 +22,7 @@ beforeEach(() => {
 it('sendToServer', async () => {
   const response = await testApp.sendToServer({
     speech: 'hello',
-    uniqueId: '1234',
+    uniqueConversationId: '1234',
   });
   expect(response).toBe(testObj);
 });
