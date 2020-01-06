@@ -125,7 +125,7 @@ class Conversation extends Component {
       <Container>
         {messages.length ? this.renderMessages() : <Loader />}
         <ScrollToDiv
-          innerRef={(el) => {
+          ref={(el) => {
             this.scrollTarget = el;
           }}
         />

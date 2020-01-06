@@ -2,7 +2,7 @@
 /* eslint-env browser */
 
 import React from 'react';
-import styled, { injectGlobal, css } from 'styled-components';
+import styled, { css, createGlobalStyle } from 'styled-components';
 import PropTypes from 'prop-types';
 import Header from './header/Header';
 import Conversation from './conversation/Conversation';
@@ -33,10 +33,10 @@ const speed = {
   superslow: 8000,
 };
 
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
   body {
-margin: 0;
-}
+    margin: 0;
+  }
 `;
 
 const propTypes = {
@@ -72,9 +72,6 @@ class App extends React.Component {
         uniqueId,
         lang,
       });
-      this.setState({
-        uniqueId,
-      });
     }
   };
 
@@ -90,9 +87,6 @@ class App extends React.Component {
         speech: 'Little Window language selection',
         uniqueId,
         lang,
-      });
-      this.setState({
-        uniqueId,
       });
     }
   };
@@ -136,7 +130,7 @@ class App extends React.Component {
   // (these are added with CSS with the dotty class).  Therefore we need to check
   // if last message is empty string to then remove the dots.
   removeWaitingDots = () => {
-    const {messages, delayDisabled} = this.state;
+    const { messages, delayDisabled } = this.state;
     if (messages.length > 0) {
       if (messages[messages.length - 1].speech === '') {
         this.setState((prevState) => ({
@@ -160,11 +154,12 @@ class App extends React.Component {
   // if so send another message to backend (for a string of messages in a row
   // with no input from user)
   sendMessage = (data) => {
-    const {uniqueId} = this.state;
+    const { uniqueId } = this.props;
+    const { lang, timedelay } = this.state;
     this.sendToServer(data)
       .then((res) => res.json())
       .then((resData) => {
-        if (this.state.uniqueId === data.uniqueId) {
+        if (uniqueId === data.uniqueId) {
           if (resData.GDPROptOut) {
             this.refresh();
             this.minimiseFunc();
@@ -181,19 +176,19 @@ class App extends React.Component {
               setTimeout(() => {
                 this.sendMessage({
                   speech: resData.retrigger,
-                  uniqueId: this.state.uniqueId,
-                  lang: this.state.lang,
+                  uniqueId,
+                  lang,
                 });
-              }, this.state.timedelay);
+              }, timedelay);
             }
             if (resData.retrigger) {
               setTimeout(() => {
                 this.sendMessage({
                   speech: resData.retrigger,
-                  uniqueId: this.state.uniqueId,
-                  lang: this.state.lang,
+                  uniqueId,
+                  lang,
                 });
-              }, this.state.timedelay);
+              }, timedelay);
             }
 
             if (resData.options.length === 0) {
@@ -201,7 +196,7 @@ class App extends React.Component {
             } else {
               this.setState({
                 inputStatus: true,
-                inputMessage: optionsLang(this.state.lang),
+                inputMessage: optionsLang(lang),
               });
             }
 
@@ -211,7 +206,7 @@ class App extends React.Component {
             newMessage.isUser = false;
             this.setState({
               inputStatus: true,
-              inputMessage: typingMessageLang(this.state.lang),
+              inputMessage: typingMessageLang(lang),
             });
             // Add dots
             this.addMessage({
@@ -240,11 +235,11 @@ class App extends React.Component {
   // removeWaitingDots checks if delayDisabled is true and if so sets refreshDisabled as false,
   // enabling the refresh button again.
   refresh = () => {
-    const newId = this.props.uniqueIdGenerator();
+    const { uniqueIdGenerator } = this.props;
+    const newId = uniqueIdGenerator();
 
     this.setState({
       messages: [],
-      uniqueId: newId,
       refreshDisabled: true,
       delayDisabled: false,
     });
@@ -260,7 +255,9 @@ class App extends React.Component {
   // components so they are returned as null and not rendered.  Minimise state is
   // also checked to change CSS in Header and App
   minimiseFunc = () => {
-    if (!this.state.minimise) {
+    const { minimise } = this.state;
+
+    if (!minimise) {
       // If parentIframe exists on window object
       if ('parentIFrame' in window) {
         // getPageInfo() gives you a load of data about the parent site
@@ -290,33 +287,38 @@ class App extends React.Component {
   };
 
   render() {
+    const { uniqueId } = this.props;
+    const {
+      minimise, refreshDisabled, lang, messages, inputStatus, inputMessage,
+    } = this.state;
+
     return (
-      <Container min={this.state.minimise === true ? 'min' : ''}>
+      <Container min={minimise === true ? 'min' : ''}>
+        <GlobalStyle />
         <Header
           refresh={this.refresh}
-          refreshDisabled={this.state.refreshDisabled}
+          refreshDisabled={refreshDisabled}
           minimiseFunc={this.minimiseFunc}
-          minimise={this.state.minimise}
-          lang={this.state.lang}
+          minimise={minimise}
+          lang={lang}
         />
         <Conversation
-          messages={this.state.messages}
+          messages={messages}
           updateLang={this.updateLang}
           addMessage={this.addMessage}
           sendMessage={this.sendMessage}
-          uniqueId={this.state.uniqueId || this.props.uniqueId}
-          minimise={this.state.minimise}
-          lang={this.state.lang}
+          uniqueId={uniqueId}
+          minimise={minimise}
+          lang={lang}
         />
-
         <Input
           addMessage={this.addMessage}
           sendMessage={this.sendMessage}
-          inputStatus={this.state.inputStatus}
-          inputMessage={this.state.inputMessage}
-          uniqueId={this.state.uniqueId || this.props.uniqueId}
-          minimise={this.state.minimise}
-          lang={this.state.lang}
+          inputStatus={inputStatus}
+          inputMessage={inputMessage}
+          uniqueId={uniqueId}
+          minimise={minimise}
+          lang={lang}
         />
       </Container>
     );

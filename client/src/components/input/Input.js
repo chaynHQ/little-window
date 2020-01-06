@@ -121,7 +121,7 @@ class Input extends Component {
 
     return (
       <Container>
-        <Form onSubmit={this.handleSubmit.bind(this)}>
+        <Form onSubmit={this.handleSubmit}>
           <StyledInput
             type="text"
             name="speech"
