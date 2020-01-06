@@ -1,8 +1,10 @@
 const test = require('tape');
 const request = require('supertest');
+const app = require('../app');
+
 
 test('check /usermessage is returning correct resources', (t) => {
-  request
+  request(app)
     .post('/usermessage')
     .expect(200)
     .send('divorce')
@@ -15,7 +17,7 @@ test('check /usermessage is returning correct resources', (t) => {
 });
 
 test('check /potato returns 404', (t) => {
-  request
+  request(app)
     .get('/potato')
     .expect(404)
     .expect('Content-Type', /html/)

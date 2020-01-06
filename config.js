@@ -10,11 +10,8 @@ const {
   TRAVIS,
 } = process.env;
 
-let { DATABASE_URL } = process.env;
 
-if (process.env.NODE_ENV === 'test') {
-  DATABASE_URL = process.env.DATABASE_URL_TEST;
-}
+const { DATABASE_URL } = process.env;
 
 if (!DATABASE_URL) {
   throw new Error('Environment variable DATABASE_URL must be set');
