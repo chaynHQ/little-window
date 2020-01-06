@@ -105,7 +105,8 @@ class Conversation extends Component {
     return messages.map((messageObj) => (
       <Message
         messageObj={messageObj}
-        key={uniqueConversationId}
+        key={messageObj.uniqueMessageId}
+        uniqueMessageId={messageObj.uniqueMessageId}
         updateLang={updateLang}
         addMessage={addMessage}
         sendMessage={sendMessage}

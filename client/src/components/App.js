@@ -41,7 +41,7 @@ const GlobalStyle = createGlobalStyle`
 
 const propTypes = {
   uniqueConversationId: PropTypes.string.isRequired,
-  uniqueConversationIdGenerator: PropTypes.func.isRequired,
+  uniqueIdGenerator: PropTypes.func.isRequired,
 };
 
 class App extends React.Component {
@@ -154,7 +154,7 @@ class App extends React.Component {
   // if so send another message to backend (for a string of messages in a row
   // with no input from user)
   sendMessage = (data) => {
-    const { uniqueConversationId } = this.props;
+    const { uniqueConversationId, uniqueIdGenerator } = this.props;
     const { lang, timedelay } = this.state;
     this.sendToServer(data)
       .then((res) => res.json())
@@ -201,7 +201,7 @@ class App extends React.Component {
             }
 
             // create copy of resData to avoid mutating it
-            const newMessage = { ...resData };
+            const newMessage = { ...resData, uniqueMessageId: uniqueIdGenerator() };
 
             newMessage.isUser = false;
             this.setState({
@@ -213,6 +213,7 @@ class App extends React.Component {
               speech: '',
               isUser: false,
               isDot: true,
+              uniqueMessageId: uniqueIdGenerator(),
             });
 
             this.addMessage(newMessage);
@@ -235,8 +236,8 @@ class App extends React.Component {
   // removeWaitingDots checks if delayDisabled is true and if so sets refreshDisabled as false,
   // enabling the refresh button again.
   refresh = () => {
-    const { uniqueConversationIdGenerator } = this.props;
-    const newId = uniqueConversationIdGenerator();
+    const { uniqueIdGenerator } = this.props;
+    const newId = uniqueIdGenerator();
 
     this.setState({
       messages: [],

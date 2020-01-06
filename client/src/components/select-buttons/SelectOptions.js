@@ -176,7 +176,6 @@ class SelectOptions extends Component {
     }
 
     const optionSelectedBool = activeOptions.some(Boolean);
-
     return (
       <div>
         <SelectOptionsDiv>{this.renderSelectOptions()}</SelectOptionsDiv>
