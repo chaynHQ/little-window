@@ -3,15 +3,15 @@ import '../styles/App.css';
 import styles from '../styles/app.module.css';
 
 import Header from './Header';
-import Conversation from './Conversation';
+import VisibleConversation from './VisibleConversation';
 import TextInput from './TextInput';
 
 const App = () => (
-      <div className={styles.container}>
-        <Header />
-        <Conversation />
-        <TextInput />
-      </div>
+  <div className={styles.container}>
+    <Header />
+    <VisibleConversation />
+    <TextInput />
+  </div>
 );
 
 export default App;
