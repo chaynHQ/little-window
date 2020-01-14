@@ -12,7 +12,7 @@ const messages = (state = [], action) => {
       // TODO: Add this to the existing state and make it have the required additional information also
       return [
         ...state,
-        action.text,
+        {text: action.text, type: 'userMessage'},
       ];
     default:
       return state;

@@ -3,12 +3,16 @@ import PropTypes from 'prop-types';
 import '../styles/App.css';
 import styles from '../styles/conversation.module.css';
 
+import Message from './Message'
+
 const Conversation = ({ messages }) => (
   <div className={styles.container}>
 
     {messages.map((message) => (
-      <h1>{message}</h1>
+      // ToDO: These need a key
+      <Message text={message.text} type={message.type}/>
     ))}
+
   </div>
 );
 
