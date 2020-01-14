@@ -19,6 +19,7 @@ it('renders without crashing', () => {
     inputMessage={inputMessage}
     uniqueConversationId={uniqueConversationId}
     lang={lang}
+    minimise
   />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
