@@ -31,9 +31,6 @@ const Singlelink = styled.a`
 const Resources = (props) => {
   const { resources, lang } = props;
 
-  console.log("In Resources")
-  console.log(resources)
-
   if (!resources) {
     return null;
   }
