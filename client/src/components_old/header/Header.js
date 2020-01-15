@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled, { css } from 'styled-components';
-import Maximise from '../../assets/maximise.svg';
+// import Maximise from '../../assets/maximise.svg';
 import Minimise from '../../assets/minimise.svg';
 import Refresh from '../../assets/refresh.svg';
 

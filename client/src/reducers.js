@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
-import { ADD_USER_INPUT, ADD_BOT_MESSAGE } from './actions';
+import { ADD_USER_INPUT, ADD_BOT_MESSAGE, SET_LANGUAGE } from './actions';
 
 // Need to make this idea based
 const initialState = {
   messages: [],
+  language: 'en',
 };
 
 const messages = (state = [], action) => {
@@ -25,8 +26,18 @@ const messages = (state = [], action) => {
   }
 };
 
+const language = (state = 'en', action) => {
+  switch (action.type) {
+    case SET_LANGUAGE:
+      return action.lang;
+    default:
+      return state;
+  }
+};
+
 const littleWindowApp = combineReducers({
   messages,
+  language,
 });
 
 export default littleWindowApp;

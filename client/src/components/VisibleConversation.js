@@ -1,33 +1,50 @@
 import { connect } from 'react-redux';
 import Conversation from './Conversation';
-import { fetchBotResponse, addUserInputToStack } from '../actions';
-
-
-const uuidv4 = require('uuid/v4');
+import { fetchBotResponse, addUserInputToStack, setLanguage } from '../actions';
 
 // Check that this isn't creating new Id's all the time.
+const uuidv4 = require('uuid/v4');
+
 const uniqueConversationId = uuidv4();
 
+const optionInputHandler = (dispatch, lang, data) => {
+  // If lang exists we are getting a response from the initial language question.
+  // Save this in state to be reused.
+  if (data.lang) {
+    dispatch(setLanguage(data.lang));
+    dispatch(fetchBotResponse({ speech: data.postback, lang: data.lang, uniqueConversationId }));
+  } else {
+    dispatch(fetchBotResponse({ speech: data.postback, lang, uniqueConversationId }));
+  }
 
-// Pieces of data we want to pass to Conversation
+  dispatch(addUserInputToStack(data.text));
+};
+
 const mapStateToProps = (state) => ({
   messages: state.messages,
+  lang: state.language,
 });
 
-// Functions we want to pass to Conversation
 const mapDispatchToProps = (dispatch) => ({
-  sendMessageToBot: (data) => {
+  initialBotMessageHandler: (data) => {
     dispatch(fetchBotResponse({ ...data, uniqueConversationId }));
   },
-  optionInputHandler: (data) => {
-    dispatch(fetchBotResponse({ speech: data.postback, lang: data.lang, uniqueConversationId }));
-    dispatch(addUserInputToStack(data.text));
+  optionInputHandler: (lang, data) => {
+    optionInputHandler(dispatch, lang, data);
   },
 });
+
+const mergeProps = (propsFromState, propsFromDispatch) => ({
+  ...propsFromState,
+  ...propsFromDispatch,
+  optionInputHandler: (data) => propsFromDispatch.optionInputHandler(propsFromState.lang, data),
+});
+
 
 const VisibleConversation = connect(
   mapStateToProps,
   mapDispatchToProps,
+  mergeProps,
 )(Conversation);
 
 export default VisibleConversation;

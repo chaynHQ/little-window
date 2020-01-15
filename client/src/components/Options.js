@@ -12,6 +12,7 @@ const Options = ({ options, optionInputHandler }) => (
         value={option.postback}
         onClick={() => optionInputHandler(option)}
         key={`option ${option.postback} ${option.text}`}
+        type="button"
       >
         {option.text}
       </button>
@@ -21,6 +22,7 @@ const Options = ({ options, optionInputHandler }) => (
 
 Options.propTypes = {
   options: PropTypes.array.isRequired,
+  optionInputHandler: PropTypes.func.isRequired,
 };
 
 export default Options;

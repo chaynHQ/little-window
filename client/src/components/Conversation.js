@@ -8,9 +8,9 @@ import Options from './Options';
 
 class Conversation extends Component {
   componentDidMount() {
-    const { sendMessageToBot } = this.props;
+    const { initialBotMessageHandler } = this.props;
 
-    sendMessageToBot({
+    initialBotMessageHandler({
       speech: 'Little Window language selection',
       lang: 'en',
     });
@@ -23,7 +23,7 @@ class Conversation extends Component {
 
         {messages.map((message) => (message.options ? ([
           <Message key={`message with options ${message.text}`} text={message.text} type={message.type} />,
-          <Options key={`message with options ${message.options}`} options={message.options} optionInputHandler={optionInputHandler} />]
+          <Options key={`message with options ${message.options}`} options={message.options} question={message.text} optionInputHandler={optionInputHandler} />]
         ) : (
           <Message key={`message ${message.text}`} text={message.text} type={message.type} />
         )))}
@@ -34,7 +34,7 @@ class Conversation extends Component {
 }
 
 Conversation.propTypes = {
-  sendMessageToBot: PropTypes.func.isRequired,
+  initialBotMessageHandler: PropTypes.func.isRequired,
   optionInputHandler: PropTypes.func.isRequired,
   messages: PropTypes.array.isRequired,
 };

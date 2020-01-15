@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/App.css';
 import styles from '../styles/header.module.css';
 
-import Maximise from '../assets/maximise.svg';
+// import Maximise from '../assets/maximise.svg';
 import Minimise from '../assets/minimise.svg';
 import Refresh from '../assets/refresh.svg';
 

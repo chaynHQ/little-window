@@ -25,6 +25,7 @@ function sendToServer(data) {
 export const ADD_USER_INPUT = 'ADD_USER_INPUT';
 export const ADD_BOT_MESSAGE = 'ADD_BOT_MESSAGE';
 export const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
+export const SET_LANGUAGE = 'SET_LANGUAGE;';
 
 /*
  * action creators
@@ -43,6 +44,8 @@ export const fetchBotResponseFailure = (error) => ({
   type: FETCH_PRODUCTS_FAILURE,
   error,
 });
+
+export const setLanguage = (lang) => ({ type: SET_LANGUAGE, lang });
 
 export function fetchBotResponse(data) {
   return (dispatch) => sendToServer(data)
