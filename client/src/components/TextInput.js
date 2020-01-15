@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addUserInput } from '../actions';
+import { addUserInputToStack } from '../actions';
 
 import '../styles/App.css';
 import styles from '../styles/textInput.module.css';
@@ -17,7 +17,7 @@ let TextInput = ({ dispatch }) => {
       className={styles.textInput}
       onSubmit={(e) => {
         e.preventDefault();
-        dispatch(addUserInput(input.value));
+        dispatch(addUserInputToStack(input.value));
         input.value = null;
       }}
     >

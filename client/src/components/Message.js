@@ -12,7 +12,7 @@ const Message = ({ text, type }) => (
 
 Message.propTypes = {
   text: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['userMessage', 'resourceMessage', 'littleWindowMessage']).isRequired
+  type: PropTypes.oneOf(['userMessage', 'resourceMessage', 'botMessage']).isRequired
 };
 
 

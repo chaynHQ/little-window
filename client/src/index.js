@@ -4,13 +4,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 
 import littleWindowApp from './reducers';
 
-const store = createStore(littleWindowApp);
+
+const store = createStore(
+  littleWindowApp,
+  applyMiddleware(thunk)
+);
 
 // toDO: I think we can move these unique generators to not be passed around so much!
 // Dialog Flow requires a unique id for every conversation.  We generate it
