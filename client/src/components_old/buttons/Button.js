@@ -102,6 +102,7 @@ class Button extends Component {
     } = this.props;
 
     if (option.lang) {
+      // TODO: Probably going to need this to update lang!
       updateLang(option.lang, () => {
         const data = {
           isUser: true,

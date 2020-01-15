@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import Conversation from './Conversation';
-import { fetchBotResponse } from '../actions';
+import { fetchBotResponse, addUserInputToStack } from '../actions';
+
 
 const uuidv4 = require('uuid/v4');
 
@@ -14,13 +15,15 @@ const mapStateToProps = (state) => ({
 });
 
 // Functions we want to pass to Conversation
-const mapDispatchToProps = dispatch => {
-  return {
-    sendMessageToBot: data => {
-      dispatch(fetchBotResponse({...data, uniqueConversationId: uniqueConversationId}))
-    }
-  }
-}
+const mapDispatchToProps = (dispatch) => ({
+  sendMessageToBot: (data) => {
+    dispatch(fetchBotResponse({ ...data, uniqueConversationId }));
+  },
+  optionInputHandler: (data) => {
+    dispatch(fetchBotResponse({ speech: data.postback, lang: data.lang, uniqueConversationId }));
+    dispatch(addUserInputToStack(data.text));
+  },
+});
 
 const VisibleConversation = connect(
   mapStateToProps,

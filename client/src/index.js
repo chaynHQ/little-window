@@ -4,8 +4,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -14,7 +14,7 @@ import littleWindowApp from './reducers';
 
 const store = createStore(
   littleWindowApp,
-  applyMiddleware(thunk)
+  applyMiddleware(thunk),
 );
 
 // toDO: I think we can move these unique generators to not be passed around so much!
