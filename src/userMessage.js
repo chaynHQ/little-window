@@ -30,6 +30,7 @@ const errTechnical = (lang) => {
 
 // the call to Dialog Flow
 const dialogFlow = (req, res, speech) => {
+  console.log(req.body)
   const requestdf = app.textRequest(speech, {
     sessionId: req.body.uniqueConversationId,
   });
@@ -71,7 +72,6 @@ const dialogFlow = (req, res, speech) => {
     if (payload.GDPROptOut) {
       data.GDPROptOut = true;
     }
-
     // check if resources exist and if so do the call to Google Sheets
     if (payload.resources) {
       const { selectedCountries } = req.body;

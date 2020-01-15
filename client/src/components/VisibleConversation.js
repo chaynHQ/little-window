@@ -4,7 +4,6 @@ import { fetchBotResponse, addUserInputToStack, setLanguage } from '../actions';
 
 // Check that this isn't creating new Id's all the time.
 const uuidv4 = require('uuid/v4');
-
 const uniqueConversationId = uuidv4();
 
 const optionInputHandler = (dispatch, lang, data) => {
@@ -39,7 +38,6 @@ const mergeProps = (propsFromState, propsFromDispatch) => ({
   ...propsFromDispatch,
   optionInputHandler: (data) => propsFromDispatch.optionInputHandler(propsFromState.lang, data),
 });
-
 
 const VisibleConversation = connect(
   mapStateToProps,

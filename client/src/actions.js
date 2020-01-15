@@ -51,11 +51,11 @@ export function fetchBotResponse(data) {
   return (dispatch) => sendToServer(data)
     .then((json) => {
       if (json.retrigger) {
-        this.fetchBotResponse({
+        dispatch(fetchBotResponse({
           speech: json.retrigger,
           uniqueConversationId: data.uniqueConversationId,
           lang: data.lang,
-        });
+        }));
       }
       dispatch(fetchBotResponseSuccess(json));
       return json;
