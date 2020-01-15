@@ -1,11 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { addUserInputToStack } from '../actions';
+import PropTypes from 'prop-types';
 
 import '../styles/App.css';
 import styles from '../styles/textInput.module.css';
 
-let TextInput = ({ dispatch }) => {
+const TextInput = ({ inputHandler }) => {
   let input;
 
   // ToDO: Change input text language based on initial user input. Do the same with the words in the header.
@@ -17,7 +16,7 @@ let TextInput = ({ dispatch }) => {
       className={styles.textInput}
       onSubmit={(e) => {
         e.preventDefault();
-        dispatch(addUserInputToStack(input.value));
+        inputHandler({ text: input.value, postback: input.value });
         input.value = null;
       }}
     >
@@ -33,5 +32,8 @@ let TextInput = ({ dispatch }) => {
   );
 };
 
-TextInput = connect()(TextInput);
+
+TextInput.propTypes = {
+  inputHandler: PropTypes.func.isRequired,
+};
 export default TextInput;

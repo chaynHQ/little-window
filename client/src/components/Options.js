@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import '../styles/App.css';
 import styles from '../styles/options.module.css';
 
+const uuidv4 = require('uuid/v4');
 
-const Options = ({ options, optionInputHandler }) => (
+const Options = ({ options, inputHandler }) => (
   <div className={styles.container}>
     {options.map((option) => (
       <button
         className={styles.option}
         value={option.postback}
-        onClick={() => optionInputHandler(option)}
-        key={`option ${option.postback} ${option.text}`}
+        onClick={() => inputHandler(option)}
+        key={uuidv4()}
         type="button"
       >
         {option.text}
@@ -22,7 +23,7 @@ const Options = ({ options, optionInputHandler }) => (
 
 Options.propTypes = {
   options: PropTypes.array.isRequired,
-  optionInputHandler: PropTypes.func.isRequired,
+  inputHandler: PropTypes.func.isRequired,
 };
 
 export default Options;

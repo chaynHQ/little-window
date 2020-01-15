@@ -30,7 +30,6 @@ const errTechnical = (lang) => {
 
 // the call to Dialog Flow
 const dialogFlow = (req, res, speech) => {
-  console.log(req.body)
   const requestdf = app.textRequest(speech, {
     sessionId: req.body.uniqueConversationId,
   });
