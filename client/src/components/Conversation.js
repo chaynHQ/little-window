@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../styles/App.css';
 import styles from '../styles/conversation.module.css';
+import ScrollableFeed from 'react-scrollable-feed'
 
 import Message from './Message';
 import Options from './Options';
@@ -26,7 +27,7 @@ class Conversation extends Component {
 
     return (
       <div className={styles.container}>
-        <div className={styles.messageDisplay}>
+        <ScrollableFeed forceScroll className={styles.messageDisplay}>
 
           {messages.map((message) => (message.options ? ([
             <Message key={uuidv4()} text={message.text} sender={message.sender} />,
@@ -40,7 +41,7 @@ class Conversation extends Component {
             <Message key={uuidv4()} text={message.text} sender={message.sender} />
           )))}
 
-        </div>
+        </ScrollableFeed>
         <TextInput inputHandler={inputHandler} lang={lang} status={nextUserAction} />
       </div>
     );
