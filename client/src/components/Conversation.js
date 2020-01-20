@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../styles/App.css';
+import ScrollableFeed from 'react-scrollable-feed';
 import styles from '../styles/conversation.module.css';
-import ScrollableFeed from 'react-scrollable-feed'
 
 import Message from './Message';
 import Options from './Options';
@@ -20,16 +20,20 @@ class Conversation extends Component {
     });
   }
 
-  render() {
-    const { messages, inputHandler, lang } = this.props;
+  componentDidUpdate() {
+    const { queueNextMessage } = this.props;
+    queueNextMessage();
+  }
 
-    const nextUserAction = messages.slice(-1)[0] ? messages.slice(-1)[0].nextUserAction : 'wait';
+  render() {
+    const { displayedMessages, inputHandler, lang } = this.props;
+    const nextUserAction = displayedMessages.slice(-1)[0] ? displayedMessages.slice(-1)[0].nextUserAction : 'wait';
 
     return (
       <div className={styles.container}>
         <ScrollableFeed forceScroll className={styles.messageDisplay}>
 
-          {messages.map((message) => (message.options ? ([
+          {displayedMessages.map((message) => (message.options ? ([
             <Message key={uuidv4()} text={message.text} sender={message.sender} />,
             <Options
               key={uuidv4()}
@@ -51,7 +55,8 @@ class Conversation extends Component {
 Conversation.propTypes = {
   inputHandler: PropTypes.func.isRequired,
   initialBotMessageHandler: PropTypes.func.isRequired,
-  messages: PropTypes.arrayOf(PropTypes.object).isRequired,
+  queueNextMessage: PropTypes.func.isRequired,
+  displayedMessages: PropTypes.arrayOf(PropTypes.object).isRequired,
   lang: PropTypes.string.isRequired,
 };
 

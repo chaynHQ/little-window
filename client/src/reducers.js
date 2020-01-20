@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
-import { ADD_USER_INPUT, ADD_BOT_MESSAGE, SET_LANGUAGE } from './actions';
+import {
+  ADD_USER_INPUT, ADD_BOT_MESSAGE, SET_LANGUAGE, UPDATE_BOT_MESSAGE,
+} from './actions';
 
 // Need to make this idea based
 const initialState = {
@@ -10,17 +12,16 @@ const initialState = {
 const messages = (state = [], action) => {
   switch (action.type) {
     case ADD_USER_INPUT:
-      // TODO: Add this to the existing state and make it have the required additional information also
       return [
         ...state,
         {
           text: action.text,
           sender: 'user',
           nextUserAction: 'wait',
+          toDisplay: true,
         },
       ];
     case ADD_BOT_MESSAGE:
-      // TODO: Add this to the existing state and make it have the required additional information also
 
       let nextUserAction;
       if (action.data.options) {
@@ -36,7 +37,13 @@ const messages = (state = [], action) => {
           options: action.data.options,
           sender: 'bot',
           nextUserAction,
+          toDisplay: false,
+          timeDelay: action.data.timedelay,
         },
+      ];
+    case UPDATE_BOT_MESSAGE:
+      return [
+        ...state,
       ];
     default:
       return state;
