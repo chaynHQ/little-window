@@ -5,7 +5,8 @@ import ScrollableFeed from 'react-scrollable-feed';
 import styles from '../styles/conversation.module.css';
 
 import Message from './Message';
-import Options from './Options';
+import CheckBoxOptions from './CheckBoxOptions';
+import RadioButtonOptions from './RadioButtonOptions';
 import TextInput from './TextInput';
 
 import botAvatar from '../assets/catbot.png';
@@ -30,20 +31,31 @@ class Conversation extends Component {
   renderMessage(currentMessage, inputHandler){
     let message = []
 
-    if (currentMessage.sender == 'bot'){
-      message.push(<div className={styles.botAvatarAndMessageContainer}>
-        <img key={uuidv4()} src={botAvatar} className={styles.botAvatar} />
+    if (currentMessage.sender === 'bot'){
+      message.push(<div key={uuidv4()} className={styles.botAvatarAndMessageContainer}>
+        <img key={uuidv4()} alt={'Bot Avatar'} src={botAvatar} className={styles.botAvatar} />
         <Message key={uuidv4()} text={currentMessage.text} sender={currentMessage.sender} />
       </div>)
     } else {
       message.push(<Message key={uuidv4()} text={currentMessage.text} sender={currentMessage.sender} />)
     }
 
-    if(currentMessage.options && currentMessage.options.length > 0){
+    if(currentMessage.checkBoxOptions && currentMessage.checkBoxOptions.length > 0){
       message.push(
-        <Options
+        <CheckBoxOptions
           key={uuidv4()}
-          options={currentMessage.options}
+          options={currentMessage.checkBoxOptions}
+          question={currentMessage.text}
+          inputHandler={inputHandler}
+        />
+      )
+    }
+
+    if(currentMessage.radioButtonOptions && currentMessage.radioButtonOptions.length > 0){
+      message.push(
+        <RadioButtonOptions
+          key={uuidv4()}
+          options={currentMessage.radioButtonOptions}
           question={currentMessage.text}
           inputHandler={inputHandler}
         />
@@ -67,13 +79,14 @@ class Conversation extends Component {
           })}
 
           { nextUserAction === 'wait' ?
-          <div className={styles.botAvatarAndMessageContainer}>
-            <img key={uuidv4()} src={botAvatar} className={styles.botAvatar} />
-            <Message key={uuidv4()} text='' sender='bot' dotty />
-          </div> : null }
+            <div className={styles.botAvatarAndMessageContainer}>
+              <img key={uuidv4()} src={botAvatar} className={styles.botAvatar} />
+              <Message key={uuidv4()} text='' sender='bot' dotty />
+            </div>
+          : null }
 
         </ScrollableFeed>
-        <TextInput inputHandler={inputHandler} lang={lang} status={nextUserAction} />
+        <TextInput inputHandler={inputHandler} lang={lang} status={nextUserAction} disabled={nextUserAction!=='input'} />
       </div>
     );
   }
