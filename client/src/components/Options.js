@@ -22,7 +22,7 @@ const Options = ({ options, inputHandler }) => (
 );
 
 Options.propTypes = {
-  options: PropTypes.array.isRequired,
+  options: PropTypes.arrayOf(PropTypes.object).isRequired,
   inputHandler: PropTypes.func.isRequired,
 };
 

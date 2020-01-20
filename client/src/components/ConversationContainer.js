@@ -33,10 +33,10 @@ const mergeProps = (propsFromState, propsFromDispatch) => ({
   inputHandler: (data) => propsFromDispatch.inputHandler(data, propsFromState.lang),
 });
 
-const VisibleConversation = connect(
+const ConversationContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps,
 )(Conversation);
 
-export default VisibleConversation;
+export default ConversationContainer;

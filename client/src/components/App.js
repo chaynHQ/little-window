@@ -2,13 +2,13 @@ import React from 'react';
 import '../styles/App.css';
 import styles from '../styles/app.module.css';
 
-import Header from './Header';
-import VisibleConversation from './VisibleConversation';
+import HeaderContainer from './HeaderContainer';
+import ConversationContainer from './ConversationContainer';
 
 const App = () => (
   <div className={styles.container}>
-    <Header />
-    <VisibleConversation />
+    <HeaderContainer />
+    <ConversationContainer />
   </div>
 );
 

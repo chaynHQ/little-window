@@ -4,15 +4,15 @@ import '../styles/App.css';
 import styles from '../styles/message.module.css';
 
 
-const Message = ({ text, type }) => (
-  <p className={styles[type]}>
+const Message = ({ text, sender }) => (
+  <p className={styles[`${sender}Message`]}>
     {text}
   </p>
 );
 
 Message.propTypes = {
   text: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['userMessage', 'resourceMessage', 'botMessage']).isRequired,
+  sender: PropTypes.oneOf(['user', 'bot']).isRequired,
 };
 
 export default Message;

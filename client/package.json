@@ -12,7 +12,8 @@
     "react-scripts": "^3.3.0",
     "redux": "^4.0.5",
     "smoothscroll-polyfill": "^0.4.3",
-    "styled-components": "^4.4.1"
+    "styled-components": "^4.4.1",
+    "uuid": "^3.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

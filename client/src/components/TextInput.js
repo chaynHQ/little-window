@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import '../styles/App.css';
 import styles from '../styles/textInput.module.css';
 
-const TextInput = ({ inputHandler }) => {
+import translations from '../assets/translations.js';
+
+const TextInput = ({ inputHandler, lang, status }) => {
   let input;
 
   // ToDO: Change input text language based on initial user input. Do the same with the words in the header.
@@ -26,8 +28,13 @@ const TextInput = ({ inputHandler }) => {
         ref={(node) => {
           input = node;
         }}
+        placeholder={translations[`${status}InputBoxText`][lang]}
       />
-      <input type="submit" className={styles.textInputSubmitButton} />
+      <input
+        type="submit"
+        className={styles.textInputSubmitButton}
+        value={translations.submitButtonText[lang]}
+      />
     </form>
   );
 };
@@ -35,5 +42,7 @@ const TextInput = ({ inputHandler }) => {
 
 TextInput.propTypes = {
   inputHandler: PropTypes.func.isRequired,
+  lang: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
 };
 export default TextInput;

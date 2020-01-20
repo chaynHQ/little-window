@@ -7,6 +7,8 @@ import Message from './Message';
 import Options from './Options';
 import TextInput from './TextInput';
 
+const uuidv4 = require('uuid/v4');
+
 class Conversation extends Component {
   componentDidMount() {
     const { initialBotMessageHandler } = this.props;
@@ -18,14 +20,16 @@ class Conversation extends Component {
   }
 
   render() {
-    const { messages, inputHandler } = this.props;
-    const uuidv4 = require('uuid/v4');
+    const { messages, inputHandler, lang } = this.props;
+
+    const nextUserAction = messages.slice(-1)[0] ? messages.slice(-1)[0].nextUserAction : 'wait';
+
     return (
       <div className={styles.container}>
         <div className={styles.messageDisplay}>
 
           {messages.map((message) => (message.options ? ([
-            <Message key={uuidv4()} text={message.text} type={message.type} />,
+            <Message key={uuidv4()} text={message.text} sender={message.sender} />,
             <Options
               key={uuidv4()}
               options={message.options}
@@ -33,11 +37,11 @@ class Conversation extends Component {
               inputHandler={inputHandler}
             />]
           ) : (
-            <Message key={uuidv4()} text={message.text} type={message.type} />
+            <Message key={uuidv4()} text={message.text} sender={message.sender} />
           )))}
 
         </div>
-        <TextInput inputHandler={inputHandler} />
+        <TextInput inputHandler={inputHandler} lang={lang} status={nextUserAction} />
       </div>
     );
   }
@@ -46,7 +50,8 @@ class Conversation extends Component {
 Conversation.propTypes = {
   inputHandler: PropTypes.func.isRequired,
   initialBotMessageHandler: PropTypes.func.isRequired,
-  messages: PropTypes.array.isRequired,
+  messages: PropTypes.arrayOf(PropTypes.object).isRequired,
+  lang: PropTypes.string.isRequired,
 };
 
 export default Conversation;

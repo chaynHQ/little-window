@@ -13,13 +13,30 @@ const messages = (state = [], action) => {
       // TODO: Add this to the existing state and make it have the required additional information also
       return [
         ...state,
-        { text: action.text, type: 'userMessage' },
+        {
+          text: action.text,
+          sender: 'user',
+          nextUserAction: 'wait',
+        },
       ];
     case ADD_BOT_MESSAGE:
       // TODO: Add this to the existing state and make it have the required additional information also
+
+      let nextUserAction;
+      if (action.data.options) {
+        nextUserAction = 'option';
+      } else {
+        nextUserAction = 'input';
+      }
+
       return [
         ...state,
-        { text: action.data.speech, options: action.data.options, type: 'botMessage' },
+        {
+          text: action.data.speech,
+          options: action.data.options,
+          sender: 'bot',
+          nextUserAction,
+        },
       ];
     default:
       return state;
