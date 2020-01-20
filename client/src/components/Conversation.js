@@ -45,6 +45,10 @@ class Conversation extends Component {
             <Message key={uuidv4()} text={message.text} sender={message.sender} />
           )))}
 
+          { nextUserAction === 'wait'
+            ? <Message dotty sender="bot" text="" />
+            : null}
+
         </ScrollableFeed>
         <TextInput inputHandler={inputHandler} lang={lang} status={nextUserAction} />
       </div>

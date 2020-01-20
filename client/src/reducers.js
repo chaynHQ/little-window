@@ -3,13 +3,9 @@ import {
   ADD_USER_INPUT, ADD_BOT_MESSAGE, SET_LANGUAGE, UPDATE_BOT_MESSAGE,
 } from './actions';
 
-// Need to make this idea based
-const initialState = {
-  messages: [],
-  language: 'en',
-};
-
 const messages = (state = [], action) => {
+  let nextUserAction;
+
   switch (action.type) {
     case ADD_USER_INPUT:
       return [
@@ -22,10 +18,10 @@ const messages = (state = [], action) => {
         },
       ];
     case ADD_BOT_MESSAGE:
-
-      let nextUserAction;
-      if (action.data.options) {
+      if (action.data.options.length > 1) {
         nextUserAction = 'option';
+      } else if (action.data.retrigger) {
+        nextUserAction = 'wait';
       } else {
         nextUserAction = 'input';
       }
