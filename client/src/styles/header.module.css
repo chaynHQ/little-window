@@ -5,3 +5,12 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.icon {
+  background: white;
+  padding: 5px;
+  border-radius: 100%;
+  border: none;
+  margin: 15px;
+  cursor: pointer;
+}

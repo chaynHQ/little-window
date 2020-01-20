@@ -1,4 +1,4 @@
-.messageDisplay{
+.messagesContainer{
   height: 85%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
@@ -11,4 +11,16 @@
 
 .container {
   height: 85%
+}
+
+.botAvatar {
+  user-select: none;
+  width: 8%;
+  max-height: 4em;
+}
+
+.botAvatarAndMessageContainer{
+  display: flex;
+  flex-direction: row;
+  margin: 2%
 }

@@ -8,6 +8,8 @@ import Message from './Message';
 import Options from './Options';
 import TextInput from './TextInput';
 
+import botAvatar from '../assets/catbot.png';
+
 const uuidv4 = require('uuid/v4');
 
 class Conversation extends Component {
@@ -25,29 +27,50 @@ class Conversation extends Component {
     queueNextMessage();
   }
 
+  renderMessage(currentMessage, inputHandler){
+    let message = []
+
+    if (currentMessage.sender == 'bot'){
+      message.push(<div className={styles.botAvatarAndMessageContainer}>
+        <img key={uuidv4()} src={botAvatar} className={styles.botAvatar} />
+        <Message key={uuidv4()} text={currentMessage.text} sender={currentMessage.sender} />
+      </div>)
+    } else {
+      message.push(<Message key={uuidv4()} text={currentMessage.text} sender={currentMessage.sender} />)
+    }
+
+    if(currentMessage.options && currentMessage.options.length > 0){
+      message.push(
+        <Options
+          key={uuidv4()}
+          options={currentMessage.options}
+          question={currentMessage.text}
+          inputHandler={inputHandler}
+        />
+      )
+    }
+
+    return message;
+  }
+
+
   render() {
     const { displayedMessages, inputHandler, lang } = this.props;
     const nextUserAction = displayedMessages.slice(-1)[0] ? displayedMessages.slice(-1)[0].nextUserAction : 'wait';
 
     return (
       <div className={styles.container}>
-        <ScrollableFeed forceScroll className={styles.messageDisplay}>
+        <ScrollableFeed forceScroll className={styles.messagesContainer}>
 
-          {displayedMessages.map((message) => (message.options ? ([
-            <Message key={uuidv4()} text={message.text} sender={message.sender} />,
-            <Options
-              key={uuidv4()}
-              options={message.options}
-              question={message.text}
-              inputHandler={inputHandler}
-            />]
-          ) : (
-            <Message key={uuidv4()} text={message.text} sender={message.sender} />
-          )))}
+          {displayedMessages.map((message, index) => {
+              return this.renderMessage(message, inputHandler)
+          })}
 
-          { nextUserAction === 'wait'
-            ? <Message dotty sender="bot" text="" />
-            : null}
+          { nextUserAction === 'wait' ?
+          <div className={styles.botAvatarAndMessageContainer}>
+            <img key={uuidv4()} src={botAvatar} className={styles.botAvatar} />
+            <Message key={uuidv4()} text='' sender='bot' dotty />
+          </div> : null }
 
         </ScrollableFeed>
         <TextInput inputHandler={inputHandler} lang={lang} status={nextUserAction} />

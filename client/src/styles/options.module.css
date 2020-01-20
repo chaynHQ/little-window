@@ -3,6 +3,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   cursor: pointer;
+  margin: 2%;
   margin-left: 5%;
   max-width: 90%;
   -webkit-overflow-scrolling: touch;
