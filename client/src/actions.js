@@ -26,7 +26,9 @@ export const ADD_USER_INPUT = 'ADD_USER_INPUT';
 export const ADD_BOT_MESSAGE = 'ADD_BOT_MESSAGE';
 export const UPDATE_BOT_MESSAGE = 'UPDATE_BOT_MESSAGE';
 export const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
-export const SET_LANGUAGE = 'SET_LANGUAGE;';
+export const SET_LANGUAGE = 'SET_LANGUAGE';
+export const SET_CONVERSATION_DATA = 'SET_CONVERSATION_DATA';
+export const REFRESH_CONVERSATION = 'REFRESH_CONVERSATION';
 
 /*
  * action creators
@@ -51,6 +53,15 @@ export const updateBotMessage = (data) => ({
   data,
 });
 
+export const updateConversation = (data) => ({
+  type: SET_CONVERSATION_DATA,
+  data,
+});
+
+export const refreshConversation = () => ({
+  type: REFRESH_CONVERSATION,
+});
+
 export const setLanguage = (lang) => ({ type: SET_LANGUAGE, lang });
 
 export function fetchBotResponse(data) {
@@ -68,6 +79,3 @@ export function fetchBotResponse(data) {
     })
     .catch((error) => dispatch(fetchBotResponseFailure(error)));
 }
-
-
-// TODO: What happens when someone rejects the GDPROptOut (minimise & refresh convo)

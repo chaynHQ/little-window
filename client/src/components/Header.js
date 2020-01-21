@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import '../styles/App.css';
 import styles from '../styles/header.module.css';
 
@@ -6,14 +7,33 @@ import styles from '../styles/header.module.css';
 import Minimise from '../assets/minimise.svg';
 import Refresh from '../assets/refresh.svg';
 
-// TODO: Change H1 to Can I help you in fr/en if minimised
-const Header = () => (
+const Header = ({ minimiseHandler, refreshHandler }) => (
   <div className={styles.header}>
-    <img className={styles.icon} src={Minimise} alt="minimise" />
+    <button
+      className={styles.icon}
+      onClick={() => minimiseHandler()}
+      onKeyDown={() => minimiseHandler()}>
+      <img
+        src={Minimise}
+        alt="minimise"
+      />
+    </button>
     <h1>Little Window</h1>
-    <img className={styles.icon} src={Refresh} alt="refresh" />
+    <button
+      onClick={() => refreshHandler()}
+      onKeyDown={() => refreshHandler()}
+      className={styles.icon}>
+      <img
+        src={Refresh}
+        alt="refresh"
+      />
+    </button>
   </div>
 );
 
+Header.propTypes = {
+  minimiseHandler: PropTypes.func.isRequired,
+  refreshHandler: PropTypes.func.isRequired,
+};
 
 export default Header;

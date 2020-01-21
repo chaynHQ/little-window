@@ -32,8 +32,6 @@ class Conversation extends Component {
   renderMessage = (currentMessage, inputHandler, lang) => {
     const message = [];
 
-    // console.log(currentMessage)
-
     if (currentMessage.sender === 'bot') {
       message.push(
         <div key={uuidv4()} className={styles.botAvatarAndMessageContainer}>

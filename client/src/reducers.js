@@ -1,7 +1,13 @@
 import { combineReducers } from 'redux';
 import {
-  ADD_USER_INPUT, ADD_BOT_MESSAGE, SET_LANGUAGE, UPDATE_BOT_MESSAGE,
+  ADD_USER_INPUT,
+  ADD_BOT_MESSAGE,
+  SET_LANGUAGE,
+  UPDATE_BOT_MESSAGE,
+  SET_CONVERSATION_DATA,
+  REFRESH_CONVERSATION,
 } from './actions';
+
 
 const messages = (state = [], action) => {
   let nextUserAction;
@@ -43,6 +49,8 @@ const messages = (state = [], action) => {
       return [
         ...state,
       ];
+    case REFRESH_CONVERSATION:
+      return [];
     default:
       return state;
   }
@@ -52,14 +60,29 @@ const language = (state = 'en', action) => {
   switch (action.type) {
     case SET_LANGUAGE:
       return action.lang;
+    case REFRESH_CONVERSATION:
+      return 'en';
     default:
       return state;
   }
 };
 
+const conversation = (state = {}, action) => {
+  switch (action.type) {
+    case SET_CONVERSATION_DATA:
+      return action.data;
+    case REFRESH_CONVERSATION:
+      return {};
+    default:
+      return state;
+  }
+};
+
+
 const littleWindowApp = combineReducers({
   messages,
   language,
+  conversation,
 });
 
 export default littleWindowApp;
