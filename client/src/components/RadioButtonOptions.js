@@ -53,4 +53,9 @@ RadioButtonOptions.propTypes = {
   hasBeenAnswered: PropTypes.bool,
 };
 
+RadioButtonOptions.defaultProps = {
+  hasBeenAnswered: false,
+  hasSelectedAnswers: false,
+};
+
 export default RadioButtonOptions;

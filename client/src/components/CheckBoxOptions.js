@@ -5,7 +5,7 @@ import styles from '../styles/checkBoxOptions.module.css';
 
 const uuidv4 = require('uuid/v4');
 
-const CheckBoxOptions = ({ options, inputHandler }) => (
+const CheckBoxOptions = ({ options, hasBeenAnswered, inputHandler }) => (
   <div className={styles.container}>
     {options.map((option) => (
       <button
@@ -18,6 +18,7 @@ const CheckBoxOptions = ({ options, inputHandler }) => (
         })}
         key={uuidv4()}
         type="button"
+        disabled={hasBeenAnswered}
       >
         {option.text}
       </button>
@@ -28,6 +29,11 @@ const CheckBoxOptions = ({ options, inputHandler }) => (
 CheckBoxOptions.propTypes = {
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
   inputHandler: PropTypes.func.isRequired,
+  hasBeenAnswered: PropTypes.bool,
+};
+
+CheckBoxOptions.defaultProps = {
+  hasBeenAnswered: false,
 };
 
 export default CheckBoxOptions;

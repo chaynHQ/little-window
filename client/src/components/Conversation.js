@@ -5,7 +5,7 @@ import ScrollableFeed from 'react-scrollable-feed';
 import styles from '../styles/conversation.module.css';
 
 import Message from './Message';
-import CheckBoxOptions from './CheckBoxOptions';
+import CheckBoxOptionsContainer from './CheckBoxOptionsContainer';
 import RadioButtonOptionsContainer from './RadioButtonOptionsContainer';
 import TextInput from './TextInput';
 
@@ -46,9 +46,9 @@ class Conversation extends Component {
 
     if (currentMessage.checkBoxOptions && currentMessage.checkBoxOptions.length > 0) {
       message.push(
-        <CheckBoxOptions
+        <CheckBoxOptionsContainer
           key={uuidv4()}
-          options={currentMessage.checkBoxOptions}
+          message={currentMessage}
           inputHandler={inputHandler}
         />,
       );

@@ -3,7 +3,7 @@ import RadioButtonOptions from './RadioButtonOptions';
 import { updateBotMessage } from '../actions';
 
 
-// Todo, set id's for each message in state so can look up via state rather than own props
+// Todo: set id's for each message in state so can look up via state rather than own props
 const mapStateToProps = (state, ownProps) => ({
   options: ownProps.message.radioButtonOptions,
   hasSelectedAnswers: ownProps.message.hasSelectedAnswers,
