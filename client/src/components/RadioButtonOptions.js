@@ -14,7 +14,7 @@ const RadioButtonOptions = ({
   hasBeenAnswered,
   radioButtonSelector,
 }) => [
-  <div className={styles.container}>
+  <div className={styles.container} key={uuidv4()}>
     {options.map((option) => (
       <button
         className={`${styles.option} ${option.selected ? styles.selected : ''}`}

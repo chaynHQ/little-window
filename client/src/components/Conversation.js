@@ -8,6 +8,7 @@ import Message from './Message';
 import CheckBoxOptionsContainer from './CheckBoxOptionsContainer';
 import RadioButtonOptionsContainer from './RadioButtonOptionsContainer';
 import TextInput from './TextInput';
+import Resource from './Resource';
 
 import botAvatar from '../assets/catbot.png';
 
@@ -28,8 +29,10 @@ class Conversation extends Component {
     queueNextMessage();
   }
 
-  renderMessage = (currentMessage, inputHandler) => {
+  renderMessage = (currentMessage, inputHandler, lang) => {
     const message = [];
+
+    // console.log(currentMessage)
 
     if (currentMessage.sender === 'bot') {
       message.push(
@@ -64,6 +67,19 @@ class Conversation extends Component {
       );
     }
 
+    if (currentMessage.resources && currentMessage.resources.length > 0) {
+      currentMessage.resources.forEach((resource) => {
+        message.push(
+          <Resource
+            key={uuidv4()}
+            text={resource.text}
+            link={resource.href}
+            lang={lang}
+          />,
+        );
+      });
+    }
+
     return message;
   }
 
@@ -79,7 +95,7 @@ class Conversation extends Component {
       <div className={styles.container}>
         <ScrollableFeed forceScroll className={styles.messagesContainer}>
 
-          {displayedMessages.map((message) => this.renderMessage(message, inputHandler))}
+          {displayedMessages.map((message) => this.renderMessage(message, inputHandler, lang))}
 
           { nextUserAction === 'wait'
             ? (

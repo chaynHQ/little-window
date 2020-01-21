@@ -32,6 +32,7 @@ const messages = (state = [], action) => {
           text: action.data.speech,
           checkBoxOptions: [...action.data.options],
           radioButtonOptions: [...action.data.selectOptions],
+          resources: action.data.resources,
           sender: 'bot',
           nextUserAction,
           toDisplay: false,
