@@ -71,6 +71,12 @@ const dialogFlow = (req, res, speech) => {
     if (payload.GDPROptOut) {
       data.GDPROptOut = true;
     }
+
+    // TodO: this is a horribly formated response,
+    // selectedCountries is too specific, we need to make it general to radiobuttons
+    // There is no standardised checking on what is being sent back and forth
+    // The postback is attached to each option,
+    // which doesn't make sense in the case of radio buttons
     // check if resources exist and if so do the call to Google Sheets
     if (payload.resources) {
       const { selectedCountries } = req.body;

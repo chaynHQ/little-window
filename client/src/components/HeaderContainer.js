@@ -10,14 +10,6 @@ const mapStateToProps = (state) => ({
 //   // initialBotMessageHandler: (data) => {
 //   //   dispatch(fetchBotResponse({ ...data, uniqueConversationId }));
 //   // },
-//   // inputHandler: (data, lang) => {
-//   //   if (data.lang) {
-//   //     dispatch(setLanguage(data.lang));
-//   //   } else {
-//   //     dispatch(fetchBotResponse({ speech: data.postback, lang, uniqueConversationId }));
-//   //   }
-//   //   dispatch(addUserInputToStack(data.text));
-//   // },
 // });
 
 const HeaderContainer = connect(

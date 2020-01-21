@@ -40,9 +40,17 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(setLanguage(data.lang));
       dispatch(fetchBotResponse({ speech: data.postback, lang: data.lang, uniqueConversationId }));
     } else {
-      dispatch(fetchBotResponse({ speech: data.postback, lang, uniqueConversationId }));
+      dispatch(fetchBotResponse({
+        speech: data.postback,
+        lang,
+        uniqueConversationId,
+        selectedCountries: data.selectedCountries,
+      }));
     }
-    dispatch(addUserInputToStack(data.text));
+
+    data.text.forEach((text) => {
+      dispatch(addUserInputToStack(text));
+    });
   },
   queueNextMessage: (displayedMessages, hiddenMessages) => {
     if (hiddenMessages.length > 0) {

@@ -6,7 +6,7 @@ import styles from '../styles/conversation.module.css';
 
 import Message from './Message';
 import CheckBoxOptions from './CheckBoxOptions';
-import RadioButtonOptions from './RadioButtonOptions';
+import RadioButtonOptionsContainer from './RadioButtonOptionsContainer';
 import TextInput from './TextInput';
 
 import botAvatar from '../assets/catbot.png';
@@ -28,38 +28,40 @@ class Conversation extends Component {
     queueNextMessage();
   }
 
-  renderMessage(currentMessage, inputHandler){
-    let message = []
+  renderMessage = (currentMessage, inputHandler) => {
+    const message = [];
 
-    if (currentMessage.sender === 'bot'){
-      message.push(<div key={uuidv4()} className={styles.botAvatarAndMessageContainer}>
-        <img key={uuidv4()} alt={'Bot Avatar'} src={botAvatar} className={styles.botAvatar} />
-        <Message key={uuidv4()} text={currentMessage.text} sender={currentMessage.sender} />
-      </div>)
+    if (currentMessage.sender === 'bot') {
+      message.push(
+        <div key={uuidv4()} className={styles.botAvatarAndMessageContainer}>
+          <img key={uuidv4()} alt="Bot Avatar" src={botAvatar} className={styles.botAvatar} />
+          <Message key={uuidv4()} text={currentMessage.text} sender={currentMessage.sender} />
+        </div>,
+      );
     } else {
-      message.push(<Message key={uuidv4()} text={currentMessage.text} sender={currentMessage.sender} />)
+      message.push(
+        <Message key={uuidv4()} text={currentMessage.text} sender={currentMessage.sender} />,
+      );
     }
 
-    if(currentMessage.checkBoxOptions && currentMessage.checkBoxOptions.length > 0){
+    if (currentMessage.checkBoxOptions && currentMessage.checkBoxOptions.length > 0) {
       message.push(
         <CheckBoxOptions
           key={uuidv4()}
           options={currentMessage.checkBoxOptions}
-          question={currentMessage.text}
           inputHandler={inputHandler}
-        />
-      )
+        />,
+      );
     }
 
-    if(currentMessage.radioButtonOptions && currentMessage.radioButtonOptions.length > 0){
+    if (currentMessage.radioButtonOptions && currentMessage.radioButtonOptions.length > 0) {
       message.push(
-        <RadioButtonOptions
+        <RadioButtonOptionsContainer
           key={uuidv4()}
-          options={currentMessage.radioButtonOptions}
-          question={currentMessage.text}
+          message={currentMessage}
           inputHandler={inputHandler}
-        />
-      )
+        />,
+      );
     }
 
     return message;
@@ -67,26 +69,34 @@ class Conversation extends Component {
 
 
   render() {
-    const { displayedMessages, inputHandler, lang } = this.props;
-    const nextUserAction = displayedMessages.slice(-1)[0] ? displayedMessages.slice(-1)[0].nextUserAction : 'wait';
+    const {
+      displayedMessages, inputHandler, lang,
+    } = this.props;
+    const nextUserAction = displayedMessages.slice(-1)[0]
+      ? displayedMessages.slice(-1)[0].nextUserAction : 'wait';
 
     return (
       <div className={styles.container}>
         <ScrollableFeed forceScroll className={styles.messagesContainer}>
 
-          {displayedMessages.map((message, index) => {
-              return this.renderMessage(message, inputHandler)
-          })}
+          {displayedMessages.map((message) => this.renderMessage(message, inputHandler))}
 
-          { nextUserAction === 'wait' ?
-            <div className={styles.botAvatarAndMessageContainer}>
-              <img key={uuidv4()} src={botAvatar} className={styles.botAvatar} />
-              <Message key={uuidv4()} text='' sender='bot' dotty />
-            </div>
-          : null }
+          { nextUserAction === 'wait'
+            ? (
+              <div className={styles.botAvatarAndMessageContainer}>
+                <img
+                  key={uuidv4()}
+                  src={botAvatar}
+                  className={styles.botAvatar}
+                  alt="Bot Avatar"
+                />
+                <Message key={uuidv4()} text="" sender="bot" dotty />
+              </div>
+            )
+            : null }
 
         </ScrollableFeed>
-        <TextInput inputHandler={inputHandler} lang={lang} status={nextUserAction} disabled={nextUserAction!=='input'} />
+        <TextInput inputHandler={inputHandler} lang={lang} status={nextUserAction} disabled={nextUserAction !== 'input'} />
       </div>
     );
   }

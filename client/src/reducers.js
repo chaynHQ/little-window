@@ -18,7 +18,7 @@ const messages = (state = [], action) => {
         },
       ];
     case ADD_BOT_MESSAGE:
-      if (action.data.options.length > 1) {
+      if (action.data.options.length > 1 || action.data.selectOptions.length > 1) {
         nextUserAction = 'option';
       } else if (action.data.retrigger) {
         nextUserAction = 'wait';
@@ -30,7 +30,8 @@ const messages = (state = [], action) => {
         ...state,
         {
           text: action.data.speech,
-          options: action.data.options,
+          checkBoxOptions: [...action.data.options],
+          radioButtonOptions: [...action.data.selectOptions],
           sender: 'bot',
           nextUserAction,
           toDisplay: false,

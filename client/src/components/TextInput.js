@@ -6,7 +6,9 @@ import styles from '../styles/textInput.module.css';
 
 import translations from '../assets/translations';
 
-const TextInput = ({ inputHandler, lang, status, disabled }) => {
+const TextInput = ({
+  inputHandler, lang, status, disabled,
+}) => {
   let input;
 
   return (
@@ -14,7 +16,7 @@ const TextInput = ({ inputHandler, lang, status, disabled }) => {
       className={styles.textInput}
       onSubmit={(e) => {
         e.preventDefault();
-        inputHandler({ text: input.value, postback: input.value });
+        inputHandler({ text: [input.value], postback: input.value });
         input.value = null;
       }}
     >
@@ -24,12 +26,12 @@ const TextInput = ({ inputHandler, lang, status, disabled }) => {
         ref={(node) => {
           input = node;
         }}
-        disabled = {disabled}
+        disabled={disabled}
         placeholder={translations[`${status}InputBoxText`][lang]}
       />
       <input
         type="submit"
-        disabled = {disabled}
+        disabled={disabled}
         className={styles.textInputSubmitButton}
         value={translations.submitButtonText[lang]}
       />
@@ -44,6 +46,6 @@ TextInput.propTypes = {
   inputHandler: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 };
 export default TextInput;
