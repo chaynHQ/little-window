@@ -30,6 +30,8 @@ const errTechnical = (lang) => {
 
 // the call to Dialog Flow
 const dialogFlow = (req, res, speech) => {
+  // TODO: remove the need for this to be labeled uniqueConversationId
+  // should instead be conversationId or sessionId
   const requestdf = app.textRequest(speech, {
     sessionId: req.body.uniqueConversationId,
   });
@@ -72,6 +74,11 @@ const dialogFlow = (req, res, speech) => {
       data.GDPROptOut = true;
     }
 
+    // TodO: this is a horribly formated response,
+    // selectedCountries is too specific, we need to make it general to radiobuttons
+    // There is no standardised checking on what is being sent back and forth
+    // The postback is attached to each option,
+    // which doesn't make sense in the case of radio buttons
     // check if resources exist and if so do the call to Google Sheets
     if (payload.resources) {
       const { selectedCountries } = req.body;

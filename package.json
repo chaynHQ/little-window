@@ -1,7 +1,7 @@
 {
   "name": "little-window",
   "version": "1.0.0",
-  "description": "A chatbot featured on all Chayn websites in an iframe, which quickly directs users to Chayn’s relevant internal or external resources",
+  "description": "A chatbot featured on Chayn websites, which quickly directs users to Chayn’s relevant internal or external resources",
   "main": "config.js",
   "scripts": {
     "start": "node ./src/server.js",
@@ -32,9 +32,10 @@
     "googleapis": "^46.0.0",
     "nodemailer": "^4.6.3",
     "pg-promise": "^7.4.1",
+    "redux-thunk": "^2.3.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "uuid": "^3.2.1"
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
