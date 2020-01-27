@@ -14,7 +14,6 @@ const Resource = ({ text, link, lang }) => (
   </p>
 );
 
-
 Resource.propTypes = {
   text: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,

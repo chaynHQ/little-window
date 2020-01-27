@@ -5,19 +5,6 @@
   margin: 2%;
   max-width: 60%;
   align-self: flex-end;
-
-}
-
-/* ToDo: not convinced these are the right styles */
-.resourceMessage {
-  float: left;
-  margin-left: 5%;
-  margin-right: 5%;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-self: flex-start;
-  margin: 0;
 }
 
 .botMessage {

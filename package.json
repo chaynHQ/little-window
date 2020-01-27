@@ -1,7 +1,7 @@
 {
   "name": "little-window",
   "version": "1.0.0",
-  "description": "A chatbot featured on all Chayn websites in an iframe, which quickly directs users to Chayn’s relevant internal or external resources",
+  "description": "A chatbot featured on Chayn websites, which quickly directs users to Chayn’s relevant internal or external resources",
   "main": "config.js",
   "scripts": {
     "start": "node ./src/server.js",
