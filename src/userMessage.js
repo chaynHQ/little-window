@@ -30,7 +30,6 @@ const errTechnical = (lang) => {
 
 // the call to Dialog Flow
 const dialogFlow = (req, res, speech) => {
-
   // TODO: remove the need for this to be labeled uniqueConversationId
   // should instead be conversationId or sessionId
   const requestdf = app.textRequest(speech, {

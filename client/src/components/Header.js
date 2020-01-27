@@ -11,8 +11,8 @@ const Header = ({ minimised, minimiseHandler, refreshHandler }) => (
   <div className={styles.header}>
     <button
       className={styles.icon}
-      onClick={() => minimiseHandler()}
-      onKeyDown={() => minimiseHandler()}
+      onClick={() => minimiseHandler(!minimised)}
+      onKeyDown={() => minimiseHandler(!minimised)}
       type="button"
     >
       <img

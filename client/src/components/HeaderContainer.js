@@ -11,8 +11,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  minimiseHandler: () => {
+  minimiseHandler: (minimised) => {
     dispatch(setMinimiseState());
+    window.parent.postMessage(minimised, '*');
   },
   refreshHandler: () => {
     dispatch(refreshConversation());
