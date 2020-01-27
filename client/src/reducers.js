@@ -6,6 +6,7 @@ import {
   UPDATE_BOT_MESSAGE,
   SET_CONVERSATION_DATA,
   REFRESH_CONVERSATION,
+  SET_MINIMISE_STATE,
 } from './actions';
 
 
@@ -78,11 +79,19 @@ const conversation = (state = {}, action) => {
   }
 };
 
-
+const minimised = (state = false, action) => {
+  switch (action.type) {
+    case SET_MINIMISE_STATE:
+      return !state;
+    default:
+      return state;
+  }
+};
 const littleWindowApp = combineReducers({
   messages,
   language,
   conversation,
+  minimised,
 });
 
 export default littleWindowApp;

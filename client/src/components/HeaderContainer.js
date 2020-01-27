@@ -1,16 +1,18 @@
 import { connect } from 'react-redux';
 import Header from './Header';
-import { refreshConversation, updateConversation, fetchBotResponse } from '../actions';
+import {
+  refreshConversation, updateConversation, fetchBotResponse, setMinimiseState,
+} from '../actions';
 
 const uuidv4 = require('uuid/v4');
 
 const mapStateToProps = (state) => ({
-  minimise: state.conversation.minimise,
+  minimised: state.minimised,
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   minimiseHandler: () => {
-
+    dispatch(setMinimiseState());
   },
   refreshHandler: () => {
     dispatch(refreshConversation());
@@ -26,7 +28,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 });
 
 const HeaderContainer = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(Header);
 

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import '../styles/App.css';
 import styles from '../styles/message.module.css';
 
-
 const Message = ({ text, sender, dotty }) => (
   <p className={`${dotty ? styles.dotty : ''} ${styles[`${sender}Message`]}`}>
     {text}

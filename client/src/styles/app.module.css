@@ -1,6 +1,7 @@
 .container {
-  height: 100vh;
-  width: 100vw;
+  width: 50vw;
   box-sizing: border-box;
   border: 1px solid black;
+  bottom: 0;
+  position: absolute;
 }

@@ -84,13 +84,13 @@ class Conversation extends Component {
 
   render() {
     const {
-      displayedMessages, inputHandler, lang,
+      displayedMessages, inputHandler, lang, minimised,
     } = this.props;
     const nextUserAction = displayedMessages.slice(-1)[0]
       ? displayedMessages.slice(-1)[0].nextUserAction : 'wait';
 
     return (
-      <div className={styles.container}>
+      <div className={`${minimised ? styles.minimised : ''} ${styles.container}`}>
         <ScrollableFeed forceScroll className={styles.messagesContainer}>
 
           {displayedMessages.map((message) => this.renderMessage(message, inputHandler, lang))}
@@ -122,6 +122,11 @@ Conversation.propTypes = {
   queueNextMessage: PropTypes.func.isRequired,
   displayedMessages: PropTypes.arrayOf(PropTypes.object).isRequired,
   lang: PropTypes.string.isRequired,
+  minimised: PropTypes.bool,
+};
+
+Conversation.defaultProps = {
+  minimised: false,
 };
 
 export default Conversation;

@@ -32,6 +32,7 @@ const mapStateToProps = (state) => ({
   hiddenMessages: state.messages.filter((message) => message.toDisplay === false),
   lang: state.language,
   conversationId: state.conversation.conversationId,
+  minimised: state.minimised,
 });
 
 const mapDispatchToProps = (dispatch) => ({

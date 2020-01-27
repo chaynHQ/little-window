@@ -3,18 +3,20 @@ import PropTypes from 'prop-types';
 import '../styles/App.css';
 import styles from '../styles/header.module.css';
 
-// import Maximise from '../assets/maximise.svg';
+import Maximise from '../assets/maximise.svg';
 import Minimise from '../assets/minimise.svg';
 import Refresh from '../assets/refresh.svg';
 
-const Header = ({ minimiseHandler, refreshHandler }) => (
+const Header = ({ minimised, minimiseHandler, refreshHandler }) => (
   <div className={styles.header}>
     <button
       className={styles.icon}
       onClick={() => minimiseHandler()}
-      onKeyDown={() => minimiseHandler()}>
+      onKeyDown={() => minimiseHandler()}
+      type="button"
+    >
       <img
-        src={Minimise}
+        src={minimised ? Maximise : Minimise}
         alt="minimise"
       />
     </button>
@@ -22,7 +24,9 @@ const Header = ({ minimiseHandler, refreshHandler }) => (
     <button
       onClick={() => refreshHandler()}
       onKeyDown={() => refreshHandler()}
-      className={styles.icon}>
+      className={styles.icon}
+      type="button"
+    >
       <img
         src={Refresh}
         alt="refresh"
@@ -34,6 +38,11 @@ const Header = ({ minimiseHandler, refreshHandler }) => (
 Header.propTypes = {
   minimiseHandler: PropTypes.func.isRequired,
   refreshHandler: PropTypes.func.isRequired,
+  minimised: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  minimised: false,
 };
 
 export default Header;

@@ -29,6 +29,7 @@ export const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
 export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const SET_CONVERSATION_DATA = 'SET_CONVERSATION_DATA';
 export const REFRESH_CONVERSATION = 'REFRESH_CONVERSATION';
+export const SET_MINIMISE_STATE = 'SET_MINIMISE_STATE';
 
 /*
  * action creators
@@ -60,6 +61,10 @@ export const updateConversation = (data) => ({
 
 export const refreshConversation = () => ({
   type: REFRESH_CONVERSATION,
+});
+
+export const setMinimiseState = () => ({
+  type: SET_MINIMISE_STATE,
 });
 
 export const setLanguage = (lang) => ({ type: SET_LANGUAGE, lang });
