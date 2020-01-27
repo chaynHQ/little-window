@@ -41,19 +41,19 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateConversation({ conversationId: uniqueConversationId }));
     dispatch(fetchBotResponse({ ...data, uniqueConversationId }));
   },
-  inputHandler: (data, lang, conversationId) => {
+  inputHandler: (data, lang, uniqueConversationId) => {
     if (data.lang) {
       dispatch(setLanguage(data.lang));
       dispatch(fetchBotResponse({
         speech: data.postback,
         lang: data.lang,
-        uniqueConversationId: conversationId,
+        uniqueConversationId,
       }));
     } else {
       dispatch(fetchBotResponse({
         speech: data.postback,
         lang,
-        conversationId,
+        uniqueConversationId,
         selectedCountries: data.selectedCountries,
       }));
     }

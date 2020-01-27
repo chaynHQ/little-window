@@ -1,4 +1,57 @@
 /*
+ * action types
+ */
+export const ADD_USER_INPUT = 'ADD_USER_INPUT';
+export const ADD_BOT_MESSAGE = 'ADD_BOT_MESSAGE';
+export const UPDATE_BOT_MESSAGE = 'UPDATE_BOT_MESSAGE';
+export const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
+export const SET_LANGUAGE = 'SET_LANGUAGE';
+export const SET_CONVERSATION_DATA = 'SET_CONVERSATION_DATA';
+export const REFRESH_CONVERSATION = 'REFRESH_CONVERSATION';
+export const SET_MINIMISE_STATE = 'SET_MINIMISE_STATE';
+
+/*
+ * action creators
+ */
+export const addUserInputToStack = (text) => ({
+  type: ADD_USER_INPUT,
+  text,
+});
+
+export const fetchBotResponseSuccess = (data) => ({
+  type: ADD_BOT_MESSAGE,
+  data,
+});
+
+export const fetchBotResponseFailure = (errorMessage) => ({
+  type: UPDATE_BOT_MESSAGE,
+  errorMessage,
+});
+
+export const updateBotMessage = (data) => ({
+  type: UPDATE_BOT_MESSAGE,
+  data,
+});
+
+export const updateConversation = (data) => ({
+  type: SET_CONVERSATION_DATA,
+  data,
+});
+
+export const refreshConversation = () => ({
+  type: REFRESH_CONVERSATION,
+});
+
+export const setMinimiseState = () => ({
+  type: SET_MINIMISE_STATE,
+});
+
+export const setLanguage = (lang) => ({
+  type: SET_LANGUAGE,
+  lang,
+});
+
+/*
  * action functions
  */
 function handleErrors(response) {
@@ -32,59 +85,7 @@ export function fetchBotResponse(data) {
       dispatch(fetchBotResponseSuccess(json));
       return json;
     })
-    .catch((error) => dispatch(fetchBotResponseFailure(error)));
+    .catch(() => dispatch(
+      fetchBotResponseFailure("I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later"),
+    ));
 }
-
-/*
- * action types
- */
-export const ADD_USER_INPUT = 'ADD_USER_INPUT';
-export const ADD_BOT_MESSAGE = 'ADD_BOT_MESSAGE';
-export const UPDATE_BOT_MESSAGE = 'UPDATE_BOT_MESSAGE';
-export const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
-export const SET_LANGUAGE = 'SET_LANGUAGE';
-export const SET_CONVERSATION_DATA = 'SET_CONVERSATION_DATA';
-export const REFRESH_CONVERSATION = 'REFRESH_CONVERSATION';
-export const SET_MINIMISE_STATE = 'SET_MINIMISE_STATE';
-
-/*
- * action creators
- */
-export const addUserInputToStack = (text) => ({
-  type: ADD_USER_INPUT,
-  text,
-})
-
-export const fetchBotResponseSuccess = (data) => ({
-  type: ADD_BOT_MESSAGE,
-  data,
-});
-
-// TODO: What to do in failure case
-export const fetchBotResponseFailure = (error) => ({
-  type: FETCH_PRODUCTS_FAILURE,
-  error,
-});
-
-export const updateBotMessage = (data) => ({
-  type: UPDATE_BOT_MESSAGE,
-  data,
-});
-
-export const updateConversation = (data) => ({
-  type: SET_CONVERSATION_DATA,
-  data,
-});
-
-export const refreshConversation = () => ({
-  type: REFRESH_CONVERSATION,
-});
-
-export const setMinimiseState = () => ({
-  type: SET_MINIMISE_STATE,
-});
-
-export const setLanguage = (lang) => ({
-  type: SET_LANGUAGE,
-  lang
-});
