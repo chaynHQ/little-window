@@ -19,6 +19,22 @@ function sendToServer(data) {
     .then((res) => res.json());
 }
 
+export function fetchBotResponse(data) {
+  return (dispatch) => sendToServer(data)
+    .then((json) => {
+      if (json.retrigger) {
+        dispatch(fetchBotResponse({
+          speech: json.retrigger,
+          uniqueConversationId: data.uniqueConversationId,
+          lang: data.lang,
+        }));
+      }
+      dispatch(fetchBotResponseSuccess(json));
+      return json;
+    })
+    .catch((error) => dispatch(fetchBotResponseFailure(error)));
+}
+
 /*
  * action types
  */
@@ -34,9 +50,10 @@ export const SET_MINIMISE_STATE = 'SET_MINIMISE_STATE';
 /*
  * action creators
  */
-export function addUserInputToStack(text) {
-  return { type: ADD_USER_INPUT, text };
-}
+export const addUserInputToStack = (text) => ({
+  type: ADD_USER_INPUT,
+  text,
+})
 
 export const fetchBotResponseSuccess = (data) => ({
   type: ADD_BOT_MESSAGE,
@@ -67,20 +84,7 @@ export const setMinimiseState = () => ({
   type: SET_MINIMISE_STATE,
 });
 
-export const setLanguage = (lang) => ({ type: SET_LANGUAGE, lang });
-
-export function fetchBotResponse(data) {
-  return (dispatch) => sendToServer(data)
-    .then((json) => {
-      if (json.retrigger) {
-        dispatch(fetchBotResponse({
-          speech: json.retrigger,
-          uniqueConversationId: data.uniqueConversationId,
-          lang: data.lang,
-        }));
-      }
-      dispatch(fetchBotResponseSuccess(json));
-      return json;
-    })
-    .catch((error) => dispatch(fetchBotResponseFailure(error)));
-}
+export const setLanguage = (lang) => ({
+  type: SET_LANGUAGE,
+  lang
+});
