@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { isMobile } from 'react-device-detect';
 import {
   ADD_USER_INPUT,
   ADD_BOT_MESSAGE,
@@ -79,7 +80,7 @@ const conversation = (state = {}, action) => {
   }
 };
 
-const minimised = (state = false, action) => {
+const minimised = (state = isMobile, action) => {
   switch (action.type) {
     case SET_MINIMISE_STATE:
       return !state;

@@ -8,7 +8,7 @@ import Minimise from '../assets/minimise.svg';
 import Refresh from '../assets/refresh.svg';
 
 const Header = ({ minimised, minimiseHandler, refreshHandler }) => (
-  <div className={styles.header}>
+  <div className={`${styles.header} ${minimised ? styles.minimised : ''}`}>
     <button
       className={styles.icon}
       onClick={() => minimiseHandler(!minimised)}
@@ -20,7 +20,7 @@ const Header = ({ minimised, minimiseHandler, refreshHandler }) => (
         alt="minimise"
       />
     </button>
-    <h1>Little Window</h1>
+    <h1>{ minimised ? 'Can I help you?' : 'Little Window'}</h1>
     <button
       onClick={() => refreshHandler()}
       onKeyDown={() => refreshHandler()}
