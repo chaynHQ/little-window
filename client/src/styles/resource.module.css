@@ -1,0 +1,16 @@
+.resource {
+  margin: 5px;
+  border: 2px #b0b0b0 solid;
+  border-radius: 15px;
+  padding: 10px;
+  min-width: 2.2rem;
+  max-width: 60%;
+  align-self: flex-start;
+}
+
+.link {
+  margin-left: 10px
+}
+.link:visited {
+  color: blue;
+}

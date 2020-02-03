@@ -1,0 +1,30 @@
+.messagesContainer {
+  height: 85%;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  background: #f8f5f1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.minimised {
+  display: none;
+}
+
+.container {
+  height: 85vh;
+}
+
+.botAvatar {
+  user-select: none;
+  height: 4em;
+  width: 4em;
+}
+
+.botAvatarAndMessageContainer{
+  display: flex;
+  flex-direction: row;
+  margin: 2%
+}

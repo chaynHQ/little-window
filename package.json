@@ -1,7 +1,7 @@
 {
   "name": "little-window",
   "version": "1.0.0",
-  "description": "A chatbot featured on all Chayn websites in an iframe, which quickly directs users to Chayn’s relevant internal or external resources",
+  "description": "A chatbot featured on Chayn websites, which quickly directs users to Chayn’s relevant internal or external resources",
   "main": "config.js",
   "scripts": {
     "start": "node ./src/server.js",
@@ -10,7 +10,8 @@
     "test": "NODE_ENV=test tape ./src/test/*test.js | tap-spec && cd client && npm run test",
     "server": "NODE_ENV=dev nodemon ./src/server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "client": "cd client && npm start"
+    "client": "cd client && npm start",
+    "lint": "eslint '**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -24,24 +25,26 @@
   "homepage": "https://github.com/fac-12/Little-Window#readme",
   "dependencies": {
     "apiai": "^4.0.3",
+    "babel-eslint": "^10.0.3",
     "body-parser": "^1.18.2",
     "dotenv": "^8.2.0",
     "express": "^4.16.2",
     "googleapis": "^46.0.0",
     "nodemailer": "^4.6.3",
     "pg-promise": "^7.4.1",
+    "redux-thunk": "^2.3.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "uuid": "^3.2.1"
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.2",
     "concurrently": "^3.5.1",
-    "eslint": "^4.18.2",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-import": "^2.9.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.7.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^1.7.0",
     "nock": "^9.2.3",
     "nodemon": "^1.14.12",
     "supertest": "^3.0.0",

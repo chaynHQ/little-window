@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
-const userMessage = require('./userMessage');
 const bodyParser = require('body-parser');
+const userMessage = require('./userMessage');
 
 const app = express();
 

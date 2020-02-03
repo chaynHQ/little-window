@@ -7,3 +7,8 @@ services:
     - postgresql
 before_script:
     - psql -c 'create database littlewindowtest;' -U postgres
+script:
+  - npm run lint
+  # TODO: Add in tests!
+  # - npm test --passWithNoTests
+  # - cd client && npm test --passWithNoTests

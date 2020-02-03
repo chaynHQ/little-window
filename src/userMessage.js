@@ -1,5 +1,5 @@
-const { DF_KEY } = require('../config');
 const apiai = require('apiai');
+const { DF_KEY } = require('../config');
 const saveConversation = require('./database/queries/save_conversation');
 const saveMessage = require('./database/queries/save_message');
 const googleCall = require('./googleCall');
@@ -9,25 +9,31 @@ const app = apiai(DF_KEY);
 // error messages in french or english
 
 const errResources = (lang) => {
+  let message;
   if (lang === 'en') {
-    return "Sorry, there's been a problem getting the information. Please check the Chayn website or try again later!";
-  } else if (lang === 'fr') {
-    return "Je rencontre un souci technique et j'ai du mal à trouver l'information que tu recherches. N'hésite pas à consulter le site de Chayn ou reviens me voir plus tard ! Merci";
+    message = "Sorry, there's been a problem getting the information. Please check the Chayn website or try again later!";
+  } if (lang === 'fr') {
+    message = "Je rencontre un souci technique et j'ai du mal à trouver l'information que tu recherches. N'hésite pas à consulter le site de Chayn ou reviens me voir plus tard ! Merci";
   }
+  return message;
 };
 
 const errTechnical = (lang) => {
+  let message;
   if (lang === 'en') {
-    return "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later";
-  } else if (lang === 'fr') {
-    return "Je rencontre un souci technique et j'ai bien peur de ne pas pouvoir discuter dans l'immédiat. En attendant que je sois de retour sur pattes, n'hésite pas à consulter le site de Chayn, et reviens me voir plus tard ! Merci";
+    message = "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later";
+  } if (lang === 'fr') {
+    message = "Je rencontre un souci technique et j'ai bien peur de ne pas pouvoir discuter dans l'immédiat. En attendant que je sois de retour sur pattes, n'hésite pas à consulter le site de Chayn, et reviens me voir plus tard ! Merci";
   }
+  return message;
 };
 
 // the call to Dialog Flow
 const dialogFlow = (req, res, speech) => {
+  // TODO: remove the need for this to be labeled uniqueConversationId
+  // should instead be conversationId or sessionId
   const requestdf = app.textRequest(speech, {
-    sessionId: req.body.uniqueId,
+    sessionId: req.body.uniqueConversationId,
   });
 
   const selectedLang = req.body.lang;
@@ -68,6 +74,11 @@ const dialogFlow = (req, res, speech) => {
       data.GDPROptOut = true;
     }
 
+    // TodO: this is a horribly formated response,
+    // selectedCountries is too specific, we need to make it general to radiobuttons
+    // There is no standardised checking on what is being sent back and forth
+    // The postback is attached to each option,
+    // which doesn't make sense in the case of radio buttons
     // check if resources exist and if so do the call to Google Sheets
     if (payload.resources) {
       const { selectedCountries } = req.body;
@@ -115,13 +126,13 @@ const dialogFlow = (req, res, speech) => {
 
 // if it is the first input from user, save the conversation id in database
 const userMessage = (req, res) => {
-  const { speech, uniqueId } = req.body;
+  const { speech, uniqueConversationId } = req.body;
   if (
     speech === 'Little Window language selection'
   ) {
-    saveConversation(uniqueId);
+    saveConversation(uniqueConversationId);
   }
-  saveMessage(speech, uniqueId);
+  saveMessage(speech, uniqueConversationId);
   dialogFlow(req, res, speech);
 };
 
