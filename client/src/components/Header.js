@@ -20,7 +20,7 @@ const Header = ({ minimised, minimiseHandler, refreshHandler }) => (
         alt="minimise"
       />
     </button>
-    <h1>Little Window</h1>
+    <h1>{ minimised ? 'Can I help you?' : 'Little Window'}</h1>
     <button
       onClick={() => refreshHandler()}
       onKeyDown={() => refreshHandler()}
