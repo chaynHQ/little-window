@@ -1,5 +1,5 @@
 .header {
-  height: 100px;
+  height: 15vh;
   background: #ffbdbd;
   display: flex;
   align-items: center;
@@ -13,4 +13,8 @@
   border: none;
   margin: 15px;
   cursor: pointer;
+}
+
+.minimised {
+  height: 100vh;
 }

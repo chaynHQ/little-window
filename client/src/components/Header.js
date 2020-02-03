@@ -8,7 +8,7 @@ import Minimise from '../assets/minimise.svg';
 import Refresh from '../assets/refresh.svg';
 
 const Header = ({ minimised, minimiseHandler, refreshHandler }) => (
-  <div className={styles.header}>
+  <div className={`${styles.header} ${minimised ? styles.minimised : ''}`}>
     <button
       className={styles.icon}
       onClick={() => minimiseHandler(!minimised)}
