@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import {isMobile} from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 import {
   ADD_USER_INPUT,
   ADD_BOT_MESSAGE,
