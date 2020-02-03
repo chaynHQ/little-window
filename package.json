@@ -32,6 +32,7 @@
     "googleapis": "^46.0.0",
     "nodemailer": "^4.6.3",
     "pg-promise": "^7.4.1",
+    "react-device-detect": "^1.11.14",
     "redux-thunk": "^2.3.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
