@@ -1,5 +1,6 @@
 .messagesContainer {
-  height: 85%;
+  height: 85% !important;
+  /* important included to ensure overwrite react-scrollable-feed style */
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
