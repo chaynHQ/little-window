@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import '../styles/App.css';
@@ -9,29 +9,28 @@ import translations from '../assets/translations';
 const TextInput = ({
   inputHandler, lang, status, disabled,
 }) => {
-  let input;
+  const [input, setInput] = useState('');
 
   return (
     <form
       className={styles.textInput}
       onSubmit={(e) => {
         e.preventDefault();
-        inputHandler({ text: [input.value], postback: input.value });
-        input.value = null;
+        inputHandler({ text: [input], postback: input });
+        setInput('');
       }}
     >
       <input
         type="text"
         className={styles.textInputArea}
-        ref={(node) => {
-          input = node;
-        }}
         disabled={disabled}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
         placeholder={translations[`${status}InputBoxText`][lang]}
       />
       <input
         type="submit"
-        disabled={disabled}
+        disabled={disabled || input.length < 1}
         className={styles.textInputSubmitButton}
         value={translations.submitButtonText[lang]}
       />
