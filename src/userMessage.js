@@ -33,7 +33,7 @@ const dialogFlow = (req, res, speech) => {
   // TODO: remove the need for this to be labeled uniqueConversationId
   // should instead be conversationId or sessionId
   const requestdf = app.textRequest(speech, {
-    sessionId: req.body.uniqueConversationId || req.body.conversationId,
+    sessionId: req.body.uniqueConversationId || req.body.conversationId || req.body.uniqueId,
   });
 
   const selectedLang = req.body.lang;
