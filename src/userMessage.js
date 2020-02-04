@@ -1,3 +1,4 @@
+const { check, validationResult } = require('express-validator');
 const { saveConversation } = require('./db');
 
 // const apiai = require('apiai');
@@ -126,9 +127,13 @@ const { saveConversation } = require('./db');
 //   requestdf.end();
 // };
 
-// if it is the first input from user, save the conversation id in database
-const userMessage = (req, res) => {
-  // Need to check that req.body is in the right shape
+exports.userMessage = (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(422).json({ errors: errors.array() });
+    return;
+  }
+
   saveConversation(req.body.conversationId);
   res.send('Hello world!');
 
@@ -144,4 +149,8 @@ const userMessage = (req, res) => {
   // dialogFlow(req, res, speech);
 };
 
-module.exports = userMessage;
+exports.validate = () => [
+  check('speech').not().isEmpty().withMessage('must not be empty'),
+  check('lang').not().isEmpty().withMessage('must not be empty'), // TODO: should we update this to isIn(str, values)
+  check('conversationId').isUUID(4).withMessage('must be a UUID'),
+];

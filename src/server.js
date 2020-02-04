@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 require('dotenv').config();
-const userMessage = require('./userMessage');
+const { userMessage, validate } = require('./userMessage');
 
 // Config
 app.set('port', process.env.PORT || 3001);
@@ -16,7 +16,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Routes
-app.post('/usermessage', userMessage);
+
+app.post('/usermessage', validate(), userMessage);
 
 // Setup
 app.listen(app.get('port'), () => {
