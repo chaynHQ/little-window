@@ -1,10 +1,7 @@
 const { check, validationResult } = require('express-validator');
-const { saveConversation } = require('./db');
+const { saveConversation, saveMessage } = require('./db');
 
 // const apiai = require('apiai');
-// const { DF_KEY } = require('../config');
-// const saveConversation = require('./database/queries/save_conversation');
-// const saveMessage = require('./database/queries/save_message');
 // const googleCall = require('./googleCall');
 //
 // const app = apiai(DF_KEY);
@@ -135,17 +132,9 @@ exports.userMessage = (req, res) => {
   }
 
   saveConversation(req.body.conversationId);
+  saveMessage(req.body.speech, req.body.conversationId);
   res.send('Hello world!');
 
-  // Check if conversation Id exists in database, if not save it, if it does, don't save it
-
-  // const { speech, uniqueConversationId } = req.body;
-  // if (
-  //   speech === 'Little Window language selection'
-  // ) {
-  //   saveConversation(uniqueConversationId);
-  // }
-  // saveMessage(speech, uniqueConversationId);
   // dialogFlow(req, res, speech);
 };
 
