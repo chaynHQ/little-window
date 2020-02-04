@@ -38,7 +38,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   initialBotMessageHandler: (data) => {
     const conversationId = uuidv4();
-    dispatch(updateConversation({ conversationId: conversationId }));
+    dispatch(updateConversation({ conversationId }));
     dispatch(fetchBotResponse({ ...data, conversationId }));
   },
   inputHandler: (data, lang, conversationId) => {

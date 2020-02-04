@@ -13,13 +13,14 @@ parser: "babel-eslint"
 parserOptions:
   ecmaFeatures:
     jsx: true
-  ecmaVersion: 2018
+  ecmaVersion: 7
   sourceType: module
 plugins:
   - react
 ignorePatterns:
   - 'node_modules/'
   - 'build/'
+  - 'src-old/'
 rules: { "react/jsx-filename-extension": [0] }
 settings:
   react:

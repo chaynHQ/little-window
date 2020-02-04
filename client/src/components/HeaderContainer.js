@@ -19,7 +19,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(refreshConversation());
 
     const conversationId = uuidv4();
-    dispatch(updateConversation({ conversationId: conversationId }));
+    dispatch(updateConversation({ conversationId }));
     dispatch(fetchBotResponse({
       speech: 'Little Window language selection',
       lang: 'en',

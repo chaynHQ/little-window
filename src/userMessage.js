@@ -1,3 +1,5 @@
+const { saveConversation } = require('./db');
+
 // const apiai = require('apiai');
 // const { DF_KEY } = require('../config');
 // const saveConversation = require('./database/queries/save_conversation');
@@ -126,8 +128,9 @@
 
 // if it is the first input from user, save the conversation id in database
 const userMessage = (req, res) => {
-  console.log('In here')
-  res.send("Hello world!");
+  // Need to check that req.body is in the right shape
+  saveConversation(req.body.conversationId);
+  res.send('Hello world!');
 
   // Check if conversation Id exists in database, if not save it, if it does, don't save it
 

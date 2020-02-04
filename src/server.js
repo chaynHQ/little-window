@@ -1,7 +1,9 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+
 const app = express();
+require('dotenv').config();
 const userMessage = require('./userMessage');
 
 // Config
