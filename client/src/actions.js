@@ -78,7 +78,7 @@ export function fetchBotResponse(data) {
       if (json.retrigger) {
         dispatch(fetchBotResponse({
           speech: json.retrigger,
-          uniqueConversationId: data.uniqueConversationId,
+          conversationId: data.conversationId,
           lang: data.lang,
         }));
       }

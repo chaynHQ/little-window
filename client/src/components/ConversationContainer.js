@@ -37,23 +37,23 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   initialBotMessageHandler: (data) => {
-    const uniqueConversationId = uuidv4();
-    dispatch(updateConversation({ conversationId: uniqueConversationId }));
-    dispatch(fetchBotResponse({ ...data, uniqueConversationId }));
+    const conversationId = uuidv4();
+    dispatch(updateConversation({ conversationId: conversationId }));
+    dispatch(fetchBotResponse({ ...data, conversationId }));
   },
-  inputHandler: (data, lang, uniqueConversationId) => {
+  inputHandler: (data, lang, conversationId) => {
     if (data.lang) {
       dispatch(setLanguage(data.lang));
       dispatch(fetchBotResponse({
         speech: data.postback,
         lang: data.lang,
-        uniqueConversationId,
+        conversationId,
       }));
     } else {
       dispatch(fetchBotResponse({
         speech: data.postback,
         lang,
-        uniqueConversationId,
+        conversationId,
         selectedCountries: data.selectedCountries,
       }));
     }

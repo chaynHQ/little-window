@@ -18,12 +18,12 @@ const mapDispatchToProps = (dispatch) => ({
   refreshHandler: () => {
     dispatch(refreshConversation());
 
-    const uniqueConversationId = uuidv4();
-    dispatch(updateConversation({ conversationId: uniqueConversationId }));
+    const conversationId = uuidv4();
+    dispatch(updateConversation({ conversationId: conversationId }));
     dispatch(fetchBotResponse({
       speech: 'Little Window language selection',
       lang: 'en',
-      uniqueConversationId,
+      conversationId,
     }));
   },
 });
