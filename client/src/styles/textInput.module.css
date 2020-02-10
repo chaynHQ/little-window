@@ -18,6 +18,7 @@
   -webkit-box-sizing: content-box;
           box-sizing: content-box;
   padding-left: 5%;
+  background-color: white;
 }
 
 .textInputSubmitButton {
