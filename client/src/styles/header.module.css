@@ -24,3 +24,7 @@
 .minimised {
   height: 100vh;
 }
+
+.hidden {
+  visibility: hidden;
+}
