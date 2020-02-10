@@ -41,7 +41,9 @@ class Conversation extends Component {
       );
     } else {
       message.push(
-        <Message key={uuidv4()} text={currentMessage.text} sender={currentMessage.sender} />,
+        <div key={uuidv4()} className={styles.userMessageContainer}>
+          <Message key={uuidv4()} text={currentMessage.text} sender={currentMessage.sender} />
+        </div>,
       );
     }
 

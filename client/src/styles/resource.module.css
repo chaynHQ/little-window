@@ -5,7 +5,8 @@
   padding: 10px;
   min-width: 2.2rem;
   max-width: 60%;
-  align-self: flex-start;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
 }
 
 .link {
