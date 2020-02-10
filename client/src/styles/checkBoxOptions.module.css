@@ -1,15 +1,21 @@
 .container {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   cursor: pointer;
   margin: 2%;
   margin-left: 5%;
   max-width: 90%;
-  -webkit-overflow-scrolling: touch;
   padding-left: 5%;
   padding-right: 5%;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 .option {
@@ -19,9 +25,13 @@
   border-radius: 15px;
   font-size: 1rem;
   cursor: pointer;
-  flex-grow: 1;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
   margin: 0.5%;
   min-height: 3rem;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
   height: fit-content;
   outline: 0;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

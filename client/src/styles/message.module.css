@@ -4,7 +4,6 @@
   padding: 10px;
   margin: 2%;
   max-width: 60%;
-  align-self: flex-end;
 }
 
 .botMessage {
@@ -13,7 +12,8 @@
   padding: 10px;
   min-width: 2.2rem;
   max-width: 60%;
-  align-self: flex-start;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
   margin: 0;
   margin-left: 5%;
 }
@@ -22,7 +22,8 @@
   overflow: hidden;
   display: block;
   vertical-align: bottom;
-  animation: ellipsis steps(4, end) 1000ms infinite;
+  -webkit-animation: ellipsis steps(4, end) 1000ms infinite;
+          animation: ellipsis steps(4, end) 1000ms infinite;
   content: '...';
   width: 0px;
 }

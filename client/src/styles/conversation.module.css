@@ -1,13 +1,8 @@
 .messagesContainer {
   height: 85% !important;
   /* important included to ensure overwrite react-scrollable-feed style */
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
   background: #f8f5f1;
   position: relative;
-  display: flex;
-  flex-direction: column;
 }
 
 .minimised {
@@ -19,13 +14,20 @@
 }
 
 .botAvatar {
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   height: 4em;
   width: 4em;
 }
 
 .botAvatarAndMessageContainer{
   display: flex;
-  flex-direction: row;
-  margin: 2%
+  margin: 2%;
+}
+
+.userMessageContainer{
+  display:flex;
+  justify-content: flex-end;
 }
