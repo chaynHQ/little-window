@@ -42,15 +42,12 @@ exports.userMessage = (req, res) => {
   saveConversation(req.body.conversationId);
   saveMessage(req.body.speech, req.body.conversationId);
 
-  // Get response
-  const response = getResponse(req, res);
-
-  // Save response
-
-  // Send response
-  res.send(response);
-
-
+  // Get & send response
+  getResponse(req).then((response) => {
+    // TODO: Save
+    // saveMessage(req.body.speech, req.body.conversationId);
+    res.send(response);
+  });
 };
 
 exports.validate = () => [

@@ -1,21 +1,20 @@
 const dialogflow = require('dialogflow');
-// const apiai = require('apiai');
-// const app = apiai(process.env.DF_KEY);
+const { value } = require('pb-util');
 
-exports.getResponse = async (req, res) => {
+exports.getResponse = async (req) => {
   // Create a new session
-  let privateKey = process.env.DIALOGFLOW_PRIVATE_KEY
-  let clientEmail = process.env.DIALOGFLOW_CLIENT_EMAIL
-  let config = {
+  const privateKey = process.env.DIALOGFLOW_PRIVATE_KEY;
+  const clientEmail = process.env.DIALOGFLOW_CLIENT_EMAIL;
+  const config = {
     credentials: {
       private_key: privateKey,
-      client_email: clientEmail
-    }
-  }
+      client_email: clientEmail,
+    },
+  };
   const sessionClient = new dialogflow.SessionsClient(config);
   const sessionPath = sessionClient.sessionPath(
     process.env.DIALOGFLOW_PROJECT_ID,
-    req.body.conversationId
+    req.body.conversationId,
   );
 
   // The Request
@@ -29,20 +28,27 @@ exports.getResponse = async (req, res) => {
     },
   };
 
-  console.log(request)
-  // Send request and log result
+  // Send request and get result
   const responses = await sessionClient.detectIntent(request);
-  console.log('Detected intent');
-  const result = responses[0].queryResult;
-  console.log(`  Query: ${result.queryText}`);
-  console.log(`  Response: ${result.fulfillmentText}`);
-  if (result.intent) {
-    console.log(`  Intent: ${result.intent.displayName}`);
-  } else {
-    console.log(`  No intent matched.`);
-  }
-  return 'Hello World'
-}
+  const result = responses[0].queryResult.fulfillmentMessages;
+
+  const customPayload = result.find((ele) => ele.message === 'payload').payload.fields;
+
+  // TODO: Change options & selectOptions to checkbox etc...
+
+  // TODO: Take resources to googlesheets
+  const data = {
+    speech: result.find((ele) => ele.message === 'text').text.text[0],
+    options: customPayload.options ? value.decode(customPayload.options) : [],
+    resources: customPayload.resources ? value.decode(customPayload.resources) : [],
+    selectOptions: customPayload.selectOptions ? value.decode(customPayload.selectOptions) : [],
+    retrigger: customPayload.retrigger ? value.decode(customPayload.retrigger) : '',
+    timedelay: customPayload.timedelay ? value.decode(customPayload.timedelay) : '',
+    refresh: customPayload.refresh ? value.decode(customPayload.refresh) : '',
+    GDPROptOut: customPayload.GDPROptOut ? value.decode(customPayload.GDPROptOut) : false,
+  };
+  return data;
+};
 
 // the call to Dialog Flow
 // const dialogFlow = (req, res, speech) => {

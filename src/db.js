@@ -18,7 +18,7 @@ const options = {
 const db = pgp(options);
 
 // queries
-
+// TODO: Error checking instead of console.log
 exports.saveConversation = async (conversationId) => {
   try {
     const conversation = await db.oneOrNone(
