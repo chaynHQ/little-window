@@ -44,8 +44,7 @@ exports.userMessage = (req, res) => {
 
   // Get & send response
   getResponse(req).then((response) => {
-    // TODO: Save
-    // saveMessage(req.body.speech, req.body.conversationId);
+    saveMessage(response, req.body.conversationId);
     res.send(response);
   });
 };
