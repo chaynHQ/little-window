@@ -2,36 +2,8 @@ const { check, validationResult } = require('express-validator');
 // const { saveConversation, saveMessage } = require('./db');
 const { getResponse } = require('./dialogFlow');
 
-// const apiai = require('apiai');
-// const googleCall = require('./googleCall');
-//
-// const app = apiai(DF_KEY);
-//
-// // error messages in french or english
-//
-// const errResources = (lang) => {
-//   let message;
-//   if (lang === 'en') {
-//     message = "Sorry, there's been a problem getting the information. Please check the Chayn website or try again later!";
-//   } if (lang === 'fr') {
-//     message = "Je rencontre un souci technique et j'ai du mal à trouver l'information que tu recherches. N'hésite pas à consulter le site de Chayn ou reviens me voir plus tard ! Merci";
-//   }
-//   return message;
-// };
-//
-// const errTechnical = (lang) => {
-//   let message;
-//   if (lang === 'en') {
-//     message = "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later";
-//   } if (lang === 'fr') {
-//     message = "Je rencontre un souci technique et j'ai bien peur de ne pas pouvoir discuter dans l'immédiat. En attendant que je sois de retour sur pattes, n'hésite pas à consulter le site de Chayn, et reviens me voir plus tard ! Merci";
-//   }
-//   return message;
-// };
-//
-
 exports.userMessage = (req, res) => {
-  // Check for errors
+  // Check req was valid
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(422).json({ errors: errors.array() });
@@ -42,11 +14,20 @@ exports.userMessage = (req, res) => {
   // saveConversation(req.body.conversationId);
   // saveMessage(req.body.speech, req.body.conversationId);
 
-  // Get & send response
-  getResponse(req, res).then((response) => {
-    // saveMessage(response, req.body.conversationId);
-    res.send(response);
-  });
+  try {
+    // Get & send response
+    getResponse(req, res).then((response) => {
+      // saveMessage(response, req.body.conversationId);
+      res.send(response);
+    });
+  } catch {
+    res.status(422).json({
+      errors: [{
+        value: null,
+        msg: 'Problem retrieving response',
+      }],
+    });
+  }
 };
 
 exports.validate = () => [

@@ -9,3 +9,6 @@ export default {
   submitButtonText: { en: 'Submit', fr: 'Envoyer' },
   resourcesViewText: { en: 'View', fr: 'Voir' },
 };
+
+
+// TODO: Need to include error messages in multiple langs
