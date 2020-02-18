@@ -39,12 +39,12 @@ exports.userMessage = (req, res) => {
   }
 
   // Save message & conversation
-  saveConversation(req.body.conversationId);
-  saveMessage(req.body.speech, req.body.conversationId);
+  // saveConversation(req.body.conversationId);
+  // saveMessage(req.body.speech, req.body.conversationId);
 
   // Get & send response
   getResponse(req).then((response) => {
-    saveMessage(response, req.body.conversationId);
+    // saveMessage(response, req.body.conversationId);
     res.send(response);
   });
 };

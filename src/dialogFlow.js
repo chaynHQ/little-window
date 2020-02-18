@@ -33,15 +33,15 @@ exports.getResponse = async (req) => {
   const result = responses[0].queryResult.fulfillmentMessages;
 
   const customPayload = result.find((ele) => ele.message === 'payload').payload.fields;
-
-  // TODO: Change options & selectOptions to checkbox etc...
-
   // TODO: Take resources to googlesheets
+
+  // TODO: Update responses in dialogflow options to checkBoxOptions
+  // TODO: Update responses in dialogflow selectOptions to radioBoxOptions
   const data = {
     speech: result.find((ele) => ele.message === 'text').text.text[0],
-    options: customPayload.options ? value.decode(customPayload.options) : [],
+    checkBoxOptions: customPayload.options ? value.decode(customPayload.options) : [],
     resources: customPayload.resources ? value.decode(customPayload.resources) : [],
-    selectOptions: customPayload.selectOptions ? value.decode(customPayload.selectOptions) : [],
+    radioButtonOptions: customPayload.selectOptions ? value.decode(customPayload.selectOptions) : [],
     retrigger: customPayload.retrigger ? value.decode(customPayload.retrigger) : '',
     timedelay: customPayload.timedelay ? value.decode(customPayload.timedelay) : '',
     refresh: customPayload.refresh ? value.decode(customPayload.refresh) : '',
