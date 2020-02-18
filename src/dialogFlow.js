@@ -1,7 +1,8 @@
 const dialogflow = require('dialogflow');
 const { value } = require('pb-util');
+const { getResources } = require('./googleSheets');
 
-exports.getResponse = async (req) => {
+exports.getResponse = async (req, res) => {
   // Create a new session
   const privateKey = process.env.DIALOGFLOW_PRIVATE_KEY;
   const clientEmail = process.env.DIALOGFLOW_CLIENT_EMAIL;
@@ -32,21 +33,39 @@ exports.getResponse = async (req) => {
   const responses = await sessionClient.detectIntent(request);
   const result = responses[0].queryResult.fulfillmentMessages;
 
+  // Turn result into reponse
   const customPayload = result.find((ele) => ele.message === 'payload').payload.fields;
-  // TODO: Take resources to googlesheets
 
   // TODO: Update responses in dialogflow options to checkBoxOptions
   // TODO: Update responses in dialogflow selectOptions to radioBoxOptions
   const data = {
     speech: result.find((ele) => ele.message === 'text').text.text[0],
     checkBoxOptions: customPayload.options ? value.decode(customPayload.options) : [],
-    resources: customPayload.resources ? value.decode(customPayload.resources) : [],
-    radioButtonOptions: customPayload.selectOptions ? value.decode(customPayload.selectOptions) : [],
+    radioButtonOptions: customPayload.selectOptions
+      ? value.decode(customPayload.selectOptions) : [],
     retrigger: customPayload.retrigger ? value.decode(customPayload.retrigger) : '',
     timedelay: customPayload.timedelay ? value.decode(customPayload.timedelay) : '',
     refresh: customPayload.refresh ? value.decode(customPayload.refresh) : '',
     GDPROptOut: customPayload.GDPROptOut ? value.decode(customPayload.GDPROptOut) : false,
   };
+
+  if (customPayload.resources && value.decode(customPayload.resources) === true) {
+    const lookupVals = req.body.selectedCountries
+      ? req.body.selectedCountries.map((country) => country.lookup)
+      : [req.body.speech];
+    const resources = await getResources(lookupVals, req.body.lang);
+    if (resources.length > 0) {
+      data.resources = resources;
+    } else {
+      res.status(422).json({
+        errors: [{
+          value: null,
+          msg: 'problem retrieving resources',
+        }],
+      });
+    }
+  }
+
   return data;
 };
 

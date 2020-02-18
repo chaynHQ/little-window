@@ -1,5 +1,5 @@
 const { check, validationResult } = require('express-validator');
-const { saveConversation, saveMessage } = require('./db');
+// const { saveConversation, saveMessage } = require('./db');
 const { getResponse } = require('./dialogFlow');
 
 // const apiai = require('apiai');
@@ -43,7 +43,7 @@ exports.userMessage = (req, res) => {
   // saveMessage(req.body.speech, req.body.conversationId);
 
   // Get & send response
-  getResponse(req).then((response) => {
+  getResponse(req, res).then((response) => {
     // saveMessage(response, req.body.conversationId);
     res.send(response);
   });

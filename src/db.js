@@ -17,12 +17,12 @@ const options = {
 
 const db = pgp(options);
 
-function existsConversation(conversationId) {
-  return db.oneOrNone(
-    'SELECT conversation_id FROM conversations WHERE conversation_id = $1',
-    [conversationId],
-  );
-}
+// function existsConversation(conversationId) {
+//   return db.oneOrNone(
+//     'SELECT conversation_id FROM conversations WHERE conversation_id = $1',
+//     [conversationId],
+//   );
+// }
 
 // queries
 // TODO: Error checking instead of console.log
@@ -31,7 +31,7 @@ exports.saveConversation = (conversationId) => {
     db.none('INSERT INTO conversations (conversation_id) VALUES ($1)', [conversationId]);
     return null;
   } catch (e) {
-    console.log(e)
+    console.log(e);
     return null;
   }
 };
