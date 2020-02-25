@@ -24,11 +24,11 @@ const db = pgp(options);
 //   );
 // }
 
-// queries
+// Queries
 // TODO: Error checking instead of console.log
 exports.saveConversation = (conversationId) => {
   try {
-    db.none('INSERT INTO conversations (conversation_id) VALUES ($1)', [conversationId]);
+    db.none('INSERT INTO conversations (id) VALUES ($1) ON CONFLICT (id) DO NOTHING;', [conversationId]);
     return null;
   } catch (e) {
     console.log(e);
@@ -36,9 +36,15 @@ exports.saveConversation = (conversationId) => {
   }
 };
 
-exports.saveMessage = (speech, conversationId) => {
+exports.saveMessage = (conversationId, speech, sender, previous_message_id) => {
+
+  // TODO: Get the storyblok_id
+
+  // TODO: PREVIOUS ID = get generated it, add it to response, make front end return it too
+
   try {
-    db.none('INSERT INTO messages (conversation_id, speech) VALUES ($1, $2)', [conversationId, speech]);
+    db.none('INSERT INTO messages (conversation_id, message, sender, previous_message) VALUES ($1, $2, $3, $4)',
+    [conversationId, speech, sender, previous_message_id]);
     return null;
   } catch (e) {
     console.log(e);

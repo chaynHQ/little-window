@@ -1,5 +1,5 @@
 const { check, validationResult } = require('express-validator');
-// const { saveConversation, saveMessage } = require('./db');
+const { saveConversation, saveMessage } = require('./db/db');
 const { getResponse } = require('./dialogFlow');
 
 exports.userMessage = (req, res) => {
@@ -11,8 +11,8 @@ exports.userMessage = (req, res) => {
   }
 
   // Save message & conversation
-  // saveConversation(req.body.conversationId);
-  // saveMessage(req.body.speech, req.body.conversationId);
+  saveConversation(req.body.conversationId);
+  saveMessage(req.body.conversationId, req.body.speech, 'sender', req.body.previous_message_id || null);
 
   try {
     // Get & send response
