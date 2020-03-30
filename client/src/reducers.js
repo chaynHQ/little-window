@@ -12,8 +12,6 @@ import {
 
 
 const messages = (state = [], action) => {
-  let nextUserAction;
-
   switch (action.type) {
     case ADD_USER_INPUT:
       return [
@@ -25,28 +23,29 @@ const messages = (state = [], action) => {
           toDisplay: true,
         },
       ];
-    case ADD_BOT_MESSAGE:
-      if (action.data.checkBoxOptions.length > 1 || action.data.radioButtonOptions.length > 1) {
-        nextUserAction = 'option';
-      } else if (action.data.retrigger) {
-        nextUserAction = 'wait';
-      } else {
-        nextUserAction = 'input';
-      }
-      return [
-        ...state,
-        {
-          text: action.data.speech,
-          checkBoxOptions: action.data.checkBoxOptions,
-          radioButtonOptions: action.data.radioButtonOptions,
-          resources: action.data.resources,
+    case ADD_BOT_MESSAGE: {
+      const newMessages = action.data.speech.map((speech, i, arr) => {
+        let message = {
+          text: speech,
           sender: 'bot',
-          nextUserAction,
+          nextUserAction: 'wait',
           toDisplay: false,
           timeDelay: action.data.timedelay,
           message_id: action.data._uid,
-        },
-      ];
+        };
+        if (arr.length - 1 === i) {
+          message = {
+            ...message,
+            nextUserAction: action.data.checkBoxOptions.length > 1 || action.data.radioButtonOptions.length > 1 ? 'option' : 'input',
+            checkBoxOptions: action.data.checkBoxOptions,
+            radioButtonOptions: action.data.radioButtonOptions,
+            resources: action.data.resources,
+          };
+        }
+        return message;
+      });
+      return [...state, ...newMessages];
+    }
     case UPDATE_BOT_MESSAGE:
       return [
         ...state,
