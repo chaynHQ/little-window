@@ -28,6 +28,7 @@ function addMessageToDisplayList(displayedMessages, hiddenMessages, dispatch) {
 }
 
 const mapStateToProps = (state) => ({
+  messages: state.messages,
   displayedMessages: state.messages.filter((message) => message.toDisplay === true),
   hiddenMessages: state.messages.filter((message) => message.toDisplay === false),
   lang: state.language,
@@ -41,13 +42,15 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateConversation({ conversationId }));
     dispatch(fetchBotResponse({ ...data, conversationId }));
   },
-  inputHandler: (data, lang, conversationId) => {
+  inputHandler: (data, lang, conversationId, previousMessageId) => {
     if (data.lang) {
       dispatch(setLanguage(data.lang));
       dispatch(fetchBotResponse({
         speech: data.postback,
         lang: data.lang,
         conversationId,
+        previousMessageId,
+        sender: 'user',
       }));
     } else {
       dispatch(fetchBotResponse({
@@ -55,6 +58,7 @@ const mapDispatchToProps = (dispatch) => ({
         lang,
         conversationId,
         selectedCountries: data.selectedCountries,
+        previousMessageId,
       }));
     }
 
@@ -76,6 +80,7 @@ const mergeProps = (propsFromState, propsFromDispatch) => ({
     data,
     propsFromState.lang,
     propsFromState.conversationId,
+    propsFromState.displayedMessages.slice(-1)[0].message_id,
   ),
   queueNextMessage: () => propsFromDispatch.queueNextMessage(
     propsFromState.displayedMessages,

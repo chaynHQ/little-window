@@ -21,7 +21,9 @@ ignorePatterns:
   - 'node_modules/'
   - 'build/'
   - 'src-old/'
-rules: { "react/jsx-filename-extension": [0] }
+rules:
+  react/jsx-filename-extension: 0
+  no-underscore-dangle: 0
 settings:
   react:
     version: 'latest'

@@ -17,18 +17,14 @@ const options = {
 
 const db = pgp(options);
 
-// function existsConversation(conversationId) {
-//   return db.oneOrNone(
-//     'SELECT conversation_id FROM conversations WHERE conversation_id = $1',
-//     [conversationId],
-//   );
-// }
-
 // Queries
 // TODO: Error checking instead of console.log
-exports.saveConversation = (conversationId) => {
+exports.saveNewConversation = (conversationId) => {
   try {
-    db.none('INSERT INTO conversations (id) VALUES ($1) ON CONFLICT (id) DO NOTHING;', [conversationId]);
+    db.none(
+      'INSERT INTO conversations (id, stage) VALUES ($1, $2) ON CONFLICT (id) DO NOTHING;',
+      [conversationId, 'setup'],
+    );
     return null;
   } catch (e) {
     console.log(e);
@@ -36,16 +32,49 @@ exports.saveConversation = (conversationId) => {
   }
 };
 
-exports.saveMessage = (conversationId, speech, sender, previous_message_id) => {
+exports.getConversationStage = (conversationId) => {
+  try {
+    return db.oneOrNone(
+      'SELECT stage FROM conversations WHERE id = $1',
+      [conversationId],
+    ).then((response) => (response ? response.stage : 'setup'));
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
 
+// TODO: Column isn't the technical term here. UPDATE
+exports.getColumnForConversation = (column, conversationId) => {
+  try {
+    return db.oneOrNone(
+      'SELECT $1:raw FROM conversations WHERE id = $2',
+      [column, conversationId],
+    ).then((response) => (!!(response && response[column] != null)));
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+exports.updateConversationsTableByColumn = (column, value, conversationId) => {
+  try {
+    return db.none('UPDATE conversations SET $1:raw = $2 WHERE id = $3', [column, value, conversationId]);
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+exports.saveMessage = async (conversationId, speech, sender, previousMessageId) => {
   // TODO: Get the storyblok_id
 
   // TODO: PREVIOUS ID = get generated it, add it to response, make front end return it too
 
   try {
-    db.none('INSERT INTO messages (conversation_id, message, sender, previous_message) VALUES ($1, $2, $3, $4)',
-    [conversationId, speech, sender, previous_message_id]);
-    return null;
+    const message_id = await db.one('INSERT INTO messages (conversation_id, message, sender, previous_message_id) VALUES ($1, $2, $3, $4) RETURNING id',
+      [conversationId, speech, sender, previousMessageId]);
+    return message_id.id;
   } catch (e) {
     console.log(e);
     return null;

@@ -63,7 +63,7 @@ exports.getResponse = async (req, res) => {
       if (resources.length > 0) {
         data.resources = resources;
       } else {
-        res.status(422).json({
+        return res.status(422).json({
           errors: [{
             value: null,
             msg: 'problem retrieving resources',

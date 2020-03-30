@@ -80,6 +80,8 @@ export function fetchBotResponse(data) {
           speech: json.retrigger,
           conversationId: data.conversationId,
           lang: data.lang,
+          sender: 'bot',
+          previousMessageId: json.message_id,
         }));
       }
       dispatch(fetchBotResponseSuccess(json));

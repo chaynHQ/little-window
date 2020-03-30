@@ -33,18 +33,18 @@ const messages = (state = [], action) => {
       } else {
         nextUserAction = 'input';
       }
-
       return [
         ...state,
         {
           text: action.data.speech,
-          checkBoxOptions: [...action.data.checkBoxOptions],
-          radioButtonOptions: [...action.data.radioButtonOptions],
+          checkBoxOptions: action.data.checkBoxOptions,
+          radioButtonOptions: action.data.radioButtonOptions,
           resources: action.data.resources,
           sender: 'bot',
           nextUserAction,
           toDisplay: false,
           timeDelay: action.data.timedelay,
+          message_id: action.data._uid,
         },
       ];
     case UPDATE_BOT_MESSAGE:

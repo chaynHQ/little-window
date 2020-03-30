@@ -25,6 +25,7 @@
   "homepage": "https://github.com/fac-12/Little-Window#readme",
   "dependencies": {
     "apiai": "^4.0.3",
+    "axios": "^0.19.2",
     "babel-eslint": "^10.0.3",
     "body-parser": "^1.18.2",
     "dialogflow": "^1.2.0",
@@ -39,6 +40,7 @@
     "redux-thunk": "^2.3.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
+    "storyblok-js-client": "^2.1.0",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
