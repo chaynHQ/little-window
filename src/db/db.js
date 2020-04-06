@@ -37,7 +37,7 @@ exports.getConversationStage = (conversationId) => {
     return db.oneOrNone(
       'SELECT stage FROM conversations WHERE id = $1',
       [conversationId],
-    ).then((response) => (response ? response.stage : 'setup'));
+    ).then((response) => (response ? response.stage : 'null'));
   } catch (e) {
     console.log(e);
     return null;
@@ -58,7 +58,6 @@ exports.getColumnForConversation = (column, conversationId) => {
 };
 
 exports.updateConversationsTableByColumn = (column, value, conversationId) => {
-  console.log(value)
   try {
     return db.none('UPDATE conversations SET $1:raw = $2 WHERE id = $3', [column, value, conversationId]);
   } catch (e) {

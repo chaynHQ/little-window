@@ -4,7 +4,6 @@
 export const ADD_USER_INPUT = 'ADD_USER_INPUT';
 export const ADD_BOT_MESSAGE = 'ADD_BOT_MESSAGE';
 export const UPDATE_BOT_MESSAGE = 'UPDATE_BOT_MESSAGE';
-export const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
 export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const SET_CONVERSATION_DATA = 'SET_CONVERSATION_DATA';
 export const REFRESH_CONVERSATION = 'REFRESH_CONVERSATION';
@@ -75,6 +74,7 @@ function sendToServer(data) {
 export function fetchBotResponse(data) {
   return (dispatch) => sendToServer(data)
     .then((json) => {
+      // TODO: this is redundant now
       if (json.retrigger) {
         dispatch(fetchBotResponse({
           speech: json.retrigger,

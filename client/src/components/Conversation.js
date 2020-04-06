@@ -19,7 +19,7 @@ class Conversation extends Component {
     const { initialBotMessageHandler } = this.props;
 
     initialBotMessageHandler({
-      speech: 'Little Window language selection',
+      speech: 'SETUP-NEWCONVERSATION',
       lang: 'en',
     });
   }

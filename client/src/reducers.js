@@ -36,7 +36,7 @@ const messages = (state = [], action) => {
         if (arr.length - 1 === i) {
           message = {
             ...message,
-            nextUserAction: action.data.checkBoxOptions.length > 1 || action.data.radioButtonOptions.length > 1 ? 'option' : 'input',
+            nextUserAction: action.data.checkBoxOptions.length > 1 || action.data.radioBoxOptions.length > 1 ? 'option' : 'input',
             checkBoxOptions: action.data.checkBoxOptions,
             radioButtonOptions: action.data.radioButtonOptions,
             resources: action.data.resources,
