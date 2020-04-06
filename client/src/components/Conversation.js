@@ -45,6 +45,19 @@ class Conversation extends Component {
       );
     }
 
+    if (currentMessage.resources && currentMessage.resources.length > 0) {
+      currentMessage.resources.forEach((resource) => {
+        message.push(
+          <Resource
+            key={uuidv4()}
+            text={resource.text}
+            link={resource.link}
+            lang={lang}
+          />,
+        );
+      });
+    }
+
     if (currentMessage.checkBoxOptions && currentMessage.checkBoxOptions.length > 0) {
       message.push(
         <CheckBoxOptionsContainer
@@ -63,19 +76,6 @@ class Conversation extends Component {
           inputHandler={inputHandler}
         />,
       );
-    }
-
-    if (currentMessage.resources && currentMessage.resources.length > 0) {
-      currentMessage.resources.forEach((resource) => {
-        message.push(
-          <Resource
-            key={uuidv4()}
-            text={resource.text}
-            link={resource.href}
-            lang={lang}
-          />,
-        );
-      });
     }
 
     return message;

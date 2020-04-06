@@ -2,48 +2,43 @@ const { check, validationResult } = require('express-validator');
 const {
   saveNewConversation, getConversationStage, updateConversationsTableByColumn,
 } = require('./db/db');
-const { getBotResponsesByUuid, getBotResponsesBySlug } = require('./storyblok');
+const { getBotResponsesBySlug } = require('./storyblok');
 const { getBotMessage } = require('./botMessage');
-
-// TODO: Move into helpers
-const indexOfEnd = (string, substring) => {
-  const io = string.lastIndexOf(substring);
-  return io === -1 ? -1 : io + substring.length;
-};
 
 const setupConversation = async (userResponse, conversationId, previousMessageId) => {
   // TODO: Can we do something nice with the getBotResponsesBySlug
   // so we don't have to filter afterwards.
-  const splitUserResponse = userResponse.split('-')
+  const splitUserResponse = userResponse.split('-');
   const botResponses = await getBotResponsesBySlug('setup');
 
-  const previousMessageWasSetupMessage =
-    botResponses.filter(response => response.content['_uid'] === previousMessageId).length > 0;
+  const previousMessageWasSetupMessage = botResponses.filter(
+    (response) => response.content._uid === previousMessageId,
+  ).length > 0;
 
   if (previousMessageWasSetupMessage) {
     // Check if it's formatted to be saved
-    const isFormattedLikeSetupAnswer = splitUserResponse.length === 3 && splitUserResponse[0] === 'SETUP'
+    const isFormattedLikeSetupAnswer = splitUserResponse.length === 3 && splitUserResponse[0] === 'SETUP';
     if (isFormattedLikeSetupAnswer) {
       try {
         updateConversationsTableByColumn(
           splitUserResponse[1],
           splitUserResponse[2],
           conversationId,
-        )
+        );
       } catch {
         throw new Error('Can\'t find userResponse to setup question');
       }
-    } else if (botResponses.filter(response => response.name === 'new-language')[0].content['_uid'] === previousMessageId) {
+    } else if (botResponses.filter((response) => response.name === 'new-language')[0].content._uid === previousMessageId) {
       updateConversationsTableByColumn(
         'language',
         'English',
         conversationId,
-      )
+      );
     } else {
-      console.log("Previous message was setup message, but we can't save it")
+      console.log("Previous message was setup message, but we can't save it");
     }
   } else {
-    console.log("STARTING NEW CONVERSATION")
+    console.log('STARTING NEW CONVERSATION');
     // Start new conversation so do nothing
   }
 };
@@ -87,6 +82,7 @@ exports.userMessage = async (req, res) => {
     getBotMessage(req, res).then((response) => {
       res.send(response);
     });
+    return null;
 
     // // GET BOT RESPONSE FROM DIALOGFLOW
     // getResponse(req, res).then((response) => {

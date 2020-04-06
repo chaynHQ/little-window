@@ -42,6 +42,7 @@ const messages = (state = [], action) => {
             resources: action.data.resources,
           };
         }
+        console.log(message);
         return message;
       });
       return [...state, ...newMessages];

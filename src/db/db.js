@@ -50,7 +50,7 @@ exports.getColumnForConversation = (column, conversationId) => {
     return db.oneOrNone(
       'SELECT $1:raw FROM conversations WHERE id = $2',
       [column, conversationId],
-    ).then((response) => (!!(response && response[column] != null)));
+    ).then((response) => (response ? response[column] : null));
   } catch (e) {
     console.log(e);
     return null;
@@ -72,9 +72,9 @@ exports.saveMessage = async (conversationId, speech, sender, previousMessageId) 
   // TODO: PREVIOUS ID = get generated it, add it to response, make front end return it too
 
   try {
-    const message_id = await db.one('INSERT INTO messages (conversation_id, message, sender, previous_message_id) VALUES ($1, $2, $3, $4) RETURNING id',
+    const messageId = await db.one('INSERT INTO messages (conversation_id, message, sender, previous_message_id) VALUES ($1, $2, $3, $4) RETURNING id',
       [conversationId, speech, sender, previousMessageId]);
-    return message_id.id;
+    return messageId.id;
   } catch (e) {
     console.log(e);
     return null;
