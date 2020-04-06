@@ -58,6 +58,7 @@ exports.getColumnForConversation = (column, conversationId) => {
 };
 
 exports.updateConversationsTableByColumn = (column, value, conversationId) => {
+  console.log(value)
   try {
     return db.none('UPDATE conversations SET $1:raw = $2 WHERE id = $3', [column, value, conversationId]);
   } catch (e) {

@@ -11,39 +11,26 @@ const indexOfEnd = (string, substring) => {
   return io === -1 ? -1 : io + substring.length;
 };
 
-const updateConversation = (userResponse, botResponse, conversationId) => {
-  const speechOptions = botResponse.content.checkBoxOptions.map((option) => option.postback);
-
-  if (speechOptions.includes(userResponse)) {
-    const prependedString = `SETUP-${botResponse.slug}-`;
-    const index = indexOfEnd(userResponse, prependedString);
-
-    if (index === -1) {
-      throw new Error('can\'t find userResponse to setup question');
-    }
-    return updateConversationsTableByColumn(
-      botResponse.slug,
-      userResponse.slice(index),
-      conversationId,
-    );
-  }
-};
-
 const setupConversation = async (userResponse, conversationId) => {
-  // TODO: Put these into a batch
-  const languageBotResponse = await
-  getBotResponsesByUuid(process.env.STORYBLOK_LANGUAGE_QUESTION_UUID);
-  const gdprBotResponse = await getBotResponsesByUuid(process.env.STORYBLOK_GDPR_QUESTION_UUID);
+  // User responses for setup should always be set in Storyblok like this:
+  // SETUP-[Column Name]-[User Answer]
+  const splitUserResponse = userResponse.split('-')
 
-  const results = [];
+  const isSetup = splitUserResponse.length === 3 && splitUserResponse[0] === 'SETUP'
 
-  [languageBotResponse, gdprBotResponse].forEach(
-    (botResponse) => results.push(
-      updateConversation(userResponse, botResponse, conversationId),
-    ),
-  );
-
-  return Promise.all(results);
+  if (isSetup) {
+    try {
+      updateConversationsTableByColumn(
+        splitUserResponse[1],
+        splitUserResponse[2],
+        conversationId,
+      )
+    } catch {
+      throw new Error('Can\'t find userResponse to setup question');
+    }
+  } else {
+    throw new Error('Did not recieve correctly formatted setup data from user');
+  }
 };
 
 exports.userMessage = async (req, res) => {
