@@ -74,16 +74,6 @@ function sendToServer(data) {
 export function fetchBotResponse(data) {
   return (dispatch) => sendToServer(data)
     .then((json) => {
-      // TODO: this is redundant now
-      if (json.retrigger) {
-        dispatch(fetchBotResponse({
-          speech: json.retrigger,
-          conversationId: data.conversationId,
-          lang: data.lang,
-          sender: 'bot',
-          previousMessageId: json.message_id,
-        }));
-      }
       dispatch(fetchBotResponseSuccess(json));
       return json;
     })

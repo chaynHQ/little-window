@@ -1,14 +1,19 @@
 const { getBotResponsesBySlug } = require('./storyblok');
 const { getConversationStage, getColumnForConversation } = require('./db/db');
 
-const formatBotResponse = (response, prefixMessages) => {
-  console.log(prefixMessages);
+const formatBotResponse = (response, prefixMessages, conversationId) => {
+  response.conversationId = conversationId;
   response.speech = prefixMessages.concat(response.speech.items);
   response.resources = response.resources ? response.resources.items : undefined;
   return response;
 };
 
-const getSetupMessage = async (userResponse, conversationId, previousMessageId) => {
+// TODO: I don't think we still need previousMessageId here
+const getSetupMessage = async (
+  userResponse,
+  conversationId,
+  previousMessageId,
+  previousMessageStoryblokId) => {
   let botResponse = {};
   const prefixMessages = [];
 
@@ -46,11 +51,12 @@ const getSetupMessage = async (userResponse, conversationId, previousMessageId) 
 
   // If someone just asked for a language we don't have tell
   // them we will speak in English
-  if (botResponses.filter((response) => response.name === 'new-language')[0].content._uid === previousMessageId) {
+  if (botResponses.filter((response) => response.name === 'new-language')[0].content._uid === previousMessageStoryblokId) {
     prefixMessages.concat(botResponses.filter((response) => response.name === 'new-language-submitted')[0].content.speech.items);
   }
 
-  return formatBotResponse(botResponse, prefixMessages);
+  // return formatBotResponse(botResponse, prefixMessages);
+  return { botResponse, prefixMessages };
 
   // Else move past setup section
   //
@@ -60,22 +66,50 @@ const getSetupMessage = async (userResponse, conversationId, previousMessageId) 
   //   return responses;
   //   });
   // TODO!!
-  return null;
+};
+
+const getFeedbackMessage = async () => {
+  const botResponses = await getBotResponsesBySlug('feedback');
+
+  botResponses.sort((a, b) => {
+    if (a.slug < b.slug) {
+      return -1;
+    } if (a.slug > b.slug) {
+      return 1;
+    }
+    return 0;
+  });
+
+  botResponses.forEach((response) => {
+    console.log(response.uuid);
+  });
+
+  // For each question check if it has been answered
+
+  // If it hasn't, ask it
+
+  // Else, wrap up conversation
 };
 
 exports.getBotMessage = async (req) => {
   // Setup useful data
   const userResponse = req.body.speech;
-  const { conversationId, previousMessageId } = req.body;
+  const { conversationId, previousMessageId, previousMessageStoryblokId } = req.body;
 
   const conversationStage = await getConversationStage(conversationId);
 
+  // const conversationStage = 'feedback';
+
   switch (conversationStage) {
     case 'setup':
-      return getSetupMessage(userResponse, conversationId, previousMessageId);
-    // case 'feedback':
-    //   // code block
-    //   return;
+      const { botResponse, prefixMessages } = await getSetupMessage(
+        userResponse,
+        conversationId,
+        previousMessageId,
+        previousMessageStoryblokId);
+      return formatBotResponse(botResponse, prefixMessages, conversationId);
+    case 'feedback':
+      return getFeedbackMessage();
     // case 'support':
     //   // code block
     //   return;

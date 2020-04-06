@@ -42,7 +42,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateConversation({ conversationId }));
     dispatch(fetchBotResponse({ ...data, conversationId }));
   },
-  inputHandler: (data, lang, conversationId, previousMessageId) => {
+  inputHandler: (data, lang, conversationId, previousMessageId, previousMessageStoryblokId) => {
+    // TODO: this lang bit might be redundant now.
     if (data.lang) {
       dispatch(setLanguage(data.lang));
       dispatch(fetchBotResponse({
@@ -50,7 +51,7 @@ const mapDispatchToProps = (dispatch) => ({
         lang: data.lang,
         conversationId,
         previousMessageId,
-        sender: 'user',
+        previousMessageStoryblokId,
       }));
     } else {
       dispatch(fetchBotResponse({
@@ -59,6 +60,7 @@ const mapDispatchToProps = (dispatch) => ({
         conversationId,
         selectedCountries: data.selectedCountries,
         previousMessageId,
+        previousMessageStoryblokId,
       }));
     }
 
@@ -80,7 +82,8 @@ const mergeProps = (propsFromState, propsFromDispatch) => ({
     data,
     propsFromState.lang,
     propsFromState.conversationId,
-    propsFromState.displayedMessages.slice(-1)[0].message_id,
+    propsFromState.displayedMessages.slice(-1)[0].previousMessageId,
+    propsFromState.displayedMessages.slice(-1)[0].previousMessageStoryblokId,
   ),
   queueNextMessage: () => propsFromDispatch.queueNextMessage(
     propsFromState.displayedMessages,

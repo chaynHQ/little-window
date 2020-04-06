@@ -31,7 +31,8 @@ const messages = (state = [], action) => {
           nextUserAction: 'wait',
           toDisplay: false,
           timeDelay: action.data.timedelay,
-          message_id: action.data._uid,
+          previousMessageStoryblokId: action.data._uid,
+          previousMessageId: action.data.messageId,
         };
         if (arr.length - 1 === i) {
           message = {
@@ -42,7 +43,6 @@ const messages = (state = [], action) => {
             resources: action.data.resources,
           };
         }
-        console.log(message);
         return message;
       });
       return [...state, ...newMessages];

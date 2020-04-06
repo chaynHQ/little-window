@@ -1,18 +1,18 @@
 const { check, validationResult } = require('express-validator');
 const {
-  saveNewConversation, getConversationStage, updateConversationsTableByColumn,
+  saveNewConversation, getConversationStage, updateConversationsTableByColumn, saveMessage,
 } = require('./db/db');
 const { getBotResponsesBySlug } = require('./storyblok');
 const { getBotMessage } = require('./botMessage');
 
-const setupConversation = async (userResponse, conversationId, previousMessageId) => {
+const setupConversation = async (userResponse, conversationId, previousMessageStoryblokId) => {
   // TODO: Can we do something nice with the getBotResponsesBySlug
   // so we don't have to filter afterwards.
   const splitUserResponse = userResponse.split('-');
   const botResponses = await getBotResponsesBySlug('setup');
 
   const previousMessageWasSetupMessage = botResponses.filter(
-    (response) => response.content._uid === previousMessageId,
+    (response) => response.content._uid === previousMessageStoryblokId,
   ).length > 0;
 
   if (previousMessageWasSetupMessage) {
@@ -28,18 +28,13 @@ const setupConversation = async (userResponse, conversationId, previousMessageId
       } catch {
         throw new Error('Can\'t find userResponse to setup question');
       }
-    } else if (botResponses.filter((response) => response.name === 'new-language')[0].content._uid === previousMessageId) {
+    } else if (botResponses.filter((response) => response.name === 'new-language')[0].content._uid === previousMessageStoryblokId) {
       updateConversationsTableByColumn(
         'language',
         'English',
         conversationId,
       );
-    } else {
-      console.log("Previous message was setup message, but we can't save it");
     }
-  } else {
-    console.log('STARTING NEW CONVERSATION');
-    // Start new conversation so do nothing
   }
 };
 
@@ -52,18 +47,19 @@ exports.userMessage = async (req, res) => {
 
   // Setup useful data
   const userResponse = req.body.speech;
-  const { conversationId, previousMessageId } = req.body;
+  const { conversationId, previousMessageId, previousMessageStoryblokId } = req.body;
 
   if (userResponse === 'SETUP-NEWCONVERSATION') {
     await saveNewConversation(conversationId);
   }
 
-  // Save message & conversation
+  const userMessageId = await saveMessage(req.body, 'user');
+
   const conversationStage = await getConversationStage(conversationId);
 
   if (conversationStage === 'setup') {
     try {
-      await setupConversation(userResponse, conversationId, previousMessageId);
+      await setupConversation(userResponse, conversationId, previousMessageStoryblokId);
     } catch (error) {
       // console.log(error);
       // TODO: IS 422 the right response here?
@@ -79,7 +75,9 @@ exports.userMessage = async (req, res) => {
 
   try {
     // Get & send response
-    getBotMessage(req, res).then((response) => {
+    getBotMessage(req).then(async (response) => {
+      response.previousMessageId = userMessageId;
+      response.messageId = await saveMessage(response, 'bot');
       res.send(response);
     });
     return null;

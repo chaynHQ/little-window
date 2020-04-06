@@ -66,14 +66,18 @@ exports.updateConversationsTableByColumn = (column, value, conversationId) => {
   }
 };
 
-exports.saveMessage = async (conversationId, speech, sender, previousMessageId) => {
-  // TODO: Get the storyblok_id
+exports.saveMessage = async (data, sender) => {
+  // console.log("Starting Message")
+  // console.log('conversation_id', data.conversationId)
+  // console.log('message', data.speech)
+  // console.log('sender', sender)
+  // console.log('previous_message_id', data.previousMessageId)
+  // console.log('storyblok_id', data['_uid'])
 
-  // TODO: PREVIOUS ID = get generated it, add it to response, make front end return it too
 
   try {
-    const messageId = await db.one('INSERT INTO messages (conversation_id, message, sender, previous_message_id) VALUES ($1, $2, $3, $4) RETURNING id',
-      [conversationId, speech, sender, previousMessageId]);
+    const messageId = await db.one('INSERT INTO messages (conversation_id, message, sender, previous_message_id, storyblok_id) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+      [data.conversation_id, data.speech, sender, data.previousMessageId, data._uid]);
     return messageId.id;
   } catch (e) {
     console.log(e);
