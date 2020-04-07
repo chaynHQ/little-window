@@ -45,11 +45,12 @@ exports.getConversationStage = (conversationId) => {
 };
 
 // TODO: Column isn't the technical term here. UPDATE
-exports.getColumnForConversation = (column, conversationId) => {
+// Get Column by Conversation_ID
+exports.getColumnForConversation = (column, conversationId, table) => {
   try {
     return db.oneOrNone(
-      'SELECT $1:raw FROM conversations WHERE id = $2',
-      [column, conversationId],
+      'SELECT $1:raw FROM $2:raw WHERE id = $3',
+      [column, table, conversationId],
     ).then((response) => (response ? response[column] : null));
   } catch (e) {
     console.log(e);
@@ -67,18 +68,35 @@ exports.updateConversationsTableByColumn = (column, value, conversationId) => {
 };
 
 exports.saveMessage = async (data, sender) => {
-  // console.log("Starting Message")
-  // console.log('conversation_id', data.conversationId)
-  // console.log('message', data.speech)
-  // console.log('sender', sender)
-  // console.log('previous_message_id', data.previousMessageId)
-  // console.log('storyblok_id', data['_uid'])
-
-
   try {
     const messageId = await db.one('INSERT INTO messages (conversation_id, message, sender, previous_message_id, storyblok_id) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-      [data.conversation_id, data.speech, sender, data.previousMessageId, data._uid]);
+      [data.conversationId, data.speech, sender, data.previousMessageId, data.storyblokId]);
     return messageId.id;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+exports.getMessagesByColumns = async (searchPairs) => {
+  let searchString = 'SELECT * FROM messages WHERE';
+  let count = 1;
+  const searchParameters = [];
+
+  searchPairs.forEach((pair, i, arr) => {
+    searchString = `${searchString} $${count}:raw = $${count + 1}`;
+    count += 2;
+    if (arr.length - 1 !== i) {
+      searchString = `${searchString} AND`;
+    }
+    searchParameters.push(pair.column, pair.value);
+  });
+
+  try {
+    return db.manyOrNone(
+      searchString,
+      searchParameters,
+    ).then((response) => (response));
   } catch (e) {
     console.log(e);
     return null;

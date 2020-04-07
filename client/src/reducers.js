@@ -24,23 +24,28 @@ const messages = (state = [], action) => {
         },
       ];
     case ADD_BOT_MESSAGE: {
-      const newMessages = action.data.speech.map((speech, i, arr) => {
+      const {
+        timedelay, storyblokId, messageId, checkBoxOptions, radioButtonOptions, resources, speech,
+      } = action.data;
+      const newMessages = speech.map((text, i, arr) => {
+        // TODO: Do we use the sender or timeDelay element anymore?
+        // TODO: THESE SHOULDN'T BE LABELLED AS PREVIOUSMESS etc...
         let message = {
-          text: speech,
+          text,
           sender: 'bot',
           nextUserAction: 'wait',
           toDisplay: false,
-          timeDelay: action.data.timedelay,
-          previousMessageStoryblokId: action.data._uid,
-          previousMessageId: action.data.messageId,
+          timeDelay: timedelay,
+          previousMessageStoryblokId: storyblokId,
+          previousMessageId: messageId,
         };
         if (arr.length - 1 === i) {
           message = {
             ...message,
-            nextUserAction: action.data.checkBoxOptions.length > 1 || action.data.radioBoxOptions.length > 1 ? 'option' : 'input',
-            checkBoxOptions: action.data.checkBoxOptions,
-            radioButtonOptions: action.data.radioButtonOptions,
-            resources: action.data.resources,
+            nextUserAction: (checkBoxOptions && checkBoxOptions.length) || (radioButtonOptions && radioButtonOptions.length) ? 'option' : 'input',
+            checkBoxOptions,
+            radioButtonOptions,
+            resources,
           };
         }
         return message;

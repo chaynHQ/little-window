@@ -1,11 +1,18 @@
 const { getBotResponsesBySlug } = require('./storyblok');
-const { getConversationStage, getColumnForConversation } = require('./db/db');
+const { getConversationStage, getColumnForConversation, getMessagesByColumns } = require('./db/db');
 
 const formatBotResponse = (response, prefixMessages, conversationId) => {
-  response.conversationId = conversationId;
-  response.speech = prefixMessages.concat(response.speech.items);
-  response.resources = response.resources ? response.resources.items : undefined;
-  return response;
+  // To do - check that response isn't empty.
+  const formattedResponse = {};
+  formattedResponse.storyblokId = response.uuid;
+  formattedResponse.conversationId = conversationId;
+  formattedResponse.speech = prefixMessages.concat(response.content.speech.items);
+  formattedResponse.resources = response.content.resources ? response.content.resources.items : [];
+  formattedResponse.checkBoxOptions = response.content.checkBoxOptions
+    ? response.content.checkBoxOptions : [];
+  formattedResponse.radioButtonOptions = response.content.radioButtonOptions
+    ? response.content.radioButtonOptions : [];
+  return formattedResponse;
 };
 
 // TODO: I don't think we still need previousMessageId here
@@ -14,14 +21,11 @@ const getSetupMessage = async (
   conversationId,
   previousMessageId,
   previousMessageStoryblokId) => {
-  let botResponse = {};
+  let setupBotResponse = {};
   const prefixMessages = [];
 
-  // TODO: IF someone is updating their preferred lang we need to send a
-  // message that tells them we'll talk in English
   // TODO: Chain all these awaits into a set of tasks
   const botResponses = await getBotResponsesBySlug('setup');
-  // TODO: pull this into a loop a la userMessage
   const isLanguageSet = await getColumnForConversation('language', conversationId);
   const isGDPRSet = await getColumnForConversation('gdpr', conversationId);
 
@@ -31,17 +35,17 @@ const getSetupMessage = async (
     // when they are typing in a general input.
     // Potential solution validate how the input was inputed by the user.
     if (userResponse === 'SETUP-language-None') {
-      botResponse = botResponses.filter((response) => response.name === 'new-language')[0].content;
+      [setupBotResponse] = botResponses.filter((response) => response.name === 'new-language');
     } else {
-      botResponse = botResponses.filter((response) => response.name === 'Language')[0].content;
+      [setupBotResponse] = botResponses.filter((response) => response.name === 'Language');
     }
   } else if (!isGDPRSet) {
     if (isGDPRSet === false) {
-      botResponse = botResponses.filter((response) => response.slug === 'gdpr-reject')[0].content;
+      [setupBotResponse] = botResponses.filter((response) => response.slug === 'gdpr-reject');
     } else if (userResponse === 'SETUP-gdpr-more') {
-      botResponse = botResponses.filter((response) => response.slug === 'gdpr-more')[0].content;
+      [setupBotResponse] = botResponses.filter((response) => response.slug === 'gdpr-more');
     } else {
-      botResponse = botResponses.filter((response) => response.name === 'GDPR')[0].content;
+      [setupBotResponse] = botResponses.filter((response) => response.name === 'GDPR');
     }
   } else {
     // Everything is set!!
@@ -51,12 +55,10 @@ const getSetupMessage = async (
 
   // If someone just asked for a language we don't have tell
   // them we will speak in English
-  if (botResponses.filter((response) => response.name === 'new-language')[0].content._uid === previousMessageStoryblokId) {
+  if (botResponses.filter((response) => response.name === 'new-language')[0].uuid === previousMessageStoryblokId) {
     prefixMessages.concat(botResponses.filter((response) => response.name === 'new-language-submitted')[0].content.speech.items);
   }
-
-  // return formatBotResponse(botResponse, prefixMessages);
-  return { botResponse, prefixMessages };
+  return { setupBotResponse, prefixMessages };
 
   // Else move past setup section
   //
@@ -68,9 +70,15 @@ const getSetupMessage = async (
   // TODO!!
 };
 
-const getFeedbackMessage = async () => {
+const getFeedbackMessage = async (conversationId) => {
+  // Get all the bot responses
   const botResponses = await getBotResponsesBySlug('feedback');
+  // Get all the user messages by convo id
+  const userMessages = await getMessagesByColumns([
+    { column: 'conversation_id', value: conversationId },
+  ]);
 
+  // SORT bot responses
   botResponses.sort((a, b) => {
     if (a.slug < b.slug) {
       return -1;
@@ -80,15 +88,16 @@ const getFeedbackMessage = async () => {
     return 0;
   });
 
-  botResponses.forEach((response) => {
-    console.log(response.uuid);
+  const feedbackBotResponse = botResponses.find((response) => {
+    if (userMessages.filter(
+      (userMessage) => userMessage.storyblok_id === response.uuid,
+    ).length === 0) {
+      return true;
+    }
+    return false;
   });
 
-  // For each question check if it has been answered
-
-  // If it hasn't, ask it
-
-  // Else, wrap up conversation
+  return feedbackBotResponse;
 };
 
 exports.getBotMessage = async (req) => {
@@ -96,23 +105,27 @@ exports.getBotMessage = async (req) => {
   const userResponse = req.body.speech;
   const { conversationId, previousMessageId, previousMessageStoryblokId } = req.body;
 
-  const conversationStage = await getConversationStage(conversationId);
+  // const conversationStage = await getConversationStage(conversationId);
 
-  // const conversationStage = 'feedback';
+  const conversationStage = 'feedback';
 
   switch (conversationStage) {
-    case 'setup':
-      const { botResponse, prefixMessages } = await getSetupMessage(
+    case 'setup': {
+      const { setupBotResponse, prefixMessages } = await getSetupMessage(
         userResponse,
         conversationId,
         previousMessageId,
-        previousMessageStoryblokId);
-      return formatBotResponse(botResponse, prefixMessages, conversationId);
-    case 'feedback':
-      return getFeedbackMessage();
-    // case 'support':
-    //   // code block
-    //   return;
+        previousMessageStoryblokId,
+      );
+      return formatBotResponse(setupBotResponse, prefixMessages, conversationId);
+    }
+    case 'feedback': {
+      const feedbackBotResponse = await getFeedbackMessage(conversationId);
+      return formatBotResponse(feedbackBotResponse, [], conversationId);
+    }
+    case 'support':
+      // code block
+      return;
     default:
       // Some error
       return null;

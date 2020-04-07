@@ -12,7 +12,7 @@ const setupConversation = async (userResponse, conversationId, previousMessageSt
   const botResponses = await getBotResponsesBySlug('setup');
 
   const previousMessageWasSetupMessage = botResponses.filter(
-    (response) => response.content._uid === previousMessageStoryblokId,
+    (response) => response.uuid === previousMessageStoryblokId,
   ).length > 0;
 
   if (previousMessageWasSetupMessage) {
@@ -28,7 +28,7 @@ const setupConversation = async (userResponse, conversationId, previousMessageSt
       } catch {
         throw new Error('Can\'t find userResponse to setup question');
       }
-    } else if (botResponses.filter((response) => response.name === 'new-language')[0].content._uid === previousMessageStoryblokId) {
+    } else if (botResponses.filter((response) => response.name === 'new-language')[0].content.uuid === previousMessageStoryblokId) {
       updateConversationsTableByColumn(
         'language',
         'English',
@@ -47,7 +47,7 @@ exports.userMessage = async (req, res) => {
 
   // Setup useful data
   const userResponse = req.body.speech;
-  const { conversationId, previousMessageId, previousMessageStoryblokId } = req.body;
+  const { conversationId, previousMessageStoryblokId } = req.body;
 
   if (userResponse === 'SETUP-NEWCONVERSATION') {
     await saveNewConversation(conversationId);
