@@ -1,5 +1,6 @@
-const { getBotResponsesBySlug } = require('./storyblok');
+const { getBotResponsesBySlug, getBotResponsesByUuid } = require('./storyblok');
 const { getConversationStage, getColumnForConversation, getMessagesByColumns } = require('./db/db');
+const { getDialogflowResponse } = require('./dialogflow');
 
 const formatBotResponse = (response, prefixMessages, conversationId) => {
   // To do - check that response isn't empty.
@@ -8,10 +9,21 @@ const formatBotResponse = (response, prefixMessages, conversationId) => {
   formattedResponse.conversationId = conversationId;
   formattedResponse.speech = prefixMessages.concat(response.content.speech.items);
   formattedResponse.resources = response.content.resources ? response.content.resources.items : [];
-  formattedResponse.checkBoxOptions = response.content.checkBoxOptions
-    ? response.content.checkBoxOptions : [];
-  formattedResponse.radioButtonOptions = response.content.radioButtonOptions
-    ? response.content.radioButtonOptions : [];
+
+  if (response.checkBoxOptions) {
+    formattedResponse.checkBoxOptions = response.checkBoxOptions
+  } else if (response.content.checkBoxOptions){
+    formattedResponse.checkBoxOptions = response.content.checkBoxOptions
+  } else {
+    formattedResponse.checkBoxOptions = []
+  }
+  if (response.radioButtonOptions) {
+    formattedResponse.radioButtonOptions = response.radioButtonOptions
+  } else if (response.content.radioButtonOptions){
+    formattedResponse.radioButtonOptions = response.content.radioButtonOptions
+  } else {
+    formattedResponse.radioButtonOptions = []
+  }
   return formattedResponse;
 };
 
@@ -100,6 +112,84 @@ const getFeedbackMessage = async (conversationId) => {
   return feedbackBotResponse;
 };
 
+const getSupportMessage = async (data) => {
+  console.log(data)
+
+  const { previousMessageStoryblokId, conversationId } = data;
+  const userResponse = data.speech;
+
+  const botResponses = await getBotResponsesBySlug('support');
+
+  const kickoffSupportMessageStoryblokId = process.env.kickoffSupportMessageStoryblokId;
+  const freeTextSupportRequestStoryblokId = process.env.freeTextSupportRequestStoryblokId;
+  const radioButtonSupportRequestStoryblokId = process.env.radioButtonSupportRequestStoryblokId;
+  const setupMessages = [
+    kickoffSupportMessageStoryblokId,
+    freeTextSupportRequestStoryblokId,
+    radioButtonSupportRequestStoryblokId
+  ];
+
+  if(userResponse.startsWith('TOPIC-')) {
+    const topic = userResponse.slice('TOPIC-')
+  }
+
+  // Does req have topic & countries?
+  // if yes, give them resources
+
+  // if no countries, give ask them for countries
+
+  // if no topic, ask them what they want
+
+  // Start by asking them what they want
+  // TURN THIS INTO A CASE STATEMENT
+  console.log('STARTHEREH WITH TOPIC')
+  if ( previousMessageStoryblokId === freeTextSupportRequestStoryblokId){
+    // TO DO TOMORROW
+    // console.log("START HERE")
+    // getDialogflowResponse(conversationId, userResponse)
+
+  } else if(typeof topic==undefined) {
+
+    // THIS DOESN"T WORK
+
+    console.log("WE HAVE A TOPIC")
+    console.log(topic)
+  } else if (previousMessageStoryblokId === kickoffSupportMessageStoryblokId) {
+    if (userResponse === 'Yes'){
+      [supportBotResponse] = botResponses.filter(response => response.uuid === freeTextSupportRequestStoryblokId)
+    } else {
+      // Send them message & checkboxes to choose their topic
+      [supportBotResponse] = botResponses.filter(response => response.uuid === radioButtonSupportRequestStoryblokId)
+      supportBotResponse.checkBoxOptions = botResponses.filter(
+        response => setupMessages.indexOf(response.uuid) < 0).map(
+          response => { return {'postback': 'TOPIC-' + response.name, 'text': response.name}})
+    }
+  } else {
+    // Send first message
+    [supportBotResponse] = botResponses.filter(response => response.uuid === kickoffSupportMessageStoryblokId)
+  }
+
+  return supportBotResponse;
+
+
+  // If they do then give them allll the options (Calculate this from storyblok folders)
+
+  // If they don't, give them an inputbox
+
+  // Ask them the country question for their topic.
+
+  // Only show them contries that have resources available
+
+  // Show them resources
+
+  // Show them follow up resources
+
+  // Ask for any more
+
+  // Move onto next stage of conversation.
+
+}
+
 exports.getBotMessage = async (req) => {
   // Setup useful data
   const userResponse = req.body.speech;
@@ -107,7 +197,7 @@ exports.getBotMessage = async (req) => {
 
   // const conversationStage = await getConversationStage(conversationId);
 
-  const conversationStage = 'feedback';
+  const conversationStage = 'support';
 
   switch (conversationStage) {
     case 'setup': {
@@ -124,8 +214,8 @@ exports.getBotMessage = async (req) => {
       return formatBotResponse(feedbackBotResponse, [], conversationId);
     }
     case 'support':
-      // code block
-      return;
+      const supportBotResponse = await getSupportMessage(req.body);
+      return formatBotResponse(supportBotResponse, [], conversationId);
     default:
       // Some error
       return null;
