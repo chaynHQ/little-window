@@ -3,7 +3,7 @@ const { value } = require('pb-util');
 const { getResources } = require('./googleSheets');
 
 exports.getDialogflowResponse = async (conversationId, speech) => {
-  console.log("HERE")
+  console.log('HERE');
   // Create a new session
   const privateKey = process.env.DIALOGFLOW_PRIVATE_KEY;
   const clientEmail = process.env.DIALOGFLOW_CLIENT_EMAIL;
@@ -30,20 +30,20 @@ exports.getDialogflowResponse = async (conversationId, speech) => {
     },
   };
 
-  console.log(request)
+  console.log(request);
   // Send request and get result
   const dialogFlowResponses = await sessionClient.detectIntent(request);
   const result = dialogFlowResponses[0].queryResult.fulfillmentMessages;
 
-  console.log(result)
+  console.log(result);
 
   // Turn result into reponse
 
-  let data = {
+  const data = {
     speech: result.find((ele) => ele.message === 'text').text.text[0],
   };
 
-  console.log(data)
+  console.log(data);
   //
   // if (result.find((ele) => ele.message === 'payload')) {
   //   const customPayload = result.find((ele) => ele.message === 'payload').payload.fields;

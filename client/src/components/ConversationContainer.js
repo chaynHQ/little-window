@@ -58,7 +58,7 @@ const mapDispatchToProps = (dispatch) => ({
         speech: data.postback,
         lang,
         conversationId,
-        selectedCountries: data.selectedCountries,
+        selectedTags: data.selectedTags,
         previousMessageId,
         previousMessageStoryblokId,
       }));

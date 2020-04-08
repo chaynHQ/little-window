@@ -46,11 +46,11 @@ exports.getConversationStage = (conversationId) => {
 
 // TODO: Column isn't the technical term here. UPDATE
 // Get Column by Conversation_ID
-exports.getColumnForConversation = (column, conversationId, table) => {
+exports.getColumnForConversation = (column, conversationId) => {
   try {
     return db.oneOrNone(
-      'SELECT $1:raw FROM $2:raw WHERE id = $3',
-      [column, table, conversationId],
+      'SELECT $1:raw FROM conversations WHERE id = $2',
+      [column, conversationId],
     ).then((response) => (response ? response[column] : null));
   } catch (e) {
     console.log(e);

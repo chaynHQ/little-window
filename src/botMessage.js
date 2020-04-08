@@ -1,85 +1,55 @@
-const { getBotResponsesBySlug, getBotResponsesByUuid } = require('./storyblok');
-const { getConversationStage, getColumnForConversation, getMessagesByColumns } = require('./db/db');
+const { getBotResponsesBySlug } = require('./storyblok');
+const {
+  getConversationStage,
+  getColumnForConversation,
+  getMessagesByColumns,
+  updateConversationsTableByColumn,
+} = require('./db/db');
 const { getDialogflowResponse } = require('./dialogflow');
 
-const formatBotResponse = (response, prefixMessages, conversationId) => {
+const formatBotResponse = (response, prefixMessages, suffixMessages, conversationId) => {
+  const speech = [];
+
+  [...prefixMessages, response, ...suffixMessages].forEach((message) => {
+    message.content.speech.items.forEach((text, i, arr) => {
+      if (arr.length - 1 === i && response.content.resources) {
+        speech.push({
+          text,
+          storyblokId: message.uuid,
+          resources: message.content.resources.items,
+        });
+      } else {
+        speech.push({ text, storyblokId: message.uuid });
+      }
+    });
+  });
+
   // To do - check that response isn't empty.
   const formattedResponse = {};
-  formattedResponse.storyblokId = response.uuid;
   formattedResponse.conversationId = conversationId;
-  formattedResponse.speech = prefixMessages.concat(response.content.speech.items);
-  formattedResponse.resources = response.content.resources ? response.content.resources.items : [];
+  formattedResponse.speech = speech;
 
-  if (response.checkBoxOptions) {
-    formattedResponse.checkBoxOptions = response.checkBoxOptions
-  } else if (response.content.checkBoxOptions){
-    formattedResponse.checkBoxOptions = response.content.checkBoxOptions
+  if (suffixMessages.length > 0
+    && suffixMessages[suffixMessages.length - 1].content.checkBoxOptions) {
+    formattedResponse.checkBoxOptions = suffixMessages[suffixMessages.length - 1].content.checkBoxOptions;
+  } else if (response.checkBoxOptions) {
+    formattedResponse.checkBoxOptions = response.checkBoxOptions;
+  } else if (response.content.checkBoxOptions) {
+    formattedResponse.checkBoxOptions = response.content.checkBoxOptions;
   } else {
-    formattedResponse.checkBoxOptions = []
+    formattedResponse.checkBoxOptions = [];
   }
-  if (response.radioButtonOptions) {
-    formattedResponse.radioButtonOptions = response.radioButtonOptions
-  } else if (response.content.radioButtonOptions){
-    formattedResponse.radioButtonOptions = response.content.radioButtonOptions
+
+  if (suffixMessages.length > 0 && suffixMessages[suffixMessages.length - 1].radioButtonOptions) {
+    formattedResponse.radioButtonOptions = suffixMessages[suffixMessages.length - 1].radioButtonOptions;
+  } else if (response.radioButtonOptions) {
+    formattedResponse.radioButtonOptions = response.radioButtonOptions;
+  } else if (response.content.radioButtonOptions) {
+    formattedResponse.radioButtonOptions = response.content.radioButtonOptions;
   } else {
-    formattedResponse.radioButtonOptions = []
+    formattedResponse.radioButtonOptions = [];
   }
   return formattedResponse;
-};
-
-// TODO: I don't think we still need previousMessageId here
-const getSetupMessage = async (
-  userResponse,
-  conversationId,
-  previousMessageId,
-  previousMessageStoryblokId) => {
-  let setupBotResponse = {};
-  const prefixMessages = [];
-
-  // TODO: Chain all these awaits into a set of tasks
-  const botResponses = await getBotResponsesBySlug('setup');
-  const isLanguageSet = await getColumnForConversation('language', conversationId);
-  const isGDPRSet = await getColumnForConversation('gdpr', conversationId);
-
-  // TODO: Set Storyblok up to translate
-  if (!isLanguageSet) {
-    // TODO: Need better checking in place to ensure users can't type this in
-    // when they are typing in a general input.
-    // Potential solution validate how the input was inputed by the user.
-    if (userResponse === 'SETUP-language-None') {
-      [setupBotResponse] = botResponses.filter((response) => response.name === 'new-language');
-    } else {
-      [setupBotResponse] = botResponses.filter((response) => response.name === 'Language');
-    }
-  } else if (!isGDPRSet) {
-    if (isGDPRSet === false) {
-      [setupBotResponse] = botResponses.filter((response) => response.slug === 'gdpr-reject');
-    } else if (userResponse === 'SETUP-gdpr-more') {
-      [setupBotResponse] = botResponses.filter((response) => response.slug === 'gdpr-more');
-    } else {
-      [setupBotResponse] = botResponses.filter((response) => response.name === 'GDPR');
-    }
-  } else {
-    // Everything is set!!
-    console.log('language', isLanguageSet);
-    console.log('GDPR', isGDPRSet);
-  }
-
-  // If someone just asked for a language we don't have tell
-  // them we will speak in English
-  if (botResponses.filter((response) => response.name === 'new-language')[0].uuid === previousMessageStoryblokId) {
-    prefixMessages.concat(botResponses.filter((response) => response.name === 'new-language-submitted')[0].content.speech.items);
-  }
-  return { setupBotResponse, prefixMessages };
-
-  // Else move past setup section
-  //
-  // return getBotResponses().then(responses => {
-  //   console.log(responses)
-  //
-  //   return responses;
-  //   });
-  // TODO!!
 };
 
 const getFeedbackMessage = async (conversationId) => {
@@ -112,110 +82,149 @@ const getFeedbackMessage = async (conversationId) => {
   return feedbackBotResponse;
 };
 
-const getSupportMessage = async (data) => {
-  console.log(data)
 
-  const { previousMessageStoryblokId, conversationId } = data;
+const getSupportMessage = async (data) => {
+  const { previousMessageStoryblokId, conversationId, selectedTags } = data;
   const userResponse = data.speech;
 
   const botResponses = await getBotResponsesBySlug('support');
 
-  const kickoffSupportMessageStoryblokId = process.env.kickoffSupportMessageStoryblokId;
-  const freeTextSupportRequestStoryblokId = process.env.freeTextSupportRequestStoryblokId;
-  const radioButtonSupportRequestStoryblokId = process.env.radioButtonSupportRequestStoryblokId;
+  const { kickoffSupportMessageStoryblokId } = process.env;
+  const { freeTextSupportRequestStoryblokId } = process.env;
+  const { radioButtonSupportRequestStoryblokId } = process.env;
+  const { resourceStoryblokId } = process.env;
+  const { additionalResourcesStoryblokId } = process.env;
+  const { anythingElseStoryblokId } = process.env;
   const setupMessages = [
     kickoffSupportMessageStoryblokId,
     freeTextSupportRequestStoryblokId,
-    radioButtonSupportRequestStoryblokId
+    radioButtonSupportRequestStoryblokId,
+    resourceStoryblokId,
+    additionalResourcesStoryblokId,
+    anythingElseStoryblokId,
   ];
 
-  if(userResponse.startsWith('TOPIC-')) {
-    const topic = userResponse.slice('TOPIC-')
-  }
+  let supportBotResponse = {};
+  let suffixMessages = [];
 
-  // Does req have topic & countries?
-  // if yes, give them resources
-
-  // if no countries, give ask them for countries
-
-  // if no topic, ask them what they want
-
-  // Start by asking them what they want
-  // TURN THIS INTO A CASE STATEMENT
-  console.log('STARTHEREH WITH TOPIC')
-  if ( previousMessageStoryblokId === freeTextSupportRequestStoryblokId){
+  if (previousMessageStoryblokId === freeTextSupportRequestStoryblokId) {
     // TO DO TOMORROW
     // console.log("START HERE")
     // getDialogflowResponse(conversationId, userResponse)
 
-  } else if(typeof topic==undefined) {
+  } else if (userResponse.startsWith('TOPIC-')) {
+    const topic = userResponse.slice('TOPIC-'.length);
+    const [topicResponse] = botResponses.filter((response) => response.name === topic);
 
-    // THIS DOESN"T WORK
-
-    console.log("WE HAVE A TOPIC")
-    console.log(topic)
-  } else if (previousMessageStoryblokId === kickoffSupportMessageStoryblokId) {
-    if (userResponse === 'Yes'){
-      [supportBotResponse] = botResponses.filter(response => response.uuid === freeTextSupportRequestStoryblokId)
+    if (selectedTags) {
+      [supportBotResponse] = botResponses.filter((response) => response.uuid === resourceStoryblokId);
+      supportBotResponse.content.resources.items = topicResponse.content.resources.items.filter(
+        (resource) => selectedTags.map((tag) => tag.text).includes(resource.tag),
+      );
+      suffixMessages = botResponses.filter((response) => response.uuid === additionalResourcesStoryblokId);
+      suffixMessages.push(botResponses.filter((response) => response.uuid === anythingElseStoryblokId)[0]);
     } else {
-      // Send them message & checkboxes to choose their topic
-      [supportBotResponse] = botResponses.filter(response => response.uuid === radioButtonSupportRequestStoryblokId)
+      topicResponse.radioButtonOptions = topicResponse.content.resources.items.reduce((tags, resource) => {
+        if (tags.indexOf(resource.tag) === -1) {
+          tags.push(resource.tag);
+        }
+        return tags;
+      }, []).map((tag) => ({ postback: userResponse, text: tag }));
+
+      topicResponse.content.resources = [];
+      supportBotResponse = topicResponse;
+    }
+  } else if (previousMessageStoryblokId === anythingElseStoryblokId && userResponse === 'No') {
+    await updateConversationsTableByColumn(
+      'stage',
+      'feedback',
+      conversationId,
+    );
+    supportBotResponse = await getFeedbackMessage(conversationId);
+  } else if (previousMessageStoryblokId === kickoffSupportMessageStoryblokId) {
+    if (userResponse === 'Yes') {
+      [supportBotResponse] = botResponses.filter((response) => response.uuid === freeTextSupportRequestStoryblokId);
+    } else {
+      [supportBotResponse] = botResponses.filter((response) => response.uuid === radioButtonSupportRequestStoryblokId);
       supportBotResponse.checkBoxOptions = botResponses.filter(
-        response => setupMessages.indexOf(response.uuid) < 0).map(
-          response => { return {'postback': 'TOPIC-' + response.name, 'text': response.name}})
+        (response) => setupMessages.indexOf(response.uuid) < 0,
+      ).map(
+        (response) => ({ postback: `TOPIC-${response.name}`, text: response.name }),
+      );
     }
   } else {
-    // Send first message
-    [supportBotResponse] = botResponses.filter(response => response.uuid === kickoffSupportMessageStoryblokId)
+    [supportBotResponse] = botResponses.filter((response) => response.uuid === kickoffSupportMessageStoryblokId);
   }
 
-  return supportBotResponse;
+  return { supportBotResponse, suffixMessages };
+};
 
+const getSetupMessage = async (data) => {
+  const { previousMessageStoryblokId, conversationId } = data;
+  const userResponse = data.speech;
+  let setupBotResponse = {};
+  const prefixMessages = [];
 
-  // If they do then give them allll the options (Calculate this from storyblok folders)
+  // TODO: Chain all these awaits into a set of tasks
+  const botResponses = await getBotResponsesBySlug('setup');
+  const isLanguageSet = await getColumnForConversation('language', conversationId);
+  const isGDPRSet = await getColumnForConversation('gdpr', conversationId);
 
-  // If they don't, give them an inputbox
+  // TODO: Set Storyblok up to translate
+  if (!isLanguageSet) {
+    // TODO: Need better checking in place to ensure users can't type this in
+    // when they are typing in a general input.
+    // Potential solution validate how the input was inputed by the user.
+    if (userResponse === 'SETUP-language-None') {
+      [setupBotResponse] = botResponses.filter((response) => response.name === 'new-language');
+    } else {
+      [setupBotResponse] = botResponses.filter((response) => response.name === 'Language');
+    }
+  } else if (!isGDPRSet) {
+    if (isGDPRSet === false) {
+      [setupBotResponse] = botResponses.filter((response) => response.slug === 'gdpr-reject');
+    } else if (userResponse === 'SETUP-gdpr-more') {
+      [setupBotResponse] = botResponses.filter((response) => response.slug === 'gdpr-more');
+    } else {
+      [setupBotResponse] = botResponses.filter((response) => response.name === 'GDPR');
+    }
+  } else {
+    await updateConversationsTableByColumn(
+      'stage',
+      'support',
+      conversationId,
+    );
+    const supportMessage = await getSupportMessage(data);
+    setupBotResponse = supportMessage.supportBotResponse;
+  }
 
-  // Ask them the country question for their topic.
-
-  // Only show them contries that have resources available
-
-  // Show them resources
-
-  // Show them follow up resources
-
-  // Ask for any more
-
-  // Move onto next stage of conversation.
-
-}
+  // If someone just asked for a language we don't have tell
+  // them we will speak in English
+  if (botResponses.filter((response) => response.name === 'new-language')[0].uuid === previousMessageStoryblokId) {
+    prefixMessages.concat(botResponses.filter((response) => response.name === 'new-language-submitted')[0].content.speech.items);
+  }
+  return { setupBotResponse, prefixMessages };
+};
 
 exports.getBotMessage = async (req) => {
-  // Setup useful data
-  const userResponse = req.body.speech;
-  const { conversationId, previousMessageId, previousMessageStoryblokId } = req.body;
+  const { conversationId } = req;
 
-  // const conversationStage = await getConversationStage(conversationId);
+  const conversationStage = await getConversationStage(conversationId);
 
-  const conversationStage = 'support';
-
+  // TODO: REfactor these into one final call to formatBotResponse at end.
   switch (conversationStage) {
     case 'setup': {
-      const { setupBotResponse, prefixMessages } = await getSetupMessage(
-        userResponse,
-        conversationId,
-        previousMessageId,
-        previousMessageStoryblokId,
-      );
-      return formatBotResponse(setupBotResponse, prefixMessages, conversationId);
+      const { setupBotResponse, prefixMessages } = await getSetupMessage(req);
+      return formatBotResponse(setupBotResponse, prefixMessages, [], conversationId);
     }
     case 'feedback': {
       const feedbackBotResponse = await getFeedbackMessage(conversationId);
-      return formatBotResponse(feedbackBotResponse, [], conversationId);
+      return formatBotResponse(feedbackBotResponse, [], [], conversationId);
     }
-    case 'support':
-      const supportBotResponse = await getSupportMessage(req.body);
-      return formatBotResponse(supportBotResponse, [], conversationId);
+    case 'support': {
+      const { supportBotResponse, suffixMessages } = await getSupportMessage(req);
+      return formatBotResponse(supportBotResponse, [], suffixMessages, conversationId);
+    }
     default:
       // Some error
       return null;

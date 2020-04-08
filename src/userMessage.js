@@ -75,7 +75,7 @@ exports.userMessage = async (req, res) => {
 
   try {
     // Get & send response
-    getBotMessage(req).then(async (response) => {
+    getBotMessage(req.body).then(async (response) => {
       response.previousMessageId = userMessageId;
       response.messageId = await saveMessage(response, 'bot');
       res.send(response);
