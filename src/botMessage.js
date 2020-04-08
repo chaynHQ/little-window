@@ -11,47 +11,37 @@ const { getDialogflowResponse } = require('./dialogflow');
 // TODO: Reformat this so the response object is a giant array of smaller message objects
 // Save each message object separately in the database.
 const formatBotResponse = (response, prefixMessages, suffixMessages, conversationId) => {
-  // To do - check that response isn't empty.
-  const formattedResponse = {};
-  const speech = [];
+  const formattedResponse = [];
 
-  [...prefixMessages, response, ...suffixMessages].forEach((message) => {
-    message.content.speech.items.forEach((text, i, arr) => {
-      if (arr.length - 1 === i && response.content.resources) {
-        speech.push({
-          text,
-          storyblokId: message.uuid,
-          resources: message.content.resources.items,
-        });
-      } else {
-        speech.push({ text, storyblokId: message.uuid });
+  [...prefixMessages, response, ...suffixMessages].forEach((messageGroup, i, arr) => {
+    messageGroup.content.speech.items.forEach(message =>{
+      newMessage = {}
+      newMessage.conversationId = conversationId;
+      newMessage.storyblokId = messageGroup.uuid;
+      newMessage.speech = message;
+      newMessage.resources = messageGroup.content.resources.items;
+      newMessage.previousMessageId
+
+
+      if (arr.length - 1 === i) {
+        if (messageGroup.checkBoxOptions) {
+          newMessage.checkBoxOptions = messageGroup.checkBoxOptions;
+        } else if (messageGroup.content.checkBoxOptions) {
+          newMessage.checkBoxOptions = messageGroup.content.checkBoxOptions;
+        } else {
+          newMessage.checkBoxOptions = [];
+        }
+        if (messageGroup.radioButtonOptions) {
+          newMessage.radioButtonOptions = messageGroup.radioButtonOptions;
+        } else if (messageGroup.content.radioButtonOptions) {
+          newMessage.radioButtonOptions = messageGroup.content.radioButtonOptions;
+        } else {
+          newMessage.radioButtonOptions = [];
+        }
       }
-    });
-  });
-
-  formattedResponse.conversationId = conversationId;
-  formattedResponse.speech = speech;
-
-  if (suffixMessages.length > 0
-    && suffixMessages[suffixMessages.length - 1].content.checkBoxOptions) {
-    formattedResponse.checkBoxOptions = suffixMessages[suffixMessages.length - 1].content.checkBoxOptions;
-  } else if (response.checkBoxOptions) {
-    formattedResponse.checkBoxOptions = response.checkBoxOptions;
-  } else if (response.content.checkBoxOptions) {
-    formattedResponse.checkBoxOptions = response.content.checkBoxOptions;
-  } else {
-    formattedResponse.checkBoxOptions = [];
-  }
-
-  if (suffixMessages.length > 0 && suffixMessages[suffixMessages.length - 1].radioButtonOptions) {
-    formattedResponse.radioButtonOptions = suffixMessages[suffixMessages.length - 1].radioButtonOptions;
-  } else if (response.radioButtonOptions) {
-    formattedResponse.radioButtonOptions = response.radioButtonOptions;
-  } else if (response.content.radioButtonOptions) {
-    formattedResponse.radioButtonOptions = response.content.radioButtonOptions;
-  } else {
-    formattedResponse.radioButtonOptions = [];
-  }
+      formattedResponse.push(newMessage)
+    })
+  })
   return formattedResponse;
 };
 
@@ -78,7 +68,6 @@ const getFeedbackMessage = async (data) => {
     if (userMessages.filter(
       (userMessage) => userMessage.storyblok_id === response.uuid,
     ).length === 0) {
-      console.log()
       return true;
     }
     return false;
@@ -141,7 +130,6 @@ const getSupportMessage = async (data) => {
     }
 
   } else if (userResponse.startsWith('TOPIC-')) {
-    console.log("IT Starts with Topic")
     const topic = userResponse.slice('TOPIC-'.length);
     const [topicResponse] = botResponses.filter((response) => response.name === topic);
 
@@ -164,7 +152,6 @@ const getSupportMessage = async (data) => {
       supportBotResponse = topicResponse;
     }
   } else if (previousMessageStoryblokId === anythingElseStoryblokId && userResponse === 'No') {
-    console.log("ANYTHING ELSE")
     await updateConversationsTableByColumn(
       'stage',
       'feedback',
@@ -239,13 +226,12 @@ const getSetupMessage = async (data) => {
 exports.getBotMessage = async (req) => {
   const { conversationId } = req;
 
-  //const conversationStage = await getConversationStage(conversationId);
+  const conversationStage = await getConversationStage(conversationId);
   const conversationLang = await getColumnForConversation('language', conversationId);
 
   if (conversationLang) {
     req.language = conversationLang;
   }
-  const conversationStage = 'feedback'
 
   // TODO: REfactor these into one final call to formatBotResponse at end.
   switch (conversationStage) {

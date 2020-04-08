@@ -74,56 +74,21 @@ exports.userMessage = async (req, res) => {
   }
 
   try {
-    // Get & send response
-    getBotMessage(req.body).then(async (response) => {
-      response.previousMessageId = userMessageId;
-      response.messageId = await saveMessage(response, 'bot');
-      res.send(response);
+    getBotMessage(req.body).then(async (botResponses) => {
+      const responses = botResponses.map(async (response, index) => {
+        response.messageId = await saveMessage(response, 'bot');
+        if (index === 0){
+          response.previousMessageId = userMessageId;
+        } else {
+          response.previousMessageId = botResponses[index-1].messageId
+        }
+        return response
+      })
+      //
+      res.send(await Promise.all(responses));
     });
     return null;
 
-    // // GET BOT RESPONSE FROM DIALOGFLOW
-    // getResponse(req, res).then((response) => {
-    //   res.send(response);
-    //
-    // });
-
-    // SAVING
-    // If the request is from the user, save that request & save the bots response
-    // TODO: THIS ISN"T SAVING right
-    //   if (req.body.sender == 'user') {
-    //     console.log("Saving user message")
-    //     console.log(req.body)
-    //     saveMessage(
-    //       req.body.conversationId,
-    //       req.body.speech,
-    //       'user',
-    //       req.body.previousMessageId || null)
-    //     .then(
-    //       user_message_id => {
-    //         console.log('Then saving bot message')
-    //         saveMessage(req.body.conversationId, response, 'bot', user_message_id || null).then(
-    //           bot_message_id => {
-    //             response.message_id = bot_message_id;
-    //             res.send(response);
-    //           }
-    //         );
-    //       })
-    //   } else {
-    //     console.log('Saving bot message')
-    // //     saveMessage(
-    //           req.body.conversationId,
-    //           response,
-    //           'bot',
-    //           req.body.previousMessageId || null
-    //         ).then(
-    //           bot_message_id => {
-    //             response.message_id = bot_message_id;
-    //             res.send(response);
-    //           }
-    //         );
-    //   }
-    //
   } catch {
     // TODO: IS 422 the right response here?
     return res.status(422).json({

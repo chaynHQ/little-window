@@ -27,29 +27,52 @@ const messages = (state = [], action) => {
       const {
         timedelay, messageId, checkBoxOptions, radioButtonOptions, speech,
       } = action.data;
-      const newMessages = speech.map((item, i, arr) => {
+      const newMessages = action.data.map((item, i, arr) => {
         // TODO: Do we use the sender or timeDelay element anymore?
         // TODO: THESE SHOULDN'T BE LABELLED AS PREVIOUSMESS etc...
         let message = {
-          text: item.text,
+          text: item.speech,
           resources: item.resources,
+          previousMessageStoryblokId: item.storyblokId,
+          previousMessageId: messageId,
           sender: 'bot',
           nextUserAction: 'wait',
           toDisplay: false,
           timeDelay: timedelay,
-          previousMessageStoryblokId: item.storyblokId,
-          previousMessageId: messageId,
         };
         if (arr.length - 1 === i) {
           message = {
             ...message,
             nextUserAction: (checkBoxOptions && checkBoxOptions.length) || (radioButtonOptions && radioButtonOptions.length) ? 'option' : 'input',
-            checkBoxOptions,
-            radioButtonOptions,
+            checkBoxOptions:item.checkBoxOptions,
+            radioButtonOptions: item.radioButtonOptions,
           };
         }
         return message;
       });
+      // const newMessages = speech.map((item, i, arr) => {
+      //   // TODO: Do we use the sender or timeDelay element anymore?
+      //   // TODO: THESE SHOULDN'T BE LABELLED AS PREVIOUSMESS etc...
+      //   let message = {
+      //     text: item.text,
+      //     resources: item.resources,
+      //     sender: 'bot',
+      //     nextUserAction: 'wait',
+      //     toDisplay: false,
+      //     timeDelay: timedelay,
+      //     previousMessageStoryblokId: item.storyblokId,
+      //     previousMessageId: messageId,
+      //   };
+      //   if (arr.length - 1 === i) {
+      //     message = {
+      //       ...message,
+      //       nextUserAction: (checkBoxOptions && checkBoxOptions.length) || (radioButtonOptions && radioButtonOptions.length) ? 'option' : 'input',
+      //       checkBoxOptions,
+      //       radioButtonOptions,
+      //     };
+      //   }
+      //   return message;
+      // });
       return [...state, ...newMessages];
     }
     case UPDATE_BOT_MESSAGE:
