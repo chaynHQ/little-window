@@ -31,7 +31,7 @@ exports.saveNewConversation = (conversationId) => {
     return null;
   }
 };
-
+// This can be deleted and use getColumnForConversation instead
 exports.getConversationStage = (conversationId) => {
   try {
     return db.oneOrNone(

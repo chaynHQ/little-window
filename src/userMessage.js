@@ -20,7 +20,7 @@ const setupConversation = async (userResponse, conversationId, previousMessageSt
     const isFormattedLikeSetupAnswer = splitUserResponse.length === 3 && splitUserResponse[0] === 'SETUP';
     if (isFormattedLikeSetupAnswer) {
       try {
-        updateConversationsTableByColumn(
+        await updateConversationsTableByColumn(
           splitUserResponse[1],
           splitUserResponse[2],
           conversationId,
@@ -61,7 +61,7 @@ exports.userMessage = async (req, res) => {
     try {
       await setupConversation(userResponse, conversationId, previousMessageStoryblokId);
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       // TODO: IS 422 the right response here?
       // Answer: NO
       return res.status(422).json({

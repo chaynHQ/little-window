@@ -52,9 +52,10 @@ const formatBotResponse = (response, prefixMessages, suffixMessages, conversatio
   return formattedResponse;
 };
 
-const getFeedbackMessage = async (conversationId) => {
+const getFeedbackMessage = async (data) => {
+  const { conversationId } = data;
   // Get all the bot responses
-  const botResponses = await getBotResponsesBySlug('feedback');
+  const botResponses = await getBotResponsesBySlug('feedback', data.language);
   // Get all the user messages by convo id
   const userMessages = await getMessagesByColumns([
     { column: 'conversation_id', value: conversationId },
@@ -87,7 +88,7 @@ const getSupportMessage = async (data) => {
   const { previousMessageStoryblokId, conversationId, selectedTags } = data;
   const userResponse = data.speech;
 
-  const botResponses = await getBotResponsesBySlug('support');
+  const botResponses = await getBotResponsesBySlug('support', data.language);
   const { kickoffSupportMessageStoryblokId } = process.env;
   const { freeTextSupportRequestStoryblokId } = process.env;
   const { radioButtonSupportRequestStoryblokId } = process.env;
@@ -165,7 +166,7 @@ const getSetupMessage = async (data) => {
   const prefixMessages = [];
 
   // TODO: Chain all these awaits into a set of tasks
-  const botResponses = await getBotResponsesBySlug('setup');
+  const botResponses = await getBotResponsesBySlug('setup', data.language);
   const isLanguageSet = await getColumnForConversation('language', conversationId);
   const isGDPRSet = await getColumnForConversation('gdpr', conversationId);
 
@@ -208,9 +209,13 @@ const getSetupMessage = async (data) => {
 exports.getBotMessage = async (req) => {
   const { conversationId } = req;
 
-  //const conversationStage = await getConversationStage(conversationId);
+  const conversationStage = await getConversationStage(conversationId);
+  const conversationLang = await getColumnForConversation('language', conversationId);
 
-  const conversationStage = 'support'
+  if (conversationLang) {
+    req.language = conversationLang;
+  }
+  // const conversationStage = 'support'
 
   // TODO: REfactor these into one final call to formatBotResponse at end.
   switch (conversationStage) {
@@ -219,7 +224,7 @@ exports.getBotMessage = async (req) => {
       return formatBotResponse(setupBotResponse, prefixMessages, [], conversationId);
     }
     case 'feedback': {
-      const feedbackBotResponse = await getFeedbackMessage(conversationId);
+      const feedbackBotResponse = await getFeedbackMessage(req);
       return formatBotResponse(feedbackBotResponse, [], [], conversationId);
     }
     case 'support': {
