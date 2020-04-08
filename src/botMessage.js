@@ -88,7 +88,6 @@ const getSupportMessage = async (data) => {
   const userResponse = data.speech;
 
   const botResponses = await getBotResponsesBySlug('support');
-
   const { kickoffSupportMessageStoryblokId } = process.env;
   const { freeTextSupportRequestStoryblokId } = process.env;
   const { radioButtonSupportRequestStoryblokId } = process.env;
@@ -209,7 +208,9 @@ const getSetupMessage = async (data) => {
 exports.getBotMessage = async (req) => {
   const { conversationId } = req;
 
-  const conversationStage = await getConversationStage(conversationId);
+  //const conversationStage = await getConversationStage(conversationId);
+
+  const conversationStage = 'support'
 
   // TODO: REfactor these into one final call to formatBotResponse at end.
   switch (conversationStage) {
