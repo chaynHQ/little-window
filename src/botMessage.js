@@ -7,7 +7,12 @@ const {
 } = require('./db/db');
 const { getDialogflowResponse } = require('./dialogflow');
 
+
+// TODO: Reformat this so the response object is a giant array of smaller message objects
+// Save each message object separately in the database.
 const formatBotResponse = (response, prefixMessages, suffixMessages, conversationId) => {
+  // To do - check that response isn't empty.
+  const formattedResponse = {};
   const speech = [];
 
   [...prefixMessages, response, ...suffixMessages].forEach((message) => {
@@ -24,8 +29,6 @@ const formatBotResponse = (response, prefixMessages, suffixMessages, conversatio
     });
   });
 
-  // To do - check that response isn't empty.
-  const formattedResponse = {};
   formattedResponse.conversationId = conversationId;
   formattedResponse.speech = speech;
 
@@ -75,6 +78,7 @@ const getFeedbackMessage = async (data) => {
     if (userMessages.filter(
       (userMessage) => userMessage.storyblok_id === response.uuid,
     ).length === 0) {
+      console.log()
       return true;
     }
     return false;
@@ -108,11 +112,36 @@ const getSupportMessage = async (data) => {
   let suffixMessages = [];
 
   if (previousMessageStoryblokId === freeTextSupportRequestStoryblokId) {
-    // TO DO TOMORROW
-    // console.log("START HERE")
-    // getDialogflowResponse(conversationId, userResponse)
+    const dialogFlowResponse = await getDialogflowResponse(conversationId, userResponse);
+
+    const [topicResponse] = botResponses.filter(
+      (response) => response.name == dialogFlowResponse,
+    )
+
+    if (topicResponse.length === 0) {
+      [topicResponse] = botResponses.filter(
+        (response) => response.name == 'Fallback',
+      )
+      dialogFlowResponse = 'Fallback'
+    }
+
+    topicResponse.speech = 'TOPIC-' + dialogFlowResponse
+    topicResponse.radioButtonOptions = topicResponse.content.resources.items.reduce((tags, resource) => {
+      if (tags.indexOf(resource.tag) === -1) {
+        tags.push(resource.tag);
+      }
+      return tags;
+    }, []).map((tag) => ({ postback: 'TOPIC-' + dialogFlowResponse, text: tag }));
+
+    topicResponse.content.resources = [];
+    supportBotResponse = topicResponse;
+
+    if (dialogFlowResponse === 'Emergency' || dialogFlowResponse === 'Fallback') {
+      suffixMessages.push(botResponses.filter((response) => response.uuid === radioButtonSupportRequestStoryblokId))
+    }
 
   } else if (userResponse.startsWith('TOPIC-')) {
+    console.log("IT Starts with Topic")
     const topic = userResponse.slice('TOPIC-'.length);
     const [topicResponse] = botResponses.filter((response) => response.name === topic);
 
@@ -135,6 +164,7 @@ const getSupportMessage = async (data) => {
       supportBotResponse = topicResponse;
     }
   } else if (previousMessageStoryblokId === anythingElseStoryblokId && userResponse === 'No') {
+    console.log("ANYTHING ELSE")
     await updateConversationsTableByColumn(
       'stage',
       'feedback',
@@ -209,13 +239,13 @@ const getSetupMessage = async (data) => {
 exports.getBotMessage = async (req) => {
   const { conversationId } = req;
 
-  const conversationStage = await getConversationStage(conversationId);
+  //const conversationStage = await getConversationStage(conversationId);
   const conversationLang = await getColumnForConversation('language', conversationId);
 
   if (conversationLang) {
     req.language = conversationLang;
   }
-  // const conversationStage = 'support'
+  const conversationStage = 'feedback'
 
   // TODO: REfactor these into one final call to formatBotResponse at end.
   switch (conversationStage) {
