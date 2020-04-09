@@ -4,9 +4,6 @@
 		"DATABASE_URL": {
 			"required": true
 		},
-		"CLIENT_ROLLBAR_ACCESS_TOKEN": {
-			"required": true
-		},
 		"DIALOGFLOW_PROJECT_ID": {
 			"required": true
 		},
