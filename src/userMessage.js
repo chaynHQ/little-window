@@ -71,32 +71,33 @@ exports.userMessage = async (req, res) => {
       });
     }
   }
-
-  try {
-    getBotMessage(req.body).then(async (botResponses) => {
-      const formattedResponses = [];
-      for (const [index, response] of botResponses.entries()) {
-        if (index === 0) {
-          response.previousMessageId = userMessageId;
-        } else {
-          response.previousMessageId = botResponses[index - 1].messageId;
-        }
-        response.messageId = await saveMessage(response, 'bot');
-
-        formattedResponses.push(response);
+  getBotMessage(req.body).then(async (botResponses) => {
+    const formattedResponses = [];
+    for (const [index, response] of botResponses.entries()) {
+      if (index === 0) {
+        response.previousMessageId = userMessageId;
+      } else {
+        response.previousMessageId = botResponses[index - 1].messageId;
       }
-      console.log(formattedResponses);
-      return res.send(formattedResponses);
-    });
-  } catch {
-    // TODO: IS 422 the right response here?
-    return res.status(422).json({
-      errors: [{
-        value: null,
-        msg: 'Problem retrieving response',
-      }],
-    });
-  }
+      response.messageId = await saveMessage(response, 'bot');
+
+      formattedResponses.push(response);
+    }
+    console.log(formattedResponses);
+    return res.send(formattedResponses);
+  });
+
+  // try {
+  //
+  // } catch {
+  //   // TODO: IS 422 the right response here?
+  //   return res.status(422).json({
+  //     errors: [{
+  //       value: null,
+  //       msg: 'Problem retrieving response',
+  //     }],
+  //   });
+  // }
 };
 
 exports.validate = () => [
