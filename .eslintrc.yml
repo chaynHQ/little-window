@@ -20,10 +20,12 @@ plugins:
 ignorePatterns:
   - 'node_modules/'
   - 'build/'
-  - 'src-old/'
+  - 'src/db/init.js'
 rules:
   react/jsx-filename-extension: 0
   no-underscore-dangle: 0
+  no-restricted-syntax: 1
+  no-await-in-loop: 1
 settings:
   react:
     version: 'latest'

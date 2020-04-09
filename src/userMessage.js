@@ -16,7 +16,6 @@ const setupConversation = async (userResponse, conversationId, previousMessageSt
   ).length > 0;
 
   if (previousMessageWasSetupMessage) {
-    // Check if it's formatted to be saved
     const isFormattedLikeSetupAnswer = splitUserResponse.length === 3 && splitUserResponse[0] === 'SETUP';
     if (isFormattedLikeSetupAnswer) {
       try {
@@ -25,13 +24,13 @@ const setupConversation = async (userResponse, conversationId, previousMessageSt
           splitUserResponse[2],
           conversationId,
         );
-      } catch {
-        throw new Error('Can\'t find userResponse to setup question');
+      } catch (error) {
+        // console.log(error);
       }
-    } else if (botResponses.filter((response) => response.name === 'new-language')[0].content.uuid === previousMessageStoryblokId) {
-      updateConversationsTableByColumn(
+    } else if (botResponses.filter((response) => response.name === 'new-language')[0].uuid === previousMessageStoryblokId) {
+      await updateConversationsTableByColumn(
         'language',
-        'English',
+        'en',
         conversationId,
       );
     }
@@ -61,7 +60,7 @@ exports.userMessage = async (req, res) => {
     try {
       await setupConversation(userResponse, conversationId, previousMessageStoryblokId);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       // TODO: IS 422 the right response here?
       // Answer: NO
       return res.status(422).json({
@@ -75,20 +74,20 @@ exports.userMessage = async (req, res) => {
 
   try {
     getBotMessage(req.body).then(async (botResponses) => {
-      const responses = botResponses.map(async (response, index) => {
-        response.messageId = await saveMessage(response, 'bot');
-        if (index === 0){
+      const formattedResponses = [];
+      for (const [index, response] of botResponses.entries()) {
+        if (index === 0) {
           response.previousMessageId = userMessageId;
         } else {
-          response.previousMessageId = botResponses[index-1].messageId
+          response.previousMessageId = botResponses[index - 1].messageId;
         }
-        return response
-      })
-      //
-      res.send(await Promise.all(responses));
+        response.messageId = await saveMessage(response, 'bot');
+
+        formattedResponses.push(response);
+      }
+      res.send(formattedResponses);
     });
     return null;
-
   } catch {
     // TODO: IS 422 the right response here?
     return res.status(422).json({

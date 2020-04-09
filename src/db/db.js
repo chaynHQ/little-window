@@ -27,7 +27,7 @@ exports.saveNewConversation = (conversationId) => {
     );
     return null;
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return null;
   }
 };
@@ -39,7 +39,7 @@ exports.getConversationStage = (conversationId) => {
       [conversationId],
     ).then((response) => (response ? response.stage : 'null'));
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return null;
   }
 };
@@ -53,7 +53,7 @@ exports.getColumnForConversation = (column, conversationId) => {
       [column, conversationId],
     ).then((response) => (response ? response[column] : null));
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return null;
   }
 };
@@ -62,18 +62,22 @@ exports.updateConversationsTableByColumn = (column, value, conversationId) => {
   try {
     return db.none('UPDATE conversations SET $1:raw = $2 WHERE id = $3', [column, value, conversationId]);
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return null;
   }
 };
 
 exports.saveMessage = async (data, sender) => {
+  let message = data.speech;
+  if (data.selectedTags) {
+    data.selectedTags.forEach((tag) => { message = `${message}-${tag.text}`; });
+  }
   try {
     const messageId = await db.one('INSERT INTO messages (conversation_id, message, sender, previous_message_id, storyblok_id) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-      [data.conversationId, data.speech, sender, data.previousMessageId, data.storyblokId]);
+      [data.conversationId, message, sender, data.previousMessageId, data.storyblokId]);
     return messageId.id;
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return null;
   }
 };
@@ -98,7 +102,7 @@ exports.getMessagesByColumns = async (searchPairs) => {
       searchParameters,
     ).then((response) => (response));
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return null;
   }
 };

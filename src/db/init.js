@@ -1,7 +1,11 @@
-CREATE EXTENSION pgcrypto; Runs once per database
+/* eslint-disable */
+
+CREATE EXTENSION pgcrypto;
 CREATE TYPE stage_type AS ENUM ('setup', 'support', 'feedback');
 CREATE TYPE sender_type AS ENUM ('bot', 'user');
 CREATE TYPE supported_languages_type AS ENUM ('fr', 'en');
+
+/* eslint-enable */
 
 CREATE TABLE conversations (
   ID uuid PRIMARY KEY,

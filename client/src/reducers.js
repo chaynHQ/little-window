@@ -25,7 +25,7 @@ const messages = (state = [], action) => {
       ];
     case ADD_BOT_MESSAGE: {
       const {
-        timedelay, messageId, checkBoxOptions, radioButtonOptions, speech,
+        timedelay,
       } = action.data;
       const newMessages = action.data.map((item, i, arr) => {
         // TODO: Do we use the sender or timeDelay element anymore?
@@ -34,7 +34,7 @@ const messages = (state = [], action) => {
           text: item.speech,
           resources: item.resources,
           previousMessageStoryblokId: item.storyblokId,
-          previousMessageId: messageId,
+          previousMessageId: item.messageId,
           sender: 'bot',
           nextUserAction: 'wait',
           toDisplay: false,
@@ -43,36 +43,13 @@ const messages = (state = [], action) => {
         if (arr.length - 1 === i) {
           message = {
             ...message,
-            nextUserAction: (checkBoxOptions && checkBoxOptions.length) || (radioButtonOptions && radioButtonOptions.length) ? 'option' : 'input',
-            checkBoxOptions:item.checkBoxOptions,
+            nextUserAction: (item.checkBoxOptions && item.checkBoxOptions.length) || (item.radioButtonOptions && item.radioButtonOptions.length) ? 'option' : 'input',
+            checkBoxOptions: item.checkBoxOptions,
             radioButtonOptions: item.radioButtonOptions,
           };
         }
         return message;
       });
-      // const newMessages = speech.map((item, i, arr) => {
-      //   // TODO: Do we use the sender or timeDelay element anymore?
-      //   // TODO: THESE SHOULDN'T BE LABELLED AS PREVIOUSMESS etc...
-      //   let message = {
-      //     text: item.text,
-      //     resources: item.resources,
-      //     sender: 'bot',
-      //     nextUserAction: 'wait',
-      //     toDisplay: false,
-      //     timeDelay: timedelay,
-      //     previousMessageStoryblokId: item.storyblokId,
-      //     previousMessageId: messageId,
-      //   };
-      //   if (arr.length - 1 === i) {
-      //     message = {
-      //       ...message,
-      //       nextUserAction: (checkBoxOptions && checkBoxOptions.length) || (radioButtonOptions && radioButtonOptions.length) ? 'option' : 'input',
-      //       checkBoxOptions,
-      //       radioButtonOptions,
-      //     };
-      //   }
-      //   return message;
-      // });
       return [...state, ...newMessages];
     }
     case UPDATE_BOT_MESSAGE:

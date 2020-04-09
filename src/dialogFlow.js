@@ -1,6 +1,4 @@
 const dialogflow = require('dialogflow');
-const { value } = require('pb-util');
-const { getResources } = require('./googleSheets');
 
 exports.getDialogflowResponse = async (conversationId, speech) => {
   // Create a new session
@@ -33,5 +31,4 @@ exports.getDialogflowResponse = async (conversationId, speech) => {
   // Send request and get result
   const dialogFlowResponses = await sessionClient.detectIntent(request);
   return dialogFlowResponses[0].queryResult.intent.displayName;
-
 };

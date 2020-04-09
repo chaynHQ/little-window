@@ -11,13 +11,13 @@ const version = process.env.CONTENT_PREVIEW_MODE === 'true' ? 'draft' : 'publish
 exports.getBotResponsesBySlug = (slug, lang) => Storyblok.get('cdn/stories/', {
   starts_with: lang ? `${lang}/${slug}` : slug,
   version,
-}).then((response) => response.data.stories).catch((error) => {
-  console.log(error);
+}).then((response) => response.data.stories).catch({
+  // console.log(error);
 });
 
 exports.getBotResponsesByUuid = (uuid) => Storyblok.get(`cdn/stories/${uuid}`, {
   find_by: 'uuid',
   version,
-}).then((response) => response.data.story).catch((error) => {
-  console.log(error);
+}).then((response) => response.data.story).catch({
+  // console.log(error);
 });

@@ -5,22 +5,27 @@ const {
   getMessagesByColumns,
   updateConversationsTableByColumn,
 } = require('./db/db');
-const { getDialogflowResponse } = require('./dialogflow');
+const { getDialogflowResponse } = require('./dialogFlow');
 
 
 // TODO: Reformat this so the response object is a giant array of smaller message objects
 // Save each message object separately in the database.
 const formatBotResponse = (response, prefixMessages, suffixMessages, conversationId) => {
+  // Check that response isn't empty
   const formattedResponse = [];
+  if (!response) {
+    return [{ speech: 'Something went wrong. My team have been notified and are trying to fix the issue' }];
+  }
+
 
   [...prefixMessages, response, ...suffixMessages].forEach((messageGroup, i, arr) => {
-    messageGroup.content.speech.items.forEach(message =>{
-      newMessage = {}
+    messageGroup.content.speech.items.forEach((message) => {
+      const newMessage = {};
       newMessage.conversationId = conversationId;
       newMessage.storyblokId = messageGroup.uuid;
       newMessage.speech = message;
-      newMessage.resources = messageGroup.content.resources.items;
-      newMessage.previousMessageId
+      newMessage.resources = messageGroup.content.resources ?
+        messageGroup.content.resources.items : [];
 
 
       if (arr.length - 1 === i) {
@@ -39,9 +44,9 @@ const formatBotResponse = (response, prefixMessages, suffixMessages, conversatio
           newMessage.radioButtonOptions = [];
         }
       }
-      formattedResponse.push(newMessage)
-    })
-  })
+      formattedResponse.push(newMessage);
+    });
+  });
   return formattedResponse;
 };
 
@@ -82,71 +87,76 @@ const getSupportMessage = async (data) => {
   const userResponse = data.speech;
 
   const botResponses = await getBotResponsesBySlug('support', data.language);
+  const botTopicResponses = await getBotResponsesBySlug('topic', data.language);
+
   const { kickoffSupportMessageStoryblokId } = process.env;
   const { freeTextSupportRequestStoryblokId } = process.env;
   const { radioButtonSupportRequestStoryblokId } = process.env;
   const { resourceStoryblokId } = process.env;
   const { additionalResourcesStoryblokId } = process.env;
   const { anythingElseStoryblokId } = process.env;
-  const setupMessages = [
-    kickoffSupportMessageStoryblokId,
-    freeTextSupportRequestStoryblokId,
-    radioButtonSupportRequestStoryblokId,
-    resourceStoryblokId,
-    additionalResourcesStoryblokId,
-    anythingElseStoryblokId,
-  ];
 
   let supportBotResponse = {};
   let suffixMessages = [];
 
   if (previousMessageStoryblokId === freeTextSupportRequestStoryblokId) {
-    const dialogFlowResponse = await getDialogflowResponse(conversationId, userResponse);
+    let dialogFlowResponse = await getDialogflowResponse(conversationId, userResponse);
+    let topicResponse = {};
 
-    const [topicResponse] = botResponses.filter(
-      (response) => response.name == dialogFlowResponse,
-    )
-
-    if (topicResponse.length === 0) {
+    [topicResponse] = botTopicResponses.filter(
+      (response) => response.name === dialogFlowResponse,
+    );
+    if (!topicResponse) {
       [topicResponse] = botResponses.filter(
-        (response) => response.name == 'Fallback',
-      )
-      dialogFlowResponse = 'Fallback'
+        (response) => response.name === 'Fallback',
+      );
+      dialogFlowResponse = 'Fallback';
     }
 
-    topicResponse.speech = 'TOPIC-' + dialogFlowResponse
-    topicResponse.radioButtonOptions = topicResponse.content.resources.items.reduce((tags, resource) => {
-      if (tags.indexOf(resource.tag) === -1) {
-        tags.push(resource.tag);
-      }
-      return tags;
-    }, []).map((tag) => ({ postback: 'TOPIC-' + dialogFlowResponse, text: tag }));
+    topicResponse.speech = `TOPIC-${dialogFlowResponse}`;
+    topicResponse.radioButtonOptions = topicResponse.content.resources.items.reduce(
+      (tags, resource) => {
+        if (tags.indexOf(resource.tag) === -1) {
+          tags.push(resource.tag);
+        }
+        return tags;
+      }, [],
+    ).map((tag) => ({ postback: `TOPIC-${dialogFlowResponse}`, text: tag }));
 
     topicResponse.content.resources = [];
     supportBotResponse = topicResponse;
 
     if (dialogFlowResponse === 'Emergency' || dialogFlowResponse === 'Fallback') {
-      suffixMessages.push(botResponses.filter((response) => response.uuid === radioButtonSupportRequestStoryblokId))
+      supportBotResponse.checkBoxOptions = botTopicResponses.map(
+        (response) => ({ postback: `TOPIC-${response.name}`, text: response.name }),
+      );
     }
-
   } else if (userResponse.startsWith('TOPIC-')) {
     const topic = userResponse.slice('TOPIC-'.length);
-    const [topicResponse] = botResponses.filter((response) => response.name === topic);
+    const [topicResponse] = botTopicResponses.filter((response) => response.name === topic);
 
     if (selectedTags) {
-      [supportBotResponse] = botResponses.filter((response) => response.uuid === resourceStoryblokId);
+      [supportBotResponse] = botResponses.filter(
+        (response) => response.uuid === resourceStoryblokId,
+      );
       supportBotResponse.content.resources.items = topicResponse.content.resources.items.filter(
         (resource) => selectedTags.map((tag) => tag.text).includes(resource.tag),
       );
-      suffixMessages = botResponses.filter((response) => response.uuid === additionalResourcesStoryblokId);
-      suffixMessages.push(botResponses.filter((response) => response.uuid === anythingElseStoryblokId)[0]);
+      suffixMessages = botResponses.filter(
+        (response) => response.uuid === additionalResourcesStoryblokId,
+      );
+      suffixMessages.push(botResponses.filter(
+        (response) => response.uuid === anythingElseStoryblokId,
+      )[0]);
     } else {
-      topicResponse.radioButtonOptions = topicResponse.content.resources.items.reduce((tags, resource) => {
-        if (tags.indexOf(resource.tag) === -1) {
-          tags.push(resource.tag);
-        }
-        return tags;
-      }, []).map((tag) => ({ postback: userResponse, text: tag }));
+      topicResponse.radioButtonOptions = topicResponse.content.resources.items.reduce(
+        (tags, resource) => {
+          if (tags.indexOf(resource.tag) === -1) {
+            tags.push(resource.tag);
+          }
+          return tags;
+        }, [],
+      ).map((tag) => ({ postback: userResponse, text: tag }));
 
       topicResponse.content.resources = [];
       supportBotResponse = topicResponse;
@@ -160,17 +170,21 @@ const getSupportMessage = async (data) => {
     supportBotResponse = await getFeedbackMessage(conversationId);
   } else if (previousMessageStoryblokId === kickoffSupportMessageStoryblokId) {
     if (userResponse === 'Yes') {
-      [supportBotResponse] = botResponses.filter((response) => response.uuid === freeTextSupportRequestStoryblokId);
+      [supportBotResponse] = botResponses.filter(
+        (response) => response.uuid === freeTextSupportRequestStoryblokId,
+      );
     } else {
-      [supportBotResponse] = botResponses.filter((response) => response.uuid === radioButtonSupportRequestStoryblokId);
-      supportBotResponse.checkBoxOptions = botResponses.filter(
-        (response) => setupMessages.indexOf(response.uuid) < 0,
-      ).map(
+      [supportBotResponse] = botResponses.filter(
+        (response) => response.uuid === radioButtonSupportRequestStoryblokId,
+      );
+      supportBotResponse.checkBoxOptions = botTopicResponses.map(
         (response) => ({ postback: `TOPIC-${response.name}`, text: response.name }),
       );
     }
   } else {
-    [supportBotResponse] = botResponses.filter((response) => response.uuid === kickoffSupportMessageStoryblokId);
+    [supportBotResponse] = botResponses.filter(
+      (response) => response.uuid === kickoffSupportMessageStoryblokId,
+    );
   }
 
   return { supportBotResponse, suffixMessages };
