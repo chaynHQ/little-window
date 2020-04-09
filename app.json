@@ -1,9 +1,6 @@
 {
 	"name": "little-window",
 	"env": {
-		"DATABASE_URL": {
-			"required": true
-		},
 		"DIALOGFLOW_PROJECT_ID": {
 			"required": true
 		},
