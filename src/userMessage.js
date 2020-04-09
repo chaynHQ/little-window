@@ -86,9 +86,8 @@ exports.userMessage = async (req, res) => {
         formattedResponses.push(response);
       }
       console.log(formattedResponses);
-      res.send(formattedResponses);
+      return res.send(formattedResponses);
     });
-    return null;
   } catch {
     // TODO: IS 422 the right response here?
     return res.status(422).json({
