@@ -24,8 +24,8 @@ const formatBotResponse = (response, prefixMessages, suffixMessages, conversatio
       newMessage.conversationId = conversationId;
       newMessage.storyblokId = messageGroup.uuid;
       newMessage.speech = message;
-      newMessage.resources = messageGroup.content.resources ?
-        messageGroup.content.resources.items : [];
+      newMessage.resources = messageGroup.content.resources
+        ? messageGroup.content.resources.items : [];
 
 
       if (arr.length - 1 === i) {

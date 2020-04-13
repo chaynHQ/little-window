@@ -17,6 +17,14 @@ const options = {
 
 const db = pgp(options);
 
+db.connect()
+  .then((obj) => {
+    obj.done(); // success, release connection;
+  })
+  .catch((error) => {
+    //  console.log("ERROR:", error.message);
+  });
+
 // Queries
 // TODO: Error checking instead of console.log
 exports.saveNewConversation = (conversationId) => {

@@ -83,7 +83,6 @@ exports.userMessage = async (req, res) => {
 
       formattedResponses.push(response);
     }
-    console.log(formattedResponses);
     return res.send(formattedResponses);
   });
 
