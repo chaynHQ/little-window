@@ -2,7 +2,7 @@ const dialogflow = require('dialogflow');
 
 exports.getDialogflowResponse = async (conversationId, speech) => {
   // Create a new session
-  const privateKey = process.env.DIALOGFLOW_PRIVATE_KEY;
+  const privateKey = (process.env.NODE_ENV=="production") ? JSON.parse(process.env.DIALOGFLOW_PRIVATE_KEY) : process.env.DIALOGFLOW_PRIVATE_KEY;
   const clientEmail = process.env.DIALOGFLOW_CLIENT_EMAIL;
   const config = {
     credentials: {
