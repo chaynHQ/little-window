@@ -8,8 +8,6 @@ const {
 const { getDialogflowResponse } = require('./dialogFlow');
 
 
-// TODO: Reformat this so the response object is a giant array of smaller message objects
-// Save each message object separately in the database.
 const formatBotResponse = (response, prefixMessages, suffixMessages, conversationId) => {
   // Check that response isn't empty
   const formattedResponse = [];

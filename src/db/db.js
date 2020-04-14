@@ -52,7 +52,6 @@ exports.getConversationStage = (conversationId) => {
   }
 };
 
-// TODO: Column isn't the technical term here. UPDATE
 // Get Column by Conversation_ID
 exports.getColumnForConversation = (column, conversationId) => {
   try {
