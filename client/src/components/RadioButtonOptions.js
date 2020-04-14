@@ -33,7 +33,7 @@ const RadioButtonOptions = ({
     onClick={() => inputHandler({
       text: selectedOptionsText,
       postback: selectedOptions[0].postback,
-      selectedCountries: selectedOptions,
+      selectedTags: selectedOptions,
     })}
     key={uuidv4()}
     type="button"

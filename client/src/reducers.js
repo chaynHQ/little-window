@@ -12,8 +12,6 @@ import {
 
 
 const messages = (state = [], action) => {
-  let nextUserAction;
-
   switch (action.type) {
     case ADD_USER_INPUT:
       return [
@@ -25,28 +23,35 @@ const messages = (state = [], action) => {
           toDisplay: true,
         },
       ];
-    case ADD_BOT_MESSAGE:
-      if (action.data.options.length > 1 || action.data.selectOptions.length > 1) {
-        nextUserAction = 'option';
-      } else if (action.data.retrigger) {
-        nextUserAction = 'wait';
-      } else {
-        nextUserAction = 'input';
-      }
-
-      return [
-        ...state,
-        {
-          text: action.data.speech,
-          checkBoxOptions: [...action.data.options],
-          radioButtonOptions: [...action.data.selectOptions],
-          resources: action.data.resources,
+    case ADD_BOT_MESSAGE: {
+      const {
+        timedelay,
+      } = action.data;
+      const newMessages = action.data.map((item, i, arr) => {
+        // TODO: Do we use the sender or timeDelay element anymore?
+        // TODO: THESE SHOULDN'T BE LABELLED AS PREVIOUSMESS etc...
+        let message = {
+          text: item.speech,
+          resources: item.resources,
+          previousMessageStoryblokId: item.storyblokId,
+          previousMessageId: item.messageId,
           sender: 'bot',
-          nextUserAction,
+          nextUserAction: 'wait',
           toDisplay: false,
-          timeDelay: action.data.timedelay,
-        },
-      ];
+          timeDelay: timedelay,
+        };
+        if (arr.length - 1 === i) {
+          message = {
+            ...message,
+            nextUserAction: (item.checkBoxOptions && item.checkBoxOptions.length) || (item.radioButtonOptions && item.radioButtonOptions.length) ? 'option' : 'input',
+            checkBoxOptions: item.checkBoxOptions,
+            radioButtonOptions: item.radioButtonOptions,
+          };
+        }
+        return message;
+      });
+      return [...state, ...newMessages];
+    }
     case UPDATE_BOT_MESSAGE:
       return [
         ...state,

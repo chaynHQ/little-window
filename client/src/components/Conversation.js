@@ -19,7 +19,7 @@ class Conversation extends Component {
     const { initialBotMessageHandler } = this.props;
 
     initialBotMessageHandler({
-      speech: 'Little Window language selection',
+      speech: 'SETUP-NEWCONVERSATION',
       lang: 'en',
     });
   }
@@ -47,6 +47,19 @@ class Conversation extends Component {
       );
     }
 
+    if (currentMessage.resources && currentMessage.resources.length > 0) {
+      currentMessage.resources.forEach((resource) => {
+        message.push(
+          <Resource
+            key={uuidv4()}
+            text={resource.text}
+            link={resource.link}
+            lang={lang}
+          />,
+        );
+      });
+    }
+
     if (currentMessage.checkBoxOptions && currentMessage.checkBoxOptions.length > 0) {
       message.push(
         <CheckBoxOptionsContainer
@@ -65,19 +78,6 @@ class Conversation extends Component {
           inputHandler={inputHandler}
         />,
       );
-    }
-
-    if (currentMessage.resources && currentMessage.resources.length > 0) {
-      currentMessage.resources.forEach((resource) => {
-        message.push(
-          <Resource
-            key={uuidv4()}
-            text={resource.text}
-            link={resource.href}
-            lang={lang}
-          />,
-        );
-      });
     }
 
     return message;

@@ -9,7 +9,7 @@
 ## Installing / Getting started
 
 ### Prerequisites
-- Dialogflow account & key
+- Dialogflow key
 - Googlesheets API key
 - PostgreSQL Database
 
@@ -19,10 +19,13 @@
 2. Move into your newly created folder and install dependencies:
 `npm install`
 3. Create a `.env` file in the root directory. This will need to include:
-- `DF_KEY=` [Your Dialogflow client key]  
 - `DATABASE_URL=` [Your PostgreSQL DB URL]
 - `GOOGLE_API_1=` https://sheets.googleapis.com/v4/spreadsheets/{your-sheet-id}/values/
 - `GOOGLE_API_2=` ?key={your-GSheet-apikey}
+- `DIALOGFLOW_PROJECT_ID=`
+- `DIALOGFLOW_CLIENT_EMAIL=`
+- `DIALOGFLOW_PRIVATE_KEY=`
+All of the variables prefixed with DIALOGFLOW_ can be created by following the following instructions to generate a key: [Get Dialogflow key](https://dialogflow.com/docs/reference/v2-auth-setup?utm_source=msa&amp;utm_medium=email&amp;utm_campaign=dialogflow_v1_deprecationauth_setup). Then follow this tutorial to include them in your .env file: [Include in .env file](https://medium.com/@tzahi/how-to-setup-dialogflow-v2-authentication-programmatically-with-node-js-b37fa4815d89).
 4. Run the app in dev mode:
 `npm run dev`
 

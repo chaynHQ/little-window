@@ -1,0 +1,41 @@
+{
+	"name": "little-window",
+	"env": {
+		"DIALOGFLOW_PROJECT_ID": {
+			"required": true
+		},
+		"DIALOGFLOW_CLIENT_EMAIL": {
+			"required": true
+		},
+		"DIALOGFLOW_PRIVATE_KEY": {
+			"required": true
+		},
+		"STORYBLOK_TOKEN": {
+			"required": true
+		},
+		"CONTENT_PREVIEW_MODE": {
+			"required": true
+		},
+		"kickoffSupportMessageStoryblokId": {
+			"required": true
+		},
+		"freeTextSupportRequestStoryblokId": {
+			"required": true
+		},
+		"radioButtonSupportRequestStoryblokId": {
+			"required": true
+		},
+		"resourceStoryblokId": {
+			"required": true
+		},
+		"additionalResourcesStoryblokId": {
+			"required": true
+		},
+		"anythingElseStoryblokId": {
+			"required": true
+		}
+	},
+	"addons": [
+		"heroku-postgresql"
+	]
+}

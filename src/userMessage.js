@@ -1,139 +1,106 @@
-const apiai = require('apiai');
-const { DF_KEY } = require('../config');
-const saveConversation = require('./database/queries/save_conversation');
-const saveMessage = require('./database/queries/save_message');
-const googleCall = require('./googleCall');
+const { check, validationResult } = require('express-validator');
+const {
+  saveNewConversation, getConversationStage, updateConversationsTableByColumn, saveMessage,
+} = require('./db/db');
+const { getBotResponsesBySlug } = require('./storyblok');
+const { getBotMessage } = require('./botMessage');
 
-const app = apiai(DF_KEY);
+const setupConversation = async (userResponse, conversationId, previousMessageStoryblokId) => {
+  // TODO: Can we do something nice with the getBotResponsesBySlug
+  // so we don't have to filter afterwards.
+  const splitUserResponse = userResponse.split('-');
+  const botResponses = await getBotResponsesBySlug('setup');
 
-// error messages in french or english
+  const previousMessageWasSetupMessage = botResponses.filter(
+    (response) => response.uuid === previousMessageStoryblokId,
+  ).length > 0;
 
-const errResources = (lang) => {
-  let message;
-  if (lang === 'en') {
-    message = "Sorry, there's been a problem getting the information. Please check the Chayn website or try again later!";
-  } if (lang === 'fr') {
-    message = "Je rencontre un souci technique et j'ai du mal à trouver l'information que tu recherches. N'hésite pas à consulter le site de Chayn ou reviens me voir plus tard ! Merci";
+  if (previousMessageWasSetupMessage) {
+    const isFormattedLikeSetupAnswer = splitUserResponse.length === 3 && splitUserResponse[0] === 'SETUP';
+    if (isFormattedLikeSetupAnswer) {
+      try {
+        await updateConversationsTableByColumn(
+          splitUserResponse[1],
+          splitUserResponse[2],
+          conversationId,
+        );
+      } catch (error) {
+        // console.log(error);
+      }
+    } else if (botResponses.filter((response) => response.name === 'new-language')[0].uuid === previousMessageStoryblokId) {
+      await updateConversationsTableByColumn(
+        'language',
+        'en',
+        conversationId,
+      );
+    }
   }
-  return message;
 };
 
-const errTechnical = (lang) => {
-  let message;
-  if (lang === 'en') {
-    message = "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later";
-  } if (lang === 'fr') {
-    message = "Je rencontre un souci technique et j'ai bien peur de ne pas pouvoir discuter dans l'immédiat. En attendant que je sois de retour sur pattes, n'hésite pas à consulter le site de Chayn, et reviens me voir plus tard ! Merci";
+exports.userMessage = async (req, res) => {
+  // Check req was valid
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
   }
-  return message;
-};
 
-// the call to Dialog Flow
-const dialogFlow = (req, res, speech) => {
-  // TODO: remove the need for this to be labeled uniqueConversationId
-  // should instead be conversationId or sessionId
-  const requestdf = app.textRequest(speech, {
-    sessionId: req.body.uniqueConversationId || req.body.conversationId || req.body.uniqueId,
+  // Setup useful data
+  const userResponse = req.body.speech;
+  const { conversationId, previousMessageStoryblokId } = req.body;
+
+  if (userResponse === 'SETUP-NEWCONVERSATION') {
+    await saveNewConversation(conversationId);
+  }
+
+  const userMessageId = await saveMessage(req.body, 'user');
+
+  const conversationStage = await getConversationStage(conversationId);
+
+  if (conversationStage === 'setup') {
+    try {
+      await setupConversation(userResponse, conversationId, previousMessageStoryblokId);
+    } catch (error) {
+      // console.log(error);
+      // TODO: IS 422 the right response here?
+      // Answer: NO
+      return res.status(422).json({
+        errors: [{
+          value: null,
+          msg: 'Problem retrieving response',
+        }],
+      });
+    }
+  }
+  getBotMessage(req.body).then(async (botResponses) => {
+    const formattedResponses = [];
+    for (const [index, response] of botResponses.entries()) {
+      if (index === 0) {
+        response.previousMessageId = userMessageId;
+      } else {
+        response.previousMessageId = botResponses[index - 1].messageId;
+      }
+      response.messageId = await saveMessage(response, 'bot');
+
+      formattedResponses.push(response);
+    }
+    return res.send(formattedResponses);
   });
 
-  const selectedLang = req.body.lang;
-  requestdf.language = selectedLang;
-
-  requestdf.on('response', (response) => {
-    const { messages } = response.result.fulfillment;
-    const data = {
-      speech: messages[0].speech,
-      options: [],
-      resources: [],
-      selectOptions: [],
-      retrigger: '',
-      timedelay: '',
-      refresh: '',
-      GDPROptOut: false,
-    };
-    // save message to database
-    saveMessage(data.speech, response.sessionId);
-
-    const payload = messages[1] ? messages[1].payload : {};
-    // check if refresh exists in payload (it's only in one message)
-    if (payload.refresh) {
-      data.refresh = payload.refresh;
-    }
-
-    // check if timedelay exists (slow, very slow and fast)
-    data.timedelay = payload.timedelay ? payload.timedelay : 'fast';
-
-    // check if retrigger exists so next message gets sent without user input
-    // (needed to display several messages in a row)
-    if (payload.retrigger) {
-      data.retrigger = payload.retrigger;
-    }
-
-    // check if GDPROptOut flag has been set (see A_OptOutConfirm in Dialog Flow)
-    if (payload.GDPROptOut) {
-      data.GDPROptOut = true;
-    }
-
-    // TodO: this is a horribly formated response,
-    // selectedCountries is too specific, we need to make it general to radiobuttons
-    // There is no standardised checking on what is being sent back and forth
-    // The postback is attached to each option,
-    // which doesn't make sense in the case of radio buttons
-    // check if resources exist and if so do the call to Google Sheets
-    if (payload.resources) {
-      const { selectedCountries } = req.body;
-      const lookupVal = speech || 'Global';
-      const resourceLink = selectedCountries || [{ lookup: lookupVal }];
-      const promiseArray = googleCall(resourceLink, selectedLang);
-
-      Promise.all(promiseArray)
-        .then((resources2dArray) => {
-          data.resources = [].concat(...resources2dArray);
-          res.send(data);
-        })
-        .catch(() => {
-          data.resources = [
-            { text: 'Chayn Website', href: 'https://chayn.co' },
-          ];
-          data.retrigger = '';
-          data.speech = errResources(selectedLang);
-          res.send(data);
-        });
-      // if no resources then set the right type of buttons
-    } else {
-      data.options = payload.options ? [...payload.options] : data.options;
-      data.selectOptions = payload.selectOptions
-        ? [...payload.selectOptions]
-        : data.selectOptions;
-      res.send(data);
-    }
-  });
-
-  requestdf.on('error', () => {
-    const data = {
-      options: [],
-      selectOptions: [],
-      timedelay: '',
-      resources: [{ text: 'Chayn Website', href: 'https://chayn.co' }],
-      retrigger: '',
-      speech: errTechnical(selectedLang),
-    };
-    res.send(data);
-  });
-
-  requestdf.end();
+  // try {
+  //
+  // } catch {
+  //   // TODO: IS 422 the right response here?
+  //   return res.status(422).json({
+  //     errors: [{
+  //       value: null,
+  //       msg: 'Problem retrieving response',
+  //     }],
+  //   });
+  // }
 };
 
-// if it is the first input from user, save the conversation id in database
-const userMessage = (req, res) => {
-  const { speech, uniqueConversationId } = req.body;
-  if (
-    speech === 'Little Window language selection'
-  ) {
-    saveConversation(uniqueConversationId);
-  }
-  saveMessage(speech, uniqueConversationId);
-  dialogFlow(req, res, speech);
-};
-
-module.exports = userMessage;
+exports.validate = () => [
+  check('speech').not().isEmpty().withMessage('must not be empty'),
+  check('lang').not().isEmpty().withMessage('must not be empty'), // TODO: should we update this to isIn(str, values)
+  check('conversationId').isUUID(4).withMessage('must be a UUID'),
+];

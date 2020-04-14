@@ -28,6 +28,7 @@ function addMessageToDisplayList(displayedMessages, hiddenMessages, dispatch) {
 }
 
 const mapStateToProps = (state) => ({
+  messages: state.messages,
   displayedMessages: state.messages.filter((message) => message.toDisplay === true),
   hiddenMessages: state.messages.filter((message) => message.toDisplay === false),
   lang: state.language,
@@ -37,24 +38,29 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   initialBotMessageHandler: (data) => {
-    const uniqueConversationId = uuidv4();
-    dispatch(updateConversation({ conversationId: uniqueConversationId }));
-    dispatch(fetchBotResponse({ ...data, uniqueConversationId }));
+    const conversationId = uuidv4();
+    dispatch(updateConversation({ conversationId }));
+    dispatch(fetchBotResponse({ ...data, conversationId }));
   },
-  inputHandler: (data, lang, uniqueConversationId) => {
+  inputHandler: (data, lang, conversationId, previousMessageId, previousMessageStoryblokId) => {
+    // TODO: this lang bit might be redundant now.
     if (data.lang) {
       dispatch(setLanguage(data.lang));
       dispatch(fetchBotResponse({
         speech: data.postback,
         lang: data.lang,
-        uniqueConversationId,
+        conversationId,
+        previousMessageId,
+        previousMessageStoryblokId,
       }));
     } else {
       dispatch(fetchBotResponse({
         speech: data.postback,
         lang,
-        uniqueConversationId,
-        selectedCountries: data.selectedCountries,
+        conversationId,
+        selectedTags: data.selectedTags,
+        previousMessageId,
+        previousMessageStoryblokId,
       }));
     }
 
@@ -76,6 +82,8 @@ const mergeProps = (propsFromState, propsFromDispatch) => ({
     data,
     propsFromState.lang,
     propsFromState.conversationId,
+    propsFromState.displayedMessages.slice(-1)[0].previousMessageId,
+    propsFromState.displayedMessages.slice(-1)[0].previousMessageStoryblokId,
   ),
   queueNextMessage: () => propsFromDispatch.queueNextMessage(
     propsFromState.displayedMessages,
