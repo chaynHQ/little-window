@@ -16,7 +16,6 @@
     "redux-thunk": "^2.3.0",
     "smoothscroll-polyfill": "^0.4.3",
     "styled-components": "^4.4.1",
-    "typescript": "^3.8.3",
     "uuid": "^3.4.0"
   },
   "scripts": {

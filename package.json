@@ -35,8 +35,8 @@
     "express": "^4.16.2",
     "express-validator": "^6.4.0",
     "nodemailer": "^4.6.3",
-    "pg-promise": "^9.0.0",
     "pb-util": "^0.1.2",
+    "pg-promise": "^9.0.0",
     "storyblok-js-client": "^2.1.0"
   },
   "devDependencies": {
