@@ -199,7 +199,6 @@ const getSetupMessage = async (data) => {
   const isLanguageSet = await getColumnForConversation('language', conversationId);
   const isGDPRSet = await getColumnForConversation('gdpr', conversationId);
 
-  // TODO: Set Storyblok up to translate
   if (!isLanguageSet) {
     // TODO: Need better checking in place to ensure users can't type this in
     // when they are typing in a general input.
