@@ -2,23 +2,29 @@
   "name": "little-window",
   "version": "1.0.0",
   "description": "A chatbot featured on Chayn websites, which quickly directs users to Chayn’s relevant internal or external resources",
+  "author": "Chayn",
   "main": "config.js",
+  "license": "ISC",
   "scripts": {
-    "start": "node ./src/server.js",
-    "start:test": "NODE_ENV=production node ./src/server.js",
-    "postinstall": "cd client && npm install && npm run build",
-    "test": "NODE_ENV=test tape ./src/test/*test.js | tap-spec && cd client && npm run test",
-    "server": "NODE_ENV=dev nodemon ./src/server.js",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "client": "cd client && npm start",
-    "lint": "eslint '**/*.js'"
+    "prebuild": "rimraf dist",
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "herokupostinstall": "cd client && npm install && npm run build",
+    "test": "NODE_ENV=test jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fac-12/Little-Window.git"
   },
-  "author": "Chayn",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/fac-12/Little-Window/issues"
   },
@@ -30,19 +36,57 @@
     "express": "^4.16.2",
     "express-validator": "^6.4.0",
     "pg-promise": "^9.0.0",
-    "storyblok-js-client": "^2.1.0"
+    "storyblok-js-client": "^2.1.0",
+    "@nestjs/common": "^7.0.0",
+    "@nestjs/core": "^7.0.0",
+    "@nestjs/platform-express": "^7.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^6.5.4"
   },
   "devDependencies": {
     "concurrently": "^5.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
-    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^2.5.1",
-    "nodemon": "^1.14.12"
+    "nodemon": "^1.14.12",
+    "@nestjs/cli": "^7.0.0",
+    "@nestjs/schematics": "^7.0.0",
+    "@nestjs/testing": "^7.0.0",
+    "@types/express": "^4.17.3",
+    "@types/jest": "25.1.4",
+    "@types/node": "^13.9.1",
+    "@types/supertest": "^2.0.8",
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "eslint-config-prettier": "^6.10.0",
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1",
+    "supertest": "^4.0.2",
+    "ts-jest": "25.2.1",
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.6.2",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.7.4"
   },
   "engines": {
     "node": "12.x"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
   }
 }

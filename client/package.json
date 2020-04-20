@@ -16,10 +16,10 @@
     "uuid": "^3.4.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "node_modules/.bin/react-scripts start",
+    "build": "node_modules/.bin/react-scripts build",
+    "test": "node_modules/.bin/react-scripts test --env=jsdom",
+    "eject": "node_modules/.bin/react-scripts eject"
   },
   "devDependencies": {},
   "browserslist": {

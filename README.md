@@ -8,6 +8,17 @@
 
 ## Installing / Getting started
 
+### .env files
+You will need to create a .env.local file in both the root directory.
+
+## Installing / Getting started
+Run the server and the client separately, using only the following commands to ensure correct binaries are used.
+Server: `npm run start` or `npm run start:dev`
+Client: `cd client && npm run start`
+
+
+
+# PREVIOUS VERSION
 ### Prerequisites
 - Dialogflow key
 - Googlesheets API key
