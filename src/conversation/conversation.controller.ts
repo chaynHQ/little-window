@@ -5,7 +5,6 @@ import { ConversationService } from './conversation.service'
 export class ConversationController {
   constructor(private conversationService: ConversationService) {}
 
-
   @Post('new')
   newConversation(): string {
     // Save Conversation

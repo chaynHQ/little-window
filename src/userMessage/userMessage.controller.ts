@@ -1,12 +1,13 @@
 import { Controller, Post } from '@nestjs/common';
-import { AppService } from '../app.service';
+import { UserMessageService } from './userMessage.service'
 
 @Controller('userMessage')
 export class UserMessageController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private userMessageService: UserMessageService) {}
 
   @Post()
-  getHello(): string {
-    return this.appService.getHello();
+  userMessage(): string {
+    console.log(this.userMessageService.getBotResponse())
+    return 'User Message Recieved'
   }
 }
