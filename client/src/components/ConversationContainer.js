@@ -6,6 +6,7 @@ import {
   setLanguage,
   updateBotMessage,
   updateConversation,
+  startNewConversation
 } from '../actions';
 
 const uuidv4 = require('uuid/v4');
@@ -38,9 +39,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   initialBotMessageHandler: (data) => {
-    const conversationId = uuidv4();
-    dispatch(updateConversation({ conversationId }));
-    dispatch(fetchBotResponse({ ...data, conversationId }));
+    // TODO: Check if we need these conversationId's
+    // const conversationId = uuidv4();
+    // dispatch(updateConversation({ conversationId }));
+    dispatch(startNewConversation({data}));
   },
   inputHandler: (data, lang, conversationId, previousMessageId, previousMessageStoryblokId) => {
     // TODO: this lang bit might be redundant now.

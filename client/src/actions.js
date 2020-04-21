@@ -60,19 +60,33 @@ function handleErrors(response) {
   return response;
 }
 
-function sendToServer(data) {
-  return fetch('/usermessage', {
+function sendToServer(data, url) {
+  return fetch(url, {
     method: 'POST',
     headers: new Headers({ 'Content-Type': 'application/json' }),
     credentials: 'same-origin',
     body: JSON.stringify(data),
   })
     .then(handleErrors)
-    .then((res) => res.json());
+    .then((res) => res.json())
+    .catch((error) => console.log(error));
 }
 
 export function fetchBotResponse(data) {
-  return (dispatch) => sendToServer(data)
+  return (dispatch) => sendToServer(data , '/usermessage')
+    .then((json) => {
+      console.log(json)
+      dispatch(fetchBotResponseSuccess(json));
+      return json;
+    })
+    .catch(() => dispatch(
+      fetchBotResponseFailure("I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later"),
+    ));
+}
+
+export function startNewConversation(data) {
+  console.log("STARTING CONVO")
+  return (dispatch) => sendToServer(data , '/conversation/new')
     .then((json) => {
       dispatch(fetchBotResponseSuccess(json));
       return json;

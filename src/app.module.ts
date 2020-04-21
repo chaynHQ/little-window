@@ -1,11 +1,12 @@
 require('dotenv').config();
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { UserMessageController } from './userMessage/userMessage.controller';
+import { ConversationController } from './conversation/conversation.controller';
 import { AppService } from './app.service';
 
 @Module({
   imports: [],
-  controllers: [AppController],
+  controllers: [UserMessageController, ConversationController],
   providers: [AppService],
 })
 export class AppModule {}
