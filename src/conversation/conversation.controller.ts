@@ -1,17 +1,18 @@
 import { Controller, Post } from '@nestjs/common';
-import { AppService } from '../app.service';
+import { ConversationService } from './conversation.service'
 
 @Controller('conversation')
 export class ConversationController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private conversationService: ConversationService) {}
+
 
   @Post('new')
   newConversation(): string {
     // Save Conversation
     // DB provider
-
+    this.conversationService.create();
     // Return Bot message
     // Bot Message Provider
-    return this.appService.getHello();
+    return 'Hello';
   }
 }
