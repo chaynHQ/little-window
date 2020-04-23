@@ -13,9 +13,14 @@ export class ConversationService {
     const conversation = new Conversation();
     conversation.stage = "setup";
 
-    await this.conversationRepository.save(conversation).then(conversation => {
-                console.log("Conversation has been saved. Conversation id is", conversation.id);
+    return await this.conversationRepository.save(conversation).then(conversation => {
+                return conversation.id
             });;
+  }
+
+  async get(conversationId: string, column?: string) {
+    const conversation = await this.conversationRepository.findOne(conversationId);
+    return column ? conversation[column] : conversation;
   }
 
 }

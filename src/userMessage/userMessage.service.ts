@@ -4,10 +4,10 @@ import { Injectable } from '@nestjs/common';
 export class UserMessageService {
   constructor() {}
 
-  async getBotResponse() {
-    //// TODO:
-    console.log("GETTING BOT RESPONSE")
-    return 'Bot Response'
-  }
+  // async getBotResponse() {
+  //   //// TODO:
+  //   console.log("GETTING BOT RESPONSE")
+  //   return 'Bot Response'
+  // }
 
 }
