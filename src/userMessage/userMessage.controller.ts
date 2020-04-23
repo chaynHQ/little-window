@@ -8,6 +8,6 @@ export class UserMessageController {
   @Post()
   userMessage(): string {
     console.log(this.userMessageService.getBotResponse())
-    return 'User Message Recieved'
+    return 'Hello'
   }
 }

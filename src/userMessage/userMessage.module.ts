@@ -3,9 +3,10 @@ import { UserMessageController } from './userMessage.controller';
 import { UserMessageService }from './userMessage.service';
 
 @Module({
-  imports: [],
   controllers: [UserMessageController],
   providers: [UserMessageService],
+  imports: [],
+  exports: [UserMessageService]
 })
 
 export class UserMessageModule {}

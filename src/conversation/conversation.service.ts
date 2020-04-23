@@ -5,13 +5,15 @@ import { Conversation } from './conversation.entity';
 
 @Injectable()
 export class ConversationService {
-  constructor(private connection: Connection) {}
+  constructor(
+    @InjectRepository(Conversation)
+    private conversationRepository: Repository<Conversation>) {}
 
   async create() {
-    //// TODO:
     const conversation = new Conversation();
     conversation.stage = "setup";
-    await this.connection.manager.save(conversation).then(conversation => {
+
+    await this.conversationRepository.save(conversation).then(conversation => {
                 console.log("Conversation has been saved. Conversation id is", conversation.id);
             });;
   }

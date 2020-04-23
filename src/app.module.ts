@@ -12,12 +12,13 @@ import { UserMessageModule } from './userMessage/userMessage.module';
 
 
 @Module({
-  imports: [ConfigModule.forRoot({isGlobal: true}),
+  controllers: [],
+  providers: [],
+  imports: [
+    ConfigModule.forRoot({isGlobal: true}),
     TypeOrmModule.forRoot(databaseConfig),
     ConversationModule,
     UserMessageModule
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
