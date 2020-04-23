@@ -6,6 +6,7 @@ export class UserMessageService {
 
   async getBotResponse() {
     //// TODO:
+    console.log("GETTING BOT RESPONSE")
     return 'Bot Response'
   }
 

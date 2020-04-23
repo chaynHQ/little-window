@@ -75,7 +75,6 @@ function sendToServer(data, url) {
 export function fetchBotResponse(data) {
   return (dispatch) => sendToServer(data , '/usermessage')
     .then((json) => {
-      console.log(json)
       dispatch(fetchBotResponseSuccess(json));
       return json;
     })
@@ -85,7 +84,6 @@ export function fetchBotResponse(data) {
 }
 
 export function startNewConversation(data) {
-  console.log("STARTING CONVO")
   return (dispatch) => sendToServer(data , '/conversation/new')
     .then((json) => {
       dispatch(fetchBotResponseSuccess(json));

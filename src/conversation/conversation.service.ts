@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getConnection, Connection } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 import { Conversation } from './conversation.entity';
 
 @Injectable()
@@ -9,10 +9,11 @@ export class ConversationService {
 
   async create() {
     //// TODO:
-    console.log("START HERE")
-    await this.connection.transaction(async manager => {
-      await manager.save('sdfs');
-    });
+    const conversation = new Conversation();
+    conversation.stage = "setup";
+    await this.connection.manager.save(conversation).then(conversation => {
+                console.log("Conversation has been saved. Conversation id is", conversation.id);
+            });;
   }
 
 }

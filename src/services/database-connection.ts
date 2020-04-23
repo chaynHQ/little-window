@@ -14,5 +14,6 @@ export const databaseConfig:TypeOrmModuleOptions = {
       "database": params.pathname.split('/')[1],
       "url": process.env.DATABASE_URL,
       "logging": process.env.NODE_ENV === "dev" ? true : false,
-      "autoLoadEntities": true
+      "autoLoadEntities": true,
+      "synchronize": false
     };

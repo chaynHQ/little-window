@@ -7,15 +7,15 @@ CREATE TYPE supported_languages_type AS ENUM ('fr', 'en');
 
 /* eslint-enable */
 
-CREATE TABLE conversations (
-  ID uuid PRIMARY KEY,
+CREATE TABLE conversation (
+  ID uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   time_created TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   stage stage_type NOT NULL,
   language supported_languages_type,
   gdpr BOOLEAN
 );
 
-CREATE TABLE messages (
+CREATE TABLE message (
   ID uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   conversation_id uuid,
   previous_message_id uuid,
@@ -23,8 +23,8 @@ CREATE TABLE messages (
   sender sender_type NOT NULL,
   storyblok_id uuid,
   time_created TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (previous_message_id) REFERENCES messages(id),
-  FOREIGN KEY (conversation_id) REFERENCES conversations(id)
+  FOREIGN KEY (previous_message_id) REFERENCES message(id),
+  FOREIGN KEY (conversation_id) REFERENCES conversation(id)
 );
 
 // TODO:  ADd in this constraint once we have storyblok_id

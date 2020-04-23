@@ -9,10 +9,10 @@ export class Conversation {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
-    @Column()
-    gdrp: boolean;
+    @Column({"nullable": true})
+    gdpr: boolean;
 
-    @Column()
+    @Column({"nullable": true})
     language: SupportedLanguagesType
 
     @Column()
