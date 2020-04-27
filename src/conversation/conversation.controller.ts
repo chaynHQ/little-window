@@ -13,9 +13,8 @@ export class ConversationController {
   @Post('new')
   async newConversation() {
     const conversationId = await this.conversationService.create();
-    // Return Bot message
-    this.botMessageService.getBotResponse({conversationId: conversationId});
-    // Bot Message Provider
-    return 'Hello';
+
+    return await this.botMessageService.getBotResponse({conversationId: conversationId});
+
   }
 }

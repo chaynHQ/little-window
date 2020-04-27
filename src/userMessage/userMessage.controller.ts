@@ -7,12 +7,12 @@ export class UserMessageController {
   constructor(private botMessageService: BotMessageService) {}
 
   @Post()
-  userMessage(@Body() userMessageDto: UserMessageDto): string {
+  userMessage(@Body() userMessageDto: UserMessageDto){
     // Do userMessage setup pieces
 
     // Get bot message
-    console.log(userMessageDto)
-    console.log(this.botMessageService.getBotResponse(userMessageDto))
+    // console.log(userMessageDto)
+    // console.log(await this.botMessageService.getBotResponse(userMessageDto))
     // Save usermessage
     // return it
     return 'Hello'
