@@ -9,17 +9,12 @@ export class BotMessageDto {
   messageId?: string;
 }
 
-
 class CheckBoxOptions {
   name: string;
   price: number;
   description: string;
 }
 
-class RadioButtonOptions {
+class RadioButtonOptions {}
 
-}
-
-class Resources {
-
-}
+class Resources {}

@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
 
 import { UserMessageController } from './userMessage.controller';
-import {UserMessageService} from './userMessage.service';
+import { UserMessageService } from './userMessage.service';
 
-import { ConversationModule} from '../conversation/conversation.module';
+import { ConversationModule } from '../conversation/conversation.module';
 import { BotMessageModule } from '../botMessage/botMessage.module';
-import { MessageModule } from'../message/message.module';
+import { MessageModule } from '../message/message.module';
 
 @Module({
-  controllers: [ UserMessageController ],
+  controllers: [UserMessageController],
   providers: [UserMessageService],
-  imports: [ ConversationModule, BotMessageModule, MessageModule ]
+  imports: [ConversationModule, BotMessageModule, MessageModule],
 })
-
 export class UserMessageModule {}

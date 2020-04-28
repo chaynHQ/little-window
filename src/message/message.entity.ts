@@ -1,36 +1,44 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, Check} from "typeorm";
-import { Conversation} from '../conversation/conversation.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToOne,
+  JoinColumn,
+  Check,
+} from 'typeorm';
+import { Conversation } from '../conversation/conversation.entity';
 
-export type SenderType = "bot" | "user"
+export type SenderType = 'bot' | 'user';
 
 @Entity()
 @Check(`NOT (sender = 'bot' AND storyblok_id IS NULL)`)
 export class Message {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+  @Column()
+  message: string;
 
-    @Column()
-    message: string;
+  @Column()
+  sender: SenderType;
 
-    @Column()
-    sender: SenderType;
+  @Column()
+  storyblok_id: string;
 
-    @Column()
-    storyblok_id: string;
+  @ManyToOne(
+    () => Conversation,
+    conversation => conversation.id,
+  )
+  conversation_: Conversation;
 
-    @ManyToOne(() => Conversation, conversation => conversation.id)
-    conversation_: Conversation;
+  @OneToOne(() => Message)
+  @JoinColumn()
+  previousmessage_: Message;
 
-    @OneToOne(() => Message)
-    @JoinColumn()
-    previousmessage_: Message;
-
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
-    time_created: Date
-
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  time_created: Date;
 }
-
 
 // CREATE TABLE message (
 //   conversation_id uuid,

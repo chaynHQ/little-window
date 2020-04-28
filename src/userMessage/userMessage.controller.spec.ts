@@ -1,44 +1,47 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserMessageController } from './userMessage.controller';
-import { UserMessageService }from './userMessage.service';
-import { BotMessageService}  from '../botMessage/botMessage.service';
+import { UserMessageService } from './userMessage.service';
+import { BotMessageService } from '../botMessage/botMessage.service';
 import { UserMessageDto } from './userMessage.dto';
 import { ConversationService } from '../conversation/conversation.service';
 import { StoryblokService } from '../botMessage/storyblok.service';
 import { MessageService } from '../message/message.service';
 import { Conversation } from '../conversation/conversation.entity';
-import { Message} from '../message/message.entity';
+import { Message } from '../message/message.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { conversationRepositoryMockFactory } from '../spec/factories/conversationRepository';
 import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
 
 describe('UserMessageController', () => {
   let userMessageController: UserMessageController;
-  const userMessageDto: UserMessageDto =  {
+  const userMessageDto: UserMessageDto = {
     speech: 'Something Something',
-    conversationId: '123456789'
-  }
+    conversationId: '123456789',
+  };
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-        controllers: [UserMessageController],
-        providers: [UserMessageService,
-          BotMessageService,
-          ConversationService,
-          StoryblokService,
-          MessageService,
-          {
-            provide: getRepositoryToken(Conversation),
-            useFactory: conversationRepositoryMockFactory
-          },
-          {
-            provide: getRepositoryToken(Message),
-            useFactory: messageRepositoryMockFactory
-          },
-        ]
+      controllers: [UserMessageController],
+      providers: [
+        UserMessageService,
+        BotMessageService,
+        ConversationService,
+        StoryblokService,
+        MessageService,
+        {
+          provide: getRepositoryToken(Conversation),
+          useFactory: conversationRepositoryMockFactory,
+        },
+        {
+          provide: getRepositoryToken(Message),
+          useFactory: messageRepositoryMockFactory,
+        },
+      ],
     }).compile();
 
-    userMessageController = app.get<UserMessageController>(UserMessageController);
+    userMessageController = app.get<UserMessageController>(
+      UserMessageController,
+    );
   });
 
   describe('root', () => {

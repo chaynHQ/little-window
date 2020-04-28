@@ -7,8 +7,8 @@ export const singleStoryblokResponse = {
     resources: {
       items: [],
     },
-    checkBoxOptions: [ [Object], [Object], [Object] ],
-    radioBoxOptions: []
+    checkBoxOptions: [[Object], [Object], [Object]],
+    radioBoxOptions: [],
   },
   slug: 'language',
 };
