@@ -7,7 +7,7 @@ import { Message } from './message.entity';
 export class MessageService {
   constructor(
     @InjectRepository(Message)
-    private conversationRepository: Repository<Message>,
+    private messageRepository: Repository<Message>
   ) {}
 
   async save(data, sender): Promise<string> {
@@ -18,8 +18,17 @@ export class MessageService {
     message.sender = sender;
     message['storyblok_id'] = data.storyblokId;
 
-    return await this.conversationRepository.save(message).then(message => {
+    return await this.messageRepository.save(message).then(message => {
       return message.id;
     });
+  }
+
+  async get(
+    value: string,
+    column: string,
+  ): Promise<Array<object>> {
+    const messages = await this.messageRepository.find({ where: { column: value } });
+
+    return messages;
   }
 }

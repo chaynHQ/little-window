@@ -3,6 +3,8 @@ import { UserMessageDto } from '../userMessage/userMessage.dto';
 import { ConversationService } from '../conversation/conversation.service';
 import { StoryblokService } from './storyblok.service';
 import { BotMessageDto } from './botMessage.dto';
+import { MessageService } from '../message/message.service';
+import { DialogFlowService } from './dialogFlow.service'
 
 @Injectable()
 export class BotMessageService {
@@ -10,6 +12,8 @@ export class BotMessageService {
     @Inject(forwardRef(() => ConversationService))
     private conversationService: ConversationService,
     private storyblokService: StoryblokService,
+    private messageService: MessageService,
+    private dialogFlowService: DialogFlowService
   ) {}
 
   async getBotResponse(
@@ -19,7 +23,8 @@ export class BotMessageService {
 
     const conversationData = await this.conversationService.get(conversationId);
 
-    const conversationStage = conversationData.stage;
+    // const conversationStage = conversationData.stage;
+    const conversationStage: string = 'support'
 
     // TODO: Refactor these into one final call to formatBotResponse at end.
     switch (conversationStage) {
@@ -39,8 +44,7 @@ export class BotMessageService {
         );
       }
       case 'feedback': {
-        // const feedbackBotResponse = await this.getFeedbackMessage({...userMessageDto, language: conversationData.language});
-        const feedbackBotResponse = await this.getFeedbackMessage();
+        const feedbackBotResponse = await this.getFeedbackMessage({...userMessageDto, language: conversationData.language});
         return this.formatBotResponse(
           feedbackBotResponse,
           [],
@@ -48,13 +52,12 @@ export class BotMessageService {
           conversationId,
         );
       }
-      //   case 'support': {
-      // TODO: SET LANGUAGE WITH EACH REQUEST
-      //     const { supportBotResponse, suffixMessages } = await this.getSupportMessage(req);
-      //     return formatBotResponse(supportBotResponse, [], suffixMessages, conversationId);
-      //   }
+      case 'support': {
+        const { supportBotResponse, suffixMessages } = await this.getSupportMessage({...userMessageDto, language: conversationData.language});
+        return this.formatBotResponse(supportBotResponse, [], suffixMessages, conversationId);
+      }
       default:
-        // Some error
+        throw conversationStage + " is not a recognised conversation stage."
         return null;
     }
   }
@@ -114,88 +117,87 @@ export class BotMessageService {
     return formattedResponse;
   }
 
-  getFeedbackMessage = async (): Promise<string> => {
-    // const { conversationId } = data;
+  getFeedbackMessage = async (data): Promise<{}> => {
+    const conversationId = data.conversationId;
     // // Get all the bot responses
-    // const botResponses = await getBotResponsesBySlug('feedback', data.language);
+    const botResponses = await this.storyblokService.getBotResponsesBySlug('feedback', data.language);
     // // Get all the user messages by convo id
-    // const userMessages = await getMessagesByColumns([
-    //   { column: 'conversation_id', value: conversationId },
-    // ]);
-    //
-    // // SORT bot responses
-    // botResponses.sort((a, b) => {
-    //   if (a.slug < b.slug) {
-    //     return -1;
-    //   } if (a.slug > b.slug) {
-    //     return 1;
-    //   }
-    //   return 0;
-    // });
-    //
-    // const feedbackBotResponse = botResponses.find((response) => {
-    //   if (userMessages.filter(
-    //     (userMessage) => userMessage.storyblok_id === response.uuid,
-    //   ).length === 0) {
-    //     return true;
-    //   }
-    //   return false;
-    // });
-    //
-    //   return feedbackBotResponse;
-    return 'Hello';
+    const userMessages = await this.messageService.get('conversation_id', conversationId);
+
+    // Sort bot responses
+    botResponses.sort((a, b) => {
+      if (a.slug < b.slug) {
+        return -1;
+      } if (a.slug > b.slug) {
+        return 1;
+      }
+      return 0;
+    });
+
+    const feedbackBotResponse = botResponses.find((response) => {
+      if (userMessages.filter(
+        (userMessage) => userMessage['storyblok_id'] === response['uuid'],
+      ).length === 0) {
+        return true;
+      }
+      return false;
+    });
+
+    return feedbackBotResponse;
   };
 
-  getSupportMessage = async (): Promise<object> => {
-    // const { previousMessageStoryblokId, conversationId, selectedTags } = data;
-    // const userMessage = data.speech;
-    //
-    // const botResponses = await getBotResponsesBySlug('support', data.language);
-    // const botTopicResponses = await getBotResponsesBySlug('topic', data.language);
-    //
+  getSupportMessage = async (data): Promise<{ supportBotResponse: object; suffixMessages: object }> => {
+    const previousMessageStoryblokId = data.previousMessageStoryblokId;
+    const conversationId = data.conversationId;
+    const selectedTags = data.selectedTags;
+    const userMessage = data.speech;
+
+    const botResponses = await this.storyblokService.getBotResponsesBySlug('support', data.language);
+    const botTopicResponses = await this.storyblokService.getBotResponsesBySlug('topic', data.language);
+
     // const { kickoffSupportMessageStoryblokId } = process.env;
-    // const { freeTextSupportRequestStoryblokId } = process.env;
+    const freeTextSupportRequestStoryblokId = process.env.freeTextSupportRequestStoryblokId;
     // const { radioButtonSupportRequestStoryblokId } = process.env;
     // const { resourceStoryblokId } = process.env;
     // const { additionalResourcesStoryblokId } = process.env;
     // const { anythingElseStoryblokId } = process.env;
-    //
-    const supportBotResponse = {};
-    const suffixMessages = [];
-    //
-    // if (previousMessageStoryblokId === freeTextSupportRequestStoryblokId) {
-    //   let dialogFlowResponse = await getDialogflowResponse(conversationId, userMessage);
-    //   let topicResponse = {};
-    //
-    //   [topicResponse] = botTopicResponses.filter(
-    //     (response) => response.name === dialogFlowResponse,
-    //   );
-    //   if (!topicResponse) {
-    //     [topicResponse] = botResponses.filter(
-    //       (response) => response.name === 'Fallback',
-    //     );
-    //     dialogFlowResponse = 'Fallback';
-    //   }
-    //
-    //   topicResponse.speech = `TOPIC-${dialogFlowResponse}`;
-    //   topicResponse.radioButtonOptions = topicResponse.content.resources.items.reduce(
-    //     (tags, resource) => {
-    //       if (tags.indexOf(resource.tag) === -1) {
-    //         tags.push(resource.tag);
-    //       }
-    //       return tags;
-    //     }, [],
-    //   ).map((tag) => ({ postback: `TOPIC-${dialogFlowResponse}`, text: tag }));
-    //
-    //   topicResponse.content.resources = [];
-    //   supportBotResponse = topicResponse;
-    //
-    //   if (dialogFlowResponse === 'Emergency' || dialogFlowResponse === 'Fallback') {
-    //     supportBotResponse.checkBoxOptions = botTopicResponses.map(
-    //       (response) => ({ postback: `TOPIC-${response.name}`, text: response.name }),
-    //     );
-    //   }
-    // } else if (userMessage.startsWith('TOPIC-')) {
+
+    let supportBotResponse = {};
+    let suffixMessages = [];
+    if (previousMessageStoryblokId === freeTextSupportRequestStoryblokId) {
+      let dialogFlowResponse = await this.dialogFlowService.getDialogflowIntent(conversationId, userMessage);
+      let topicResponse = {};
+
+      [topicResponse] = botTopicResponses.filter(
+        (response) => response.name === dialogFlowResponse,
+      );
+      if (!topicResponse) {
+        [topicResponse] = botResponses.filter(
+          (response) => response.name === 'Fallback',
+        );
+        dialogFlowResponse = 'Fallback';
+      }
+
+      topicResponse['speech'] = `TOPIC-${dialogFlowResponse}`;
+      topicResponse['radioButtonOptions'] = topicResponse['content'].resources.items.reduce(
+        (tags, resource) => {
+          if (tags.indexOf(resource.tag) === -1) {
+            tags.push(resource.tag);
+          }
+          return tags;
+        }, [],
+      ).map((tag) => ({ postback: `TOPIC-${dialogFlowResponse}`, text: tag }));
+
+      topicResponse['content'].resources = [];
+      supportBotResponse = topicResponse;
+
+      if (dialogFlowResponse === 'Emergency' || dialogFlowResponse === 'Fallback') {
+        supportBotResponse['checkBoxOptions'] = botTopicResponses.map(
+          (response) => ({ postback: `TOPIC-${response.name}`, text: response.name }),
+        );
+      }
+    }
+    //  else if (userMessage.startsWith('TOPIC-')) {
     //   const topic = userMessage.slice('TOPIC-'.length);
     //   const [topicResponse] = botTopicResponses.filter((response) => response.name === topic);
     //
@@ -300,8 +302,7 @@ export class BotMessageService {
       }
     } else {
       await this.conversationService.update('stage', 'support', conversationId);
-      // const supportMessage = await this.getSupportMessage(data);
-      const supportMessage = await this.getSupportMessage();
+      const supportMessage = await this.getSupportMessage(data);
       setupBotResponse = supportMessage['supportBotResponse'];
     }
 
