@@ -4,6 +4,7 @@ import { UserMessageDto } from './userMessage.dto'
 import { ConversationService } from '../conversation/conversation.service';
 import { UserMessageService } from './userMessage.service'
 import { MessageService } from '../message/message.service';
+import { BotMessageDto } from '../botMessage/botMessage.dto'
 
 @Controller('userMessage')
 export class UserMessageController {
@@ -16,41 +17,36 @@ export class UserMessageController {
 
 
   @Post()
-  async userMessage(@Body() userMessageDto:UserMessageDto){
+  async userMessage(@Body() userMessageDto: UserMessageDto){
     const conversationId: string = userMessageDto.conversationId;
     const previousMessageStoryblokId: string = userMessageDto.previousMessageStoryblokId;
     const userResponse: string = userMessageDto.speech;
 
     // If setup, setup the conversation
-    const conversationStage = await this.conversationService.get(conversationId, 'stage');
-
+    const conversationStage: string = await this.conversationService.get(conversationId, 'stage');
     if (conversationStage === 'setup'){
       await this.userMessageService.setupConversation(userResponse, conversationId, previousMessageStoryblokId)
     }
-    // Save user Message
-    await this.messageService.save(userMessageDto, 'user');
 
-    console.log("START HERE")
-    console.log("WITH TESTS")
+    // Save user Message
+    const userMessageId = await this.messageService.save(userMessageDto, 'user');
+
     // Get bot Message & Save it
-    // this.botMessageService.getBotResponse(userMessageDto).then(async (botResponses) => {
-    //   const formattedResponses = [];
-    //   for (const [index, response] of botResponses.entries()) {
-    //     if (index === 0) {
-    //       response.previousMessageId = userMessageId;
-    //     } else {
-    //       response.previousMessageId = botResponses[index - 1].messageId;
-    //     }
-    //     response.messageId = await saveMessage(response, 'bot');
-    //
-    //     formattedResponses.push(response);
-    //   }
-    //   return formattedResponses;
-    // });
-    //
-    // // Save usermessage
-    //
-    // // return it
-    return 'Hello'
+    return this.botMessageService.getBotResponse(userMessageDto).then(async (botResponses: Array<BotMessageDto>) => {
+      const formattedResponses = [];
+      for (const [index, response] of botResponses.entries()) {
+        if (index === 0) {
+          response.previousMessageId = userMessageId;
+        } else {
+          response.previousMessageId = botResponses[index - 1].messageId;
+        }
+
+        response.messageId = await this.messageService.save(response, 'bot');
+
+        formattedResponses.push(response);
+      }
+
+      return formattedResponses;
+    });
   }
 }

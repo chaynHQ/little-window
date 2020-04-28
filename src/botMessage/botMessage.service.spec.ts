@@ -33,7 +33,7 @@ describe('BotMessageService', () => {
     }).compile();
 
     botMessageService = app.get<BotMessageService>(BotMessageService);
-        storyblokService = app.get<StoryblokService>(StoryblokService)
+    storyblokService = app.get<StoryblokService>(StoryblokService)
   });
 
   describe('getBotResponse', () => {

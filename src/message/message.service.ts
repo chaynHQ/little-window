@@ -15,9 +15,11 @@ export class MessageService {
     message.conversation_ = data.conversationId
     message.previousmessage_ = data.previousMessageId
     message.sender = sender
+    message.storyblok_id = data.storyblokId
 
     return await this.conversationRepository.save(message).then(message => {
-            });
+      return message.id
+    });
   }
 
 }

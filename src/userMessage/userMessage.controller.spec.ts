@@ -41,9 +41,9 @@ describe('UserMessageController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello"', () => {
+    it('should return array', () => {
       return userMessageController.userMessage(userMessageDto).then(data => {
-         expect(data.match('Hello'));
+        expect(Array.isArray(data)).toBe(true);
       });
     });
   });
