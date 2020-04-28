@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-const StoryblokClient = require('storyblok-js-client');
+const StoryblokClient = require('storyblok-js-client');// eslint-disable-line
 
 @Injectable()
 export class StoryblokService {
