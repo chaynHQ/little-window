@@ -271,31 +271,31 @@ export class BotMessageService {
       this.conversationService.get(conversationId, 'gdpr'),
     ]);
 
-    if (!isLanguageSet) {
+    if (isLanguageSet === null) {
       // TODO: Need better checking in place to ensure users can't type this in
       // when they are typing in a general input.
       // Potential solution validate how the input was inputed by the user.
       if (userMessage === 'SETUP-language-None') {
         [setupBotResponse] = botResponses.filter(
-          response => response.name === 'new-language',
+          response => response['name'] === 'new-language',
         );
       } else {
         [setupBotResponse] = botResponses.filter(
-          response => response.slug === 'language',
+          response => response['slug'] === 'language',
         );
       }
-    } else if (!isGDPRSet) {
-      if (isGDPRSet === false) {
+    } else if (isGDPRSet === null) {
+      if (isGDPRSet === 'false') {
         [setupBotResponse] = botResponses.filter(
-          response => response.slug === 'gdpr-reject',
+          response => response['slug'] === 'gdpr-reject',
         );
       } else if (userMessage === 'SETUP-gdpr-more') {
         [setupBotResponse] = botResponses.filter(
-          response => response.slug === 'gdpr-more',
+          response => response['slug'] === 'gdpr-more',
         );
       } else {
         [setupBotResponse] = botResponses.filter(
-          response => response.name === 'GDPR',
+          response => response['name'] === 'GDPR',
         );
       }
     } else {
@@ -308,14 +308,13 @@ export class BotMessageService {
     // If someone just asked for a language we don't have tell
     // them we will speak in English
     if (
-      botResponses.filter(response => response.name === 'new-language')[0] &&
-      botResponses.filter(response => response.name === 'new-language')[0]
-        .uuid === previousMessageStoryblokId
+      botResponses.filter(response => response['name'] === 'new-language')[0] &&
+      botResponses.filter(response => response['name'] === 'new-language')[0]['uuid'] === previousMessageStoryblokId
     ) {
       prefixMessages.concat(
         botResponses.filter(
-          response => response.name === 'new-language-submitted',
-        )[0].content.speech.items,
+          response => response['name'] === 'new-language-submitted',
+        )[0]['content'].speech.items,
       );
     }
     return { setupBotResponse, prefixMessages };

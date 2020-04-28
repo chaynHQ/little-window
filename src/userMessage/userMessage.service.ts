@@ -23,7 +23,7 @@ export class UserMessageService {
 
     const previousMessageWasSetupMessage =
       botResponses.filter(
-        response => response.uuid === previousMessageStoryblokId,
+        response => response['uuid']=== previousMessageStoryblokId,
       ).length > 0;
 
     if (previousMessageWasSetupMessage) {
@@ -40,8 +40,7 @@ export class UserMessageService {
           throw error;
         }
       } else if (
-        botResponses.filter(response => response.name === 'new-language')[0]
-          .uuid === previousMessageStoryblokId
+        botResponses.filter(response => response['name'] === 'new-language')[0]['uuid'] === previousMessageStoryblokId
       ) {
         await this.conversationService.update('language', 'en', conversationId);
       }

@@ -3,7 +3,7 @@ const StoryblokClient = require('storyblok-js-client'); // eslint-disable-line
 
 @Injectable()
 export class StoryblokService {
-  async getBotResponsesBySlug(slug: string, lang?: string): Promise<{}> {
+  async getBotResponsesBySlug(slug: string, lang?: string): Promise<Array<object>> {
     const Storyblok = new StoryblokClient({
       accessToken: process.env.STORYBLOK_TOKEN,
     });
