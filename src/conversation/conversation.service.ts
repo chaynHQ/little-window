@@ -9,7 +9,7 @@ export class ConversationService {
     @InjectRepository(Conversation)
     private conversationRepository: Repository<Conversation>) {}
 
-  async create() {
+  async create(): Promise<string> {
     const conversation = new Conversation();
     conversation.stage = "setup";
 
@@ -18,7 +18,10 @@ export class ConversationService {
             });
   }
 
-  async get(conversationId: string, column?: string) {
+  async get(conversationId: string): Promise<{language, stage}>;
+  async get(conversationId: string, column: string): Promise<string>;
+
+  async get(conversationId: string, column?: string): Promise<string |{language, stage}> {
     const conversation = await this.conversationRepository.findOne(conversationId);
 
     if (!conversation){
@@ -28,7 +31,7 @@ export class ConversationService {
     return column ? conversation[column] : conversation;
   }
 
-  async update (column, value, conversationId) {
+  async update (column, value, conversationId):Promise<object> {
     const conversation = new Conversation();
     conversation[column] = value;
     conversation.id = conversationId

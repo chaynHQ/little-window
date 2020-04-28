@@ -2,6 +2,7 @@ import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { UserMessageDto } from '../userMessage/userMessage.dto'
 import { ConversationService } from '../conversation/conversation.service'
 import { StoryblokService } from './storyblok.service'
+import { BotMessageDto } from './botMessage.dto'
 
 @Injectable()
 export class BotMessageService {
@@ -11,7 +12,7 @@ export class BotMessageService {
     private storyblokService: StoryblokService
   ) {}
 
-  async getBotResponse(userMessageDto: UserMessageDto){
+  async getBotResponse(userMessageDto: UserMessageDto): Promise<Array<BotMessageDto>>{
     const conversationId: string = userMessageDto.conversationId;
 
     const conversationData = await this.conversationService.get(conversationId);
@@ -21,17 +22,16 @@ export class BotMessageService {
     // TODO: Refactor these into one final call to formatBotResponse at end.
     switch (conversationStage) {
       case 'setup': {
-         // TODO: SET LANGUAGE WITH EACH REQUEST
         const { setupBotResponse, prefixMessages } = await this.getSetupMessage(
           {...userMessageDto, language: conversationData.language}
         );
         return this.formatBotResponse(setupBotResponse, prefixMessages, [], conversationId);
       }
-    //   case 'feedback': {
-    // TODO: SET LANGUAGE WITH EACH REQUEST
-    //     const feedbackBotResponse = await this.getFeedbackMessage(req);
-    //     return formatBotResponse(feedbackBotResponse, [], [], conversationId);
-    //   }
+      case 'feedback': {
+        // const feedbackBotResponse = await this.getFeedbackMessage({...userMessageDto, language: conversationData.language});
+        const feedbackBotResponse = await this.getFeedbackMessage();
+        return this.formatBotResponse(feedbackBotResponse, [], [], conversationId);
+      }
     //   case 'support': {
     // TODO: SET LANGUAGE WITH EACH REQUEST
     //     const { supportBotResponse, suffixMessages } = await this.getSupportMessage(req);
@@ -41,16 +41,18 @@ export class BotMessageService {
         // Some error
         return null;
     }
-
-    return 'Bot Response'
   }
 
-  formatBotResponse = (response, prefixMessages, suffixMessages, conversationId: string) => {
+  formatBotResponse (response, prefixMessages, suffixMessages, conversationId: string):Array<BotMessageDto> {
 
     // Check that response isn't empty
     const formattedResponse = [];
     if (!response) {
-      return [{ speech: 'Something went wrong. My team have been notified and are trying to fix the issue' }];
+
+      return [{
+        speech: 'Something went wrong. My team have been notified and are trying to fix the issue',
+        conversationId: conversationId,
+       }];
     }
 
     [...prefixMessages, response, ...suffixMessages].forEach((messageGroup, i, arr) => {
@@ -83,39 +85,40 @@ export class BotMessageService {
     });
     return formattedResponse;
   };
-  //
-  // const getFeedbackMessage = async (data) => {
-  //   const { conversationId } = data;
-  //   // Get all the bot responses
-  //   const botResponses = await getBotResponsesBySlug('feedback', data.language);
-  //   // Get all the user messages by convo id
-  //   const userMessages = await getMessagesByColumns([
-  //     { column: 'conversation_id', value: conversationId },
-  //   ]);
-  //
-  //   // SORT bot responses
-  //   botResponses.sort((a, b) => {
-  //     if (a.slug < b.slug) {
-  //       return -1;
-  //     } if (a.slug > b.slug) {
-  //       return 1;
-  //     }
-  //     return 0;
-  //   });
-  //
-  //   const feedbackBotResponse = botResponses.find((response) => {
-  //     if (userMessages.filter(
-  //       (userMessage) => userMessage.storyblok_id === response.uuid,
-  //     ).length === 0) {
-  //       return true;
-  //     }
-  //     return false;
-  //   });
+
+  getFeedbackMessage = async (): Promise<string> => {
+    // const { conversationId } = data;
+    // // Get all the bot responses
+    // const botResponses = await getBotResponsesBySlug('feedback', data.language);
+    // // Get all the user messages by convo id
+    // const userMessages = await getMessagesByColumns([
+    //   { column: 'conversation_id', value: conversationId },
+    // ]);
+    //
+    // // SORT bot responses
+    // botResponses.sort((a, b) => {
+    //   if (a.slug < b.slug) {
+    //     return -1;
+    //   } if (a.slug > b.slug) {
+    //     return 1;
+    //   }
+    //   return 0;
+    // });
+    //
+    // const feedbackBotResponse = botResponses.find((response) => {
+    //   if (userMessages.filter(
+    //     (userMessage) => userMessage.storyblok_id === response.uuid,
+    //   ).length === 0) {
+    //     return true;
+    //   }
+    //   return false;
+    // });
   //
   //   return feedbackBotResponse;
-  // };
-  //
-  getSupportMessage = async (data) => {
+  return 'Hello'
+  };
+
+  getSupportMessage = async (): Promise<object> => {
     // const { previousMessageStoryblokId, conversationId, selectedTags } = data;
     // const userMessage = data.speech;
     //
@@ -129,8 +132,8 @@ export class BotMessageService {
     // const { additionalResourcesStoryblokId } = process.env;
     // const { anythingElseStoryblokId } = process.env;
     //
-    let supportBotResponse = {};
-    let suffixMessages = [];
+    const supportBotResponse = {};
+    const suffixMessages = [];
     //
     // if (previousMessageStoryblokId === freeTextSupportRequestStoryblokId) {
     //   let dialogFlowResponse = await getDialogflowResponse(conversationId, userMessage);
@@ -223,8 +226,7 @@ export class BotMessageService {
     return { supportBotResponse, suffixMessages };
   };
 
-
-  getSetupMessage = async (data) => {
+  getSetupMessage = async (data): Promise<{setupBotResponse: object, prefixMessages: object }> => {
     const conversationId = data.conversationId;
     const language = data.language;
     const userMessage = data.speech;
@@ -233,7 +235,7 @@ export class BotMessageService {
     let setupBotResponse = {};
     const prefixMessages = [];
 
-    let [botResponses, isLanguageSet, isGDPRSet] = await Promise.all([
+    const [botResponses, isLanguageSet, isGDPRSet] = await Promise.all([
       this.storyblokService.getBotResponsesBySlug('setup', language),
       this.conversationService.get(conversationId, 'language'),
       this.conversationService.get(conversationId, 'gdpr')
@@ -263,8 +265,9 @@ export class BotMessageService {
         'support',
         conversationId,
       );
-      const supportMessage = await this.getSupportMessage(data);
-      setupBotResponse = supportMessage.supportBotResponse;
+      // const supportMessage = await this.getSupportMessage(data);
+      const supportMessage = await this.getSupportMessage();
+      setupBotResponse = supportMessage['supportBotResponse'];
     }
 
     // If someone just asked for a language we don't have tell

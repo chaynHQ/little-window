@@ -3,9 +3,8 @@ const StoryblokClient = require('storyblok-js-client');
 
 @Injectable()
 export class StoryblokService {
-  constructor() {}
 
-  async getBotResponsesBySlug (slug: string, lang?: string) {
+  async getBotResponsesBySlug (slug: string, lang?: string): Promise<{}> {
     const Storyblok = new StoryblokClient({
        accessToken: process.env.STORYBLOK_TOKEN,
      });
@@ -13,7 +12,7 @@ export class StoryblokService {
 
     try {
       const responses = await Storyblok.get('cdn/stories/', {
-        starts_with: lang ? `${lang}/${slug}` : slug,
+        'starts_with': lang ? `${lang}/${slug}` : slug,
         version,
       })
 
@@ -21,7 +20,6 @@ export class StoryblokService {
     } catch(err) {
       throw err
     }
-
 
   }
 

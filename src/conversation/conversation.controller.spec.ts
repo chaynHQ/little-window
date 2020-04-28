@@ -1,12 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConversationController } from './conversation.controller';
 import { ConversationService }from './conversation.service';
 import { Conversation } from './conversation.entity';
-import { UserMessageModule } from '../userMessage/userMessage.module';
 import { BotMessageService } from '../botMessage/botMessage.service';
 import { StoryblokService } from '../botMessage/storyblok.service';
-import { repositoryMockFactory } from '../spec/factories/repository';
+import { conversationRepositoryMockFactory } from '../spec/factories/conversationRepository';
 import { singleStoryblokResponse } from '../spec/data/singleStoryblokResponse'
 
 jest.mock("../botMessage/storyblok.service");
@@ -22,7 +21,7 @@ describe('ConversationController', () => {
         ConversationService,
         {
           provide: getRepositoryToken(Conversation),
-          useFactory: repositoryMockFactory
+          useFactory: conversationRepositoryMockFactory
         },
         BotMessageService,
         StoryblokService

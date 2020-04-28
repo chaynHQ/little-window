@@ -9,11 +9,12 @@ import { MessageService } from '../message/message.service';
 import { Conversation } from '../conversation/conversation.entity';
 import { Message} from '../message/message.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { conversationRepositoryMockFactory } from '../spec/factories/conversationRepository';
+import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
 
 describe('UserMessageController', () => {
   let userMessageController: UserMessageController;
-  let userMessageDto: UserMessageDto =  {
+  const userMessageDto: UserMessageDto =  {
     speech: 'Something Something',
     conversationId: '123456789'
   }
@@ -28,11 +29,11 @@ describe('UserMessageController', () => {
           MessageService,
           {
             provide: getRepositoryToken(Conversation),
-            useFactory: repositoryMockFactory
+            useFactory: conversationRepositoryMockFactory
           },
           {
             provide: getRepositoryToken(Message),
-            useFactory: repositoryMockFactory
+            useFactory: messageRepositoryMockFactory
           },
         ]
     }).compile();
@@ -48,19 +49,3 @@ describe('UserMessageController', () => {
     });
   });
 });
-
-// @ts-ignore
-export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(() => ({
-  save: jest.fn(() => Promise.resolve({id:'123456789'})),
-  findOne: jest.fn(() => Promise.resolve({
-    id: '6595164b-8546-4193-8836-64294221a4e0',
-    gdpr: null,
-    language: null,
-    stage: 'setup',
-    time_created: '2020-04-27T09:05:13.834Z'
-  }))
-}));
-
-export type MockType<T> = {
- [P in keyof T]: jest.Mock<{}>;
-};

@@ -19,10 +19,10 @@ export class Message {
     @Column()
     storyblok_id: string;
 
-    @ManyToOne(type => Conversation, conversation => conversation.id)
+    @ManyToOne(() => Conversation, conversation => conversation.id)
     conversation_: Conversation;
 
-    @OneToOne(type => Message)
+    @OneToOne(() => Message)
     @JoinColumn()
     previousmessage_: Message;
 

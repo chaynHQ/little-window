@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BotMessageService } from '../botMessage/botMessage.service'
-import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserMessageDto } from '../userMessage/userMessage.dto';
 import { ConversationService } from '../conversation/conversation.service';
 import { StoryblokService } from './storyblok.service';
-import { repositoryMockFactory } from '../spec/factories/repository';
+import { conversationRepositoryMockFactory } from '../spec/factories/conversationRepository';
 import { Conversation } from '../conversation/conversation.entity';
 import { singleStoryblokResponse } from '../spec/data/singleStoryblokResponse'
 
@@ -14,7 +14,7 @@ jest.mock("../botMessage/storyblok.service");
 describe('BotMessageService', () => {
   let botMessageService: BotMessageService;
   let storyblokService: StoryblokService;
-  let userMessageDto: UserMessageDto =  {
+  const userMessageDto: UserMessageDto =  {
     speech: 'Something Something',
     conversationId: '123456789'
   }
@@ -27,7 +27,7 @@ describe('BotMessageService', () => {
         StoryblokService,
         {
           provide: getRepositoryToken(Conversation),
-          useFactory: repositoryMockFactory
+          useFactory: conversationRepositoryMockFactory
         },
       ],
     }).compile();

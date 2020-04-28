@@ -9,7 +9,7 @@ export class UserMessageService {
     private storyblokService: StoryblokService
   ) {}
 
-  setupConversation = async (userResponse, conversationId, previousMessageStoryblokId) => {
+  setupConversation = async (userResponse, conversationId, previousMessageStoryblokId): Promise<void> => {
     // TODO: Can we do something nice with the getBotResponsesBySlug
     // so we don't have to filter afterwards.
     const splitUserResponse = userResponse.split('-');

@@ -5,11 +5,8 @@ import {
   addUserInputToStack,
   setLanguage,
   updateBotMessage,
-  updateConversation,
-  startNewConversation
+  startNewConversation,
 } from '../actions';
-
-const uuidv4 = require('uuid/v4');
 
 function addMessageToDisplayList(displayedMessages, hiddenMessages, dispatch) {
   const speed = {
@@ -42,7 +39,7 @@ const mapDispatchToProps = (dispatch) => ({
     // TODO: Check if we need these conversationId's
     // const conversationId = uuidv4();
     // dispatch(updateConversation({ conversationId }));
-    dispatch(startNewConversation({data}));
+    dispatch(startNewConversation({ data }));
   },
   inputHandler: (data, lang, conversationId, previousMessageId, previousMessageStoryblokId) => {
     // TODO: this lang bit might be redundant now.

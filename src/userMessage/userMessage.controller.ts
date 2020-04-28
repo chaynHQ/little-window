@@ -17,7 +17,7 @@ export class UserMessageController {
 
 
   @Post()
-  async userMessage(@Body() userMessageDto: UserMessageDto){
+  async userMessage(@Body() userMessageDto: UserMessageDto): Promise<Array<BotMessageDto>>{
     const conversationId: string = userMessageDto.conversationId;
     const previousMessageStoryblokId: string = userMessageDto.previousMessageStoryblokId;
     const userResponse: string = userMessageDto.speech;

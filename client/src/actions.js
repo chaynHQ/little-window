@@ -69,11 +69,11 @@ function sendToServer(data, url) {
   })
     .then(handleErrors)
     .then((res) => res.json())
-    .catch((error) => console.log(error));
+    .catch();
 }
 
 export function fetchBotResponse(data) {
-  return (dispatch) => sendToServer(data , '/usermessage')
+  return (dispatch) => sendToServer(data, '/usermessage')
     .then((json) => {
       dispatch(fetchBotResponseSuccess(json));
       return json;
@@ -84,7 +84,7 @@ export function fetchBotResponse(data) {
 }
 
 export function startNewConversation(data) {
-  return (dispatch) => sendToServer(data , '/conversation/new')
+  return (dispatch) => sendToServer(data, '/conversation/new')
     .then((json) => {
       dispatch(fetchBotResponseSuccess(json));
       return json;
