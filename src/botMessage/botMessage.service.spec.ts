@@ -8,7 +8,7 @@ import { conversationRepositoryMockFactory } from '../spec/factories/conversatio
 import { Conversation } from '../conversation/conversation.entity';
 import { singleStoryblokResponse } from '../spec/data/singleStoryblokResponse';
 import { MessageService } from '../message/message.service';
-import {DialogFlowService} from './dialogflow.service';
+import {DialogFlowService} from './dialogFlow.service';
 import { Message } from '../message/message.entity';
 import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
 
