@@ -184,7 +184,7 @@ export class BotMessageService {
       data.language,
     );
 
-    const kickoffSupportMessageStoryblokId = process.env;
+    const kickoffSupportMessageStoryblokId = process.env.kickoffSupportMessageStoryblokId;
     const freeTextSupportRequestStoryblokId =
       process.env.freeTextSupportRequestStoryblokId;
     const radioButtonSupportRequestStoryblokId = process.env;

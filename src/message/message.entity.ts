@@ -39,19 +39,3 @@ export class Message {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   time_created: Date;
 }
-
-// CREATE TABLE message (
-//   conversation_id uuid,
-// FOREIGN KEY (conversation_id) REFERENCES conversation(id)
-//   previous_message_id uuid,
-//
-//   FOREIGN KEY (previous_message_id) REFERENCES message(id),
-//
-// );
-
-// TODO:  ADd in this constraint once we have storyblok_id
-// CONSTRAINT if_sender_is_bot_then_storyblok_id_is_not_null
-//    CHECK ( NOT (sender = 'bot' AND storyblok_id IS NULL) )
-
-// sender sender_type NOT NULL,
-//   storyblok_id uuid,

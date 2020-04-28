@@ -12,7 +12,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
   password: password,
   database: params.pathname.split('/')[1],
   url: process.env.DATABASE_URL,
-  logging: process.env.NODE_ENV === 'dev' ? true : false,
+  logging: process.env.NODE_ENV === 'dev' ? false : true,
   autoLoadEntities: true,
   synchronize: false,
 };

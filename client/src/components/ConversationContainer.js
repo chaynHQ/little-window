@@ -36,9 +36,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   initialBotMessageHandler: (data) => {
-    // TODO: Check if we need these conversationId's
-    // const conversationId = uuidv4();
-    // dispatch(updateConversation({ conversationId }));
     dispatch(startNewConversation({ data }));
   },
   inputHandler: (data, lang, conversationId, previousMessageId, previousMessageStoryblokId) => {
