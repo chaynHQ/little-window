@@ -7,6 +7,10 @@ import { StoryblokService } from './storyblok.service';
 import { conversationRepositoryMockFactory } from '../spec/factories/conversationRepository';
 import { Conversation } from '../conversation/conversation.entity';
 import { singleStoryblokResponse } from '../spec/data/singleStoryblokResponse';
+import { MessageService } from '../message/message.service';
+import {DialogFlowService} from './dialogflow.service';
+import { Message } from '../message/message.entity';
+import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
 
 jest.mock('../botMessage/storyblok.service');
 
@@ -27,6 +31,12 @@ describe('BotMessageService', () => {
         {
           provide: getRepositoryToken(Conversation),
           useFactory: conversationRepositoryMockFactory,
+        },
+        MessageService,
+        DialogFlowService,
+        {
+          provide: getRepositoryToken(Message),
+          useFactory: messageRepositoryMockFactory,
         },
       ],
     }).compile();

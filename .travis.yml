@@ -10,5 +10,5 @@ before_script:
 script:
   - npm run lint
   - npm run test
-  - cd client && npm test --passWithNoTests
+  - cd client && npm run test --passWithNoTests
   - npm run lint

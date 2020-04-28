@@ -6,6 +6,7 @@ import { UserMessageDto } from './userMessage.dto';
 import { ConversationService } from '../conversation/conversation.service';
 import { StoryblokService } from '../botMessage/storyblok.service';
 import { MessageService } from '../message/message.service';
+import { DialogFlowService } from '../botMessage/dialogFlow.service'
 import { Conversation } from '../conversation/conversation.entity';
 import { Message } from '../message/message.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -28,6 +29,7 @@ describe('UserMessageController', () => {
         ConversationService,
         StoryblokService,
         MessageService,
+        DialogFlowService,
         {
           provide: getRepositoryToken(Conversation),
           useFactory: conversationRepositoryMockFactory,

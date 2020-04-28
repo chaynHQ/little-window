@@ -7,15 +7,10 @@ export const messageRepositoryMockFactory: () => MockType<
   Repository<Message>
 > = jest.fn(() => ({
   save: jest.fn(() => Promise.resolve({ id: '123456789' })),
-  findOne: jest.fn(() =>
-    Promise.resolve({
-      id: '6595164b-8546-4193-8836-64294221a4e0',
-      gdpr: null,
-      language: null,
-      stage: 'setup',
-      'time_created': '2020-04-27T09:05:13.834Z',
-    }),
-  ),
+  find: jest.fn(() => Promise.resolve([
+    {speech: 'foo', conversation_: '12345', previousmessage_: '12345', storyblok_id: '1234'},
+    {speech: 'foo', conversation_: '12345', previousmessage_: '12345', storyblok_id: '1234'}
+  ]))
 }));
 
 export type MockType<T> = {
