@@ -24,6 +24,7 @@ const messages = (state = [], action) => {
         },
       ];
     case ADD_BOT_MESSAGE: {
+                  console.log("INCOMING: ", action.data)
       const {
         timedelay,
       } = action.data;

@@ -61,6 +61,7 @@ function handleErrors(response) {
 }
 
 function sendToServer(data, url) {
+  console.log("OUTGOING: ", data)
   return fetch(url, {
     method: 'POST',
     headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -86,6 +87,7 @@ export function fetchBotResponse(data) {
 export function startNewConversation(data) {
   return (dispatch) => sendToServer(data, '/conversation/new')
     .then((json) => {
+      dispatch(updateConversation({ conversationId: json[0].conversationId }));
       dispatch(fetchBotResponseSuccess(json));
       return json;
     })

@@ -1,13 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BotMessageService } from '../botMessage/botMessage.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { UserMessageDto } from '../userMessage/userMessage.dto';
-import { ConversationService } from '../conversation/conversation.service';
-import { StoryblokService } from '../botMessage/storyblok.service';
 import { MessageService } from './message.service';
 import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
-import { Conversation } from '../conversation/conversation.entity';
-import { singleStoryblokResponse } from '../spec/data/singleStoryblokResponse';
 import { Message } from './message.entity'
 
 describe('MessageService', () => {
@@ -26,7 +20,7 @@ describe('MessageService', () => {
       ],
     }).compile();
 
-    mockMessage = {speech: 'foo', conversation_: '12345', previousmessage_: '12345', storyblok_id: '1234'}
+    mockMessage = {speech: 'foo', conversation_: '12345', previousmessage_: '12345', 'storyblok_id': '1234'}
     messageService = app.get<MessageService>(MessageService);
   });
 
