@@ -20,6 +20,11 @@ export class ConversationService {
 
   async get(conversationId: string, column?: string) {
     const conversation = await this.conversationRepository.findOne(conversationId);
+
+    if (!conversation){
+      throw "Cannot find conversation with that id"
+    }
+
     return column ? conversation[column] : conversation;
   }
 

@@ -6,7 +6,7 @@ import { ConversationModule} from '../conversation/conversation.module'
 @Module({
   providers: [ BotMessageService, StoryblokService ],
   imports: [ forwardRef(() => ConversationModule) ],
-  exports: [ BotMessageService ]
+  exports: [ BotMessageService, StoryblokService ]
 })
 
 export class BotMessageModule {}

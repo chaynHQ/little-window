@@ -7,9 +7,8 @@ import { ConfigModule } from '@nestjs/config'
 
 import { databaseConfig } from './services/database-connection';
 import { ConversationModule } from './conversation/conversation.module';
-
 import { UserMessageModule } from './userMessage/userMessage.module';
-
+import { MessageModule } from './message/message.module'
 
 @Module({
   controllers: [],
@@ -18,7 +17,8 @@ import { UserMessageModule } from './userMessage/userMessage.module';
     ConfigModule.forRoot({isGlobal: true}),
     TypeOrmModule.forRoot(databaseConfig),
     ConversationModule,
-    UserMessageModule
+    UserMessageModule,
+    MessageModule
   ],
 })
 export class AppModule {}

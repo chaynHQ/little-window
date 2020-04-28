@@ -4,8 +4,10 @@ import { UserMessageService }from './userMessage.service';
 import { BotMessageService}  from '../botMessage/botMessage.service';
 import { UserMessageDto } from './userMessage.dto';
 import { ConversationService } from '../conversation/conversation.service';
-import { StoryblokService } from '../botMessage/storyblok.service'
+import { StoryblokService } from '../botMessage/storyblok.service';
+import { MessageService } from '../message/message.service';
 import { Conversation } from '../conversation/conversation.entity';
+import { Message} from '../message/message.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -23,10 +25,16 @@ describe('UserMessageController', () => {
           BotMessageService,
           ConversationService,
           StoryblokService,
+          MessageService,
           {
             provide: getRepositoryToken(Conversation),
             useFactory: repositoryMockFactory
-          }]
+          },
+          {
+            provide: getRepositoryToken(Message),
+            useFactory: repositoryMockFactory
+          },
+        ]
     }).compile();
 
     userMessageController = app.get<UserMessageController>(UserMessageController);
@@ -34,7 +42,9 @@ describe('UserMessageController', () => {
 
   describe('root', () => {
     it('should return "Hello"', () => {
-      expect(userMessageController.userMessage(userMessageDto)).toBe('Hello');
+      return userMessageController.userMessage(userMessageDto).then(data => {
+         expect(data.match('Hello'));
+      });
     });
   });
 });
