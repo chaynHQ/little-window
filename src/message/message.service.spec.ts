@@ -37,7 +37,6 @@ describe('MessageService', () => {
     test('should return an array', () => {
 
       return messageService.get('conversation_id', '12345').then(data => {
-        console.log(data)
         expect(Array.isArray(data)).toBe(true);
       });
     });

@@ -61,7 +61,6 @@ function handleErrors(response) {
 }
 
 function sendToServer(data, url) {
-  console.log("OUTGOING: ", data)
   return fetch(url, {
     method: 'POST',
     headers: new Headers({ 'Content-Type': 'application/json' }),
