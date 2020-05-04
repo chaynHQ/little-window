@@ -83,6 +83,7 @@ export class BotMessageService {
     // Check that response isn't empty
     const formattedResponse = [];
     if (!response) {
+      //TODO: Throw error rather than return
       return [
         {
           speech:
