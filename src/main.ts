@@ -1,13 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as expressListRoutes from 'express-list-routes';
+import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe({forbidNonWhitelisted: true, whitelist: true}));
   await app.listen(process.env.PORT);
 
-  const server = app.getHttpServer();
-  const router = server._events.request._router;
-  console.log(expressListRoutes({}, 'API:', router));
 }
 bootstrap();

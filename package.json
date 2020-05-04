@@ -36,6 +36,8 @@
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/typeorm": "^7.0.0",
     "body-parser": "^1.19.0",
+    "class-transformer": "^0.2.3",
+    "class-validator": "^0.12.2",
     "dialogflow": "^1.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.16.2",
@@ -93,6 +95,8 @@
     },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
-    "setupFiles": ["../jestSetup.ts"]
+    "setupFiles": [
+      "../jestSetup.ts"
+    ]
   }
 }
