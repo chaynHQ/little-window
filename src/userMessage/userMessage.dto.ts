@@ -16,4 +16,7 @@ export class UserMessageDto {
   @IsOptional()
   @IsUUID(4)
   readonly previousMessageId?: string;
+
+  @IsOptional()
+  readonly selectedTags?: object[];
 }

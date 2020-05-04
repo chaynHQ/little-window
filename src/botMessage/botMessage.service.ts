@@ -131,15 +131,10 @@ export class BotMessageService {
 
   getFeedbackMessage = async (data): Promise<{}> => {
     const conversationId = data.conversationId;
-    // // Get all the bot responses
+    // Get all the bot responses
     const botResponses = await this.storyblokService.getBotResponsesBySlug(
       'feedback',
       data.language,
-    );
-    // // Get all the user messages by convo id
-    const userMessages = await this.messageService.get(
-      'conversation_id',
-      conversationId,
     );
 
     // Sort bot responses
@@ -152,6 +147,11 @@ export class BotMessageService {
       }
       return 0;
     });
+
+    // Get all the user messages by convo id
+    const userMessages = await this.messageService.getByConversationId(
+      conversationId,
+    );
 
     const feedbackBotResponse = botResponses.find(response => {
       if (

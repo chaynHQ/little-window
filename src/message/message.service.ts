@@ -23,9 +23,9 @@ export class MessageService {
     });
   }
 
-  async get(value: string, column: string): Promise<Array<object>> {
+  async getByConversationId(value: string): Promise<Array<object>> {
     const messages = await this.messageRepository.find({
-      where: { column: value },
+      where: { "conversation_": value },
     });
 
     return messages;

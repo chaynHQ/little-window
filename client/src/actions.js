@@ -74,19 +74,19 @@ function sendToServer(data, url) {
 
 export function fetchBotResponse(data) {
   return (dispatch) => {
-    if (data.speech.startsWith("SETUP-language-")) {
-      dispatch(setLanguage(data.speech.slice("SETUP-language-".length)))
+    if (data.speech.startsWith('SETUP-language-')) {
+      dispatch(setLanguage(data.speech.slice('SETUP-language-'.length)));
     }
 
     sendToServer(data, '/usermessage')
-    .then((json) => {
-      dispatch(fetchBotResponseSuccess(json));
-      return json;
-    })
-    .catch(() => dispatch(
-      fetchBotResponseFailure("I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later"),
-    ));
-  }
+      .then((json) => {
+        dispatch(fetchBotResponseSuccess(json));
+        return json;
+      })
+      .catch(() => dispatch(
+        fetchBotResponseFailure("I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later"),
+      ));
+  };
 }
 
 export function startNewConversation(data) {
