@@ -18,9 +18,7 @@ class Conversation extends Component {
   componentDidMount() {
     const { initialBotMessageHandler } = this.props;
 
-    initialBotMessageHandler({
-      speech: 'SETUP-NEWCONVERSATION',
-    });
+    initialBotMessageHandler();
   }
 
   componentDidUpdate() {

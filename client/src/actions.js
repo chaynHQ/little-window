@@ -89,8 +89,8 @@ export function fetchBotResponse(data) {
   };
 }
 
-export function startNewConversation(data) {
-  return (dispatch) => sendToServer(data, '/conversation/new')
+export function startNewConversation() {
+  return (dispatch) => sendToServer({speech: "SETUP-NEWCONVERSATION"}, '/conversation/new')
     .then((json) => {
       dispatch(updateConversation({ conversationId: json[0].conversationId }));
       dispatch(fetchBotResponseSuccess(json));

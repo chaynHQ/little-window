@@ -1,10 +1,8 @@
 import { connect } from 'react-redux';
 import Header from './Header';
 import {
-  refreshConversation, updateConversation, fetchBotResponse, setMinimiseState,
+  refreshConversation, updateConversation, fetchBotResponse, setMinimiseState, startNewConversation
 } from '../actions';
-
-const uuidv4 = require('uuid/v4');
 
 const mapStateToProps = (state) => ({
   minimised: state.minimised,
@@ -18,12 +16,7 @@ const mapDispatchToProps = (dispatch) => ({
   refreshHandler: () => {
     dispatch(refreshConversation());
 
-    const conversationId = uuidv4();
-    dispatch(updateConversation({ conversationId }));
-    dispatch(fetchBotResponse({
-      speech: 'SETUP-NEWCONVERSATION',
-      conversationId,
-    }));
+    dispatch(startNewConversation());
   },
 });
 

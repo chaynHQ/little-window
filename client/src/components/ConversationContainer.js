@@ -34,8 +34,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  initialBotMessageHandler: (data) => {
-    dispatch(startNewConversation({ data }));
+  initialBotMessageHandler: () => {
+    dispatch(startNewConversation());
   },
   inputHandler: (data, conversationId, previousMessageId, previousMessageStoryblokId) => {
     dispatch(fetchBotResponse({
