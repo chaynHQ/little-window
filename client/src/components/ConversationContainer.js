@@ -3,7 +3,6 @@ import Conversation from './Conversation';
 import {
   fetchBotResponse,
   addUserInputToStack,
-  setLanguage,
   updateBotMessage,
   startNewConversation,
 } from '../actions';
@@ -38,27 +37,14 @@ const mapDispatchToProps = (dispatch) => ({
   initialBotMessageHandler: (data) => {
     dispatch(startNewConversation({ data }));
   },
-  inputHandler: (data, lang, conversationId, previousMessageId, previousMessageStoryblokId) => {
-    // TODO: this lang bit might be redundant now.
-    if (data.lang) {
-      dispatch(setLanguage(data.lang));
-      dispatch(fetchBotResponse({
-        speech: data.postback,
-        lang: data.lang,
-        conversationId,
-        previousMessageId,
-        previousMessageStoryblokId,
-      }));
-    } else {
-      dispatch(fetchBotResponse({
-        speech: data.postback,
-        lang,
-        conversationId,
-        selectedTags: data.selectedTags,
-        previousMessageId,
-        previousMessageStoryblokId,
-      }));
-    }
+  inputHandler: (data, conversationId, previousMessageId, previousMessageStoryblokId) => {
+    dispatch(fetchBotResponse({
+      speech: data.postback,
+      conversationId,
+      selectedTags: data.selectedTags,
+      previousMessageId,
+      previousMessageStoryblokId,
+    }));
 
     data.text.forEach((text) => {
       dispatch(addUserInputToStack(text));
@@ -76,7 +62,6 @@ const mergeProps = (propsFromState, propsFromDispatch) => ({
   ...propsFromDispatch,
   inputHandler: (data) => propsFromDispatch.inputHandler(
     data,
-    propsFromState.lang,
     propsFromState.conversationId,
     propsFromState.displayedMessages.slice(-1)[0].previousMessageId,
     propsFromState.displayedMessages.slice(-1)[0].previousMessageStoryblokId,

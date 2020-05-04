@@ -22,7 +22,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateConversation({ conversationId }));
     dispatch(fetchBotResponse({
       speech: 'SETUP-NEWCONVERSATION',
-      lang: 'en',
       conversationId,
     }));
   },

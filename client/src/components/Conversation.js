@@ -20,7 +20,6 @@ class Conversation extends Component {
 
     initialBotMessageHandler({
       speech: 'SETUP-NEWCONVERSATION',
-      lang: 'en',
     });
   }
 
@@ -29,7 +28,7 @@ class Conversation extends Component {
     queueNextMessage();
   }
 
-  renderMessage = (currentMessage, inputHandler, lang) => {
+  renderMessage = (currentMessage, inputHandler) => {
     const message = [];
 
     if (currentMessage.sender === 'bot') {
@@ -54,7 +53,6 @@ class Conversation extends Component {
             key={uuidv4()}
             text={resource.text}
             link={resource.link}
-            lang={lang}
           />,
         );
       });
@@ -86,7 +84,7 @@ class Conversation extends Component {
 
   render() {
     const {
-      displayedMessages, inputHandler, lang, minimised,
+      displayedMessages, inputHandler, minimised, lang
     } = this.props;
     const nextUserAction = displayedMessages.slice(-1)[0]
       ? displayedMessages.slice(-1)[0].nextUserAction : 'wait';
@@ -95,7 +93,7 @@ class Conversation extends Component {
       <div className={`${minimised ? styles.minimised : ''} ${styles.container}`}>
         <ScrollableFeed forceScroll className={styles.messagesContainer}>
 
-          {displayedMessages.map((message) => this.renderMessage(message, inputHandler, lang))}
+          {displayedMessages.map((message) => this.renderMessage(message, inputHandler))}
 
           { nextUserAction === 'wait'
             ? (
@@ -123,7 +121,6 @@ Conversation.propTypes = {
   initialBotMessageHandler: PropTypes.func.isRequired,
   queueNextMessage: PropTypes.func.isRequired,
   displayedMessages: PropTypes.arrayOf(PropTypes.object).isRequired,
-  lang: PropTypes.string.isRequired,
   minimised: PropTypes.bool,
 };
 
