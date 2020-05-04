@@ -84,13 +84,7 @@ export class BotMessageService {
     const formattedResponse = [];
     if (!response) {
       //TODO: Throw error rather than return
-      return [
-        {
-          speech:
-            'Something went wrong. My team have been notified and are trying to fix the issue',
-          conversationId: conversationId,
-        },
-      ];
+      throw 'No response found error'
     }
 
     [...prefixMessages, response, ...suffixMessages].forEach(

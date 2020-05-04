@@ -89,9 +89,9 @@ describe('BotMessageService', () => {
     });
 
     test('should return a message if no response recieved', () => {
-      expect(
-        botMessageService.formatBotResponse(null, [], [], '1234'),
-      ).toHaveLength(1);
+      expect(() => {
+        botMessageService.formatBotResponse(null, [], [], '1234')
+      }).toThrow();
     });
   });
 });
