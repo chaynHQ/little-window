@@ -1,13 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Conversation } from './conversation.entity';
+import { RollbarLogger } from 'nestjs-rollbar';
 
 @Injectable()
 export class ConversationService {
+  private logger: Logger = new Logger();
   constructor(
     @InjectRepository(Conversation)
     private conversationRepository: Repository<Conversation>,
+    private readonly rollbarLogger: RollbarLogger,
   ) {}
 
   async create(): Promise<string> {
@@ -18,6 +21,9 @@ export class ConversationService {
       .save(conversation)
       .then(conversation => {
         return conversation.id;
+      }).catch(error => {
+        this.rollbarLogger.error(error, 'Save Conversation');
+        return null;
       });
   }
 
@@ -30,10 +36,10 @@ export class ConversationService {
   ): Promise<string | { language; stage }> {
     const conversation = await this.conversationRepository.findOne(
       conversationId,
-    );
+    ).catch(error => this.rollbarLogger.error(error, 'Get Conversation'));
 
     if (!conversation) {
-      throw 'Cannot find conversation with that id';
+      this.rollbarLogger.error({message: 'Cannot find a conversation with id: ' + conversationId, name: 'No ConversationId'}, 'Get Conversation');
     }
 
     return column ? conversation[column] : conversation;
@@ -43,7 +49,9 @@ export class ConversationService {
     const conversation = new Conversation();
     conversation[column] = value;
     conversation.id = conversationId;
-
-    return await this.conversationRepository.save(conversation);
+    return await this.conversationRepository.save(conversation).catch(error => {
+      this.rollbarLogger.error(error, 'Update Conversation')
+    return null
+  });
   }
 }

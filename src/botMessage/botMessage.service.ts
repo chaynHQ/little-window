@@ -1,4 +1,4 @@
-import { Injectable, Inject, forwardRef } from '@nestjs/common';
+import { Injectable, Inject, forwardRef, Logger } from '@nestjs/common';
 import { UserMessageDto } from '../userMessage/userMessage.dto';
 import { ConversationService } from '../conversation/conversation.service';
 import { StoryblokService } from './storyblok.service';
@@ -8,6 +8,7 @@ import { DialogFlowService } from './dialogFlow.service';
 
 @Injectable()
 export class BotMessageService {
+  private logger: Logger = new Logger();
   constructor(
     @Inject(forwardRef(() => ConversationService))
     private conversationService: ConversationService,
@@ -83,7 +84,6 @@ export class BotMessageService {
     // Check that response isn't empty
     const formattedResponse = [];
     if (!response) {
-      //TODO: Throw error rather than return
       throw 'No response found error'
     }
 
