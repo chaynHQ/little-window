@@ -7,6 +7,7 @@ export class BotMessageDto {
   radioButtonOptions?: Array<Resources>;
   previousMessageId?: string;
   messageId?: string;
+  endOfConversation?: boolean;
 }
 
 class CheckBoxOptions {

@@ -29,11 +29,24 @@ export class UserMessageService {
     if (previousMessageWasSetupMessage) {
       const isFormattedLikeSetupAnswer =
         splitUserResponse.length === 3 && splitUserResponse[0] === 'SETUP';
+
+        const column = splitUserResponse[1]
+        let value = splitUserResponse[2]
+
+        if (column === 'gdpr'){
+          try {
+              value = JSON.parse(splitUserResponse[2]);
+          }
+          catch (e) {
+            return
+          }
+        }
+
       if (isFormattedLikeSetupAnswer) {
         try {
           await this.conversationService.update(
-            splitUserResponse[1],
-            splitUserResponse[2],
+            column,
+            value,
             conversationId,
           );
         } catch (error) {

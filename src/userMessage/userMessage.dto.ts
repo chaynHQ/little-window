@@ -9,7 +9,7 @@ export class UserMessageDto {
   @IsUUID(4)
   readonly conversationId: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsUUID(4)
   readonly previousMessageStoryblokId?: string;
 

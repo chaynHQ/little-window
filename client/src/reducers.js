@@ -41,9 +41,15 @@ const messages = (state = [], action) => {
           timeDelay: timedelay,
         };
         if (arr.length - 1 === i) {
+          let nextUserAction = 'input';
+          if ((item.checkBoxOptions && item.checkBoxOptions.length) || (item.radioButtonOptions && item.radioButtonOptions.length) ){
+            nextUserAction = 'option'
+          } else if (item.endOfConversation === true){
+            nextUserAction = 'none';
+          }
           message = {
             ...message,
-            nextUserAction: (item.checkBoxOptions && item.checkBoxOptions.length) || (item.radioButtonOptions && item.radioButtonOptions.length) ? 'option' : 'input',
+            nextUserAction: nextUserAction,
             checkBoxOptions: item.checkBoxOptions,
             radioButtonOptions: item.radioButtonOptions,
           };

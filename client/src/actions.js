@@ -22,9 +22,9 @@ export const fetchBotResponseSuccess = (data) => ({
   data,
 });
 
-export const fetchBotResponseFailure = (errorMessage) => ({
-  type: UPDATE_BOT_MESSAGE,
-  errorMessage,
+export const fetchBotResponseFailure = (data) => ({
+  type: ADD_BOT_MESSAGE,
+  data,
 });
 
 export const updateBotMessage = (data) => ({
@@ -84,7 +84,7 @@ export function fetchBotResponse(data) {
         return json;
       })
       .catch(() => dispatch(
-        fetchBotResponseFailure("I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later"),
+        fetchBotResponseFailure([{speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later", endOfConversation: true}]),
       ));
   };
 }
@@ -96,7 +96,8 @@ export function startNewConversation(data) {
       dispatch(fetchBotResponseSuccess(json));
       return json;
     })
-    .catch(() => dispatch(
-      fetchBotResponseFailure("I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later"),
+    .catch(() =>
+    dispatch(
+      fetchBotResponseFailure([{speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later", endOfConversation: true}]),
     ));
 }

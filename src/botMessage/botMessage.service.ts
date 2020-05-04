@@ -116,6 +116,7 @@ export class BotMessageService {
             } else {
               newMessage['radioButtonOptions'] = [];
             }
+            newMessage['endOfConversation'] = messageGroup.endOfConversation;
           }
           formattedResponse.push(newMessage);
         });
@@ -158,6 +159,10 @@ export class BotMessageService {
       }
       return false;
     });
+
+    if (feedbackBotResponse.uuid === process.env.finalMessageStoryblokId){
+      feedbackBotResponse.endOfConversation = true;
+    }
 
     return feedbackBotResponse;
   };
@@ -323,6 +328,8 @@ export class BotMessageService {
       this.conversationService.get(conversationId, 'gdpr'),
     ]);
 
+    console.log('IS GDPR SET: ', isGDPRSet)
+
     if (isLanguageSet === null) {
       // TODO: Need better checking in place to ensure users can't type this in
       // when they are typing in a general input.
@@ -336,20 +343,18 @@ export class BotMessageService {
           response => response['slug'] === 'language',
         );
       }
+    } else if (userMessage === 'SETUP-gdpr-more') {
+      [setupBotResponse] = botResponses.filter(
+        response => response['slug'] === 'gdpr-more',
+      );
     } else if (isGDPRSet === null) {
-      if (isGDPRSet === 'false') {
-        [setupBotResponse] = botResponses.filter(
-          response => response['slug'] === 'gdpr-reject',
-        );
-      } else if (userMessage === 'SETUP-gdpr-more') {
-        [setupBotResponse] = botResponses.filter(
-          response => response['slug'] === 'gdpr-more',
-        );
-      } else {
-        [setupBotResponse] = botResponses.filter(
-          response => response['name'] === 'GDPR',
-        );
-      }
+      [setupBotResponse] = botResponses.filter(
+        response => response['name'] === 'GDPR',
+      );
+    } else if (!isGDPRSet) {
+      [setupBotResponse] = botResponses.filter(
+        response => response['slug'] === 'gdpr-reject',
+      );
     } else {
       await this.conversationService.update('stage', 'support', conversationId);
       const supportMessage = await this.getSupportMessage(data);
