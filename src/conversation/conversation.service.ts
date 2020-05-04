@@ -49,8 +49,7 @@ export class ConversationService {
     const conversation = new Conversation();
     conversation[column] = value;
     conversation.id = conversationId;
-    console.log("VALUE, ", value)
-    console.log(conversation)
+
     return await this.conversationRepository.save(conversation).catch(error => {
       this.rollbarLogger.error(error, 'Update Conversation')
     return null

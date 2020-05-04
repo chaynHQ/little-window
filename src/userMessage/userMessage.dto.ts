@@ -5,7 +5,7 @@ export class UserMessageDto {
   @IsString()
   readonly speech?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsUUID(4)
   readonly conversationId: string;
 

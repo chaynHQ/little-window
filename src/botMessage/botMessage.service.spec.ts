@@ -11,6 +11,8 @@ import { MessageService } from '../message/message.service';
 import {DialogFlowService} from './dialogFlow.service';
 import { Message } from '../message/message.entity';
 import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
+import { RollbarLogger } from 'nestjs-rollbar';
+import { rollbarMockFactory } from '../spec/factories/rollbar';
 
 jest.mock('../botMessage/storyblok.service');
 
@@ -38,6 +40,10 @@ describe('BotMessageService', () => {
           provide: getRepositoryToken(Message),
           useFactory: messageRepositoryMockFactory,
         },
+        {
+          provide: RollbarLogger,
+          useFactory:rollbarMockFactory
+        }
       ],
     }).compile();
 

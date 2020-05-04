@@ -2,7 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MessageService } from './message.service';
 import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
-import { Message } from './message.entity'
+import { rollbarMockFactory } from '../spec/factories/rollbar';
+import { Message } from './message.entity';
+import { RollbarLogger } from 'nestjs-rollbar';
 
 describe('MessageService', () => {
 
@@ -17,6 +19,10 @@ describe('MessageService', () => {
           provide: getRepositoryToken(Message),
           useFactory: messageRepositoryMockFactory,
         },
+        {
+          provide: RollbarLogger,
+          useFactory:rollbarMockFactory
+        }
       ],
     }).compile();
 

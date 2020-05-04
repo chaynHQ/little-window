@@ -12,6 +12,9 @@ import { Message } from '../message/message.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { conversationRepositoryMockFactory } from '../spec/factories/conversationRepository';
 import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
+import { RollbarLogger } from 'nestjs-rollbar';
+import { rollbarMockFactory } from '../spec/factories/rollbar';
+
 
 describe('UserMessageController', () => {
   let userMessageController: UserMessageController;
@@ -38,6 +41,10 @@ describe('UserMessageController', () => {
           provide: getRepositoryToken(Message),
           useFactory: messageRepositoryMockFactory,
         },
+        {
+          provide: RollbarLogger,
+          useFactory:rollbarMockFactory
+        }
       ],
     }).compile();
 

@@ -10,7 +10,9 @@ import { conversationRepositoryMockFactory } from '../spec/factories/conversatio
 import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
 import { singleStoryblokResponse } from '../spec/data/singleStoryblokResponse';
 import { MessageService } from '../message/message.service';
-import { Message } from '../message/message.entity'
+import { Message } from '../message/message.entity';
+import { RollbarLogger } from 'nestjs-rollbar';
+import { rollbarMockFactory } from '../spec/factories/rollbar';
 
 jest.mock('../botMessage/storyblok.service');
 
@@ -35,6 +37,10 @@ describe('ConversationController', () => {
           provide: getRepositoryToken(Message),
           useFactory: messageRepositoryMockFactory,
         },
+        {
+          provide: RollbarLogger,
+          useFactory:rollbarMockFactory
+        }
       ],
     }).compile();
 

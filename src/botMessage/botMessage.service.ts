@@ -161,7 +161,7 @@ export class BotMessageService {
     });
 
     if (feedbackBotResponse.uuid === process.env.finalMessageStoryblokId){
-      feedbackBotResponse.endOfConversation = true;
+      feedbackBotResponse['endOfConversation'] = true;
     }
 
     return feedbackBotResponse;
@@ -187,7 +187,7 @@ export class BotMessageService {
     const kickoffSupportMessageStoryblokId = process.env.kickoffSupportMessageStoryblokId;
     const freeTextSupportRequestStoryblokId =
       process.env.freeTextSupportRequestStoryblokId;
-    const radioButtonSupportRequestStoryblokId = process.env;
+    const radioButtonSupportRequestStoryblokId = process.env.radioButtonSupportRequestStoryblokId;
     const resourceStoryblokId = process.env.resourceStoryblokId;
     const additionalResourcesStoryblokId =
       process.env.additionalResourcesStoryblokId;
@@ -327,8 +327,6 @@ export class BotMessageService {
       this.conversationService.get(conversationId, 'language'),
       this.conversationService.get(conversationId, 'gdpr'),
     ]);
-
-    console.log('IS GDPR SET: ', isGDPRSet)
 
     if (isLanguageSet === null) {
       // TODO: Need better checking in place to ensure users can't type this in

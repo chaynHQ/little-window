@@ -6,7 +6,7 @@ export class StoryblokService {
   async getBotResponsesBySlug(
     slug: string,
     lang?: string,
-  ): Promise<Array<{ slug; name; speech; uuid; radioButtonOptions; content; storyblokId; endOfConversation }>> {
+  ): Promise<Array<{ slug; name; speech; uuid; radioButtonOptions; content;}>> {
     const Storyblok = new StoryblokClient({
       accessToken: process.env.STORYBLOK_TOKEN,
     });
