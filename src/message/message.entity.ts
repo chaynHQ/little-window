@@ -23,7 +23,7 @@ export class Message {
   @Column()
   sender: SenderType;
 
-  @Column()
+  @Column({ nullable: true })
   storyblok_id: string;
 
   @ManyToOne(

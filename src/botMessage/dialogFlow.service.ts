@@ -7,6 +7,7 @@ export class DialogFlowService {
     conversationId: string,
     userMessage: string,
   ): Promise<string> {
+    console.log(process.env.NODE_ENV)
     const privateKey =
       process.env.NODE_ENV == 'production'
         ? JSON.parse(process.env.DIALOGFLOW_PRIVATE_KEY)

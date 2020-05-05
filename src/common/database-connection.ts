@@ -18,9 +18,9 @@ const databaseConfig: TypeOrmModuleOptions = {
   autoLoadEntities: true,
   synchronize: false,
   cli: {
-    migrationsDir: 'dist/migration',
+    migrationsDir: 'src/migration',
   },
-  migrations: ['dist/migration/*.js'],
+  migrations: ['dist/src/migration/*.js'],
   migrationsRun: true,
   entities: [Message, Conversation],
 };
