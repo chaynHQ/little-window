@@ -14,6 +14,7 @@
     "start:prod": "node dist/main",
     "herokupostinstall": "cd client && npm install && npm run build",
     "test": "NODE_ENV=test jest",
+    "testtravis": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
