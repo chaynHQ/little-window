@@ -27,7 +27,7 @@ import { join } from 'path';
       environment: process.env.NODE_ENV,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client'),
+      rootPath: join(__dirname, '..', 'client/build'),
     }),
   ],
 })
