@@ -20,7 +20,8 @@ export class Message {
   @Column()
   message: string;
 
-  @Column()
+  @Column({type: "enum",
+      enum: ['bot', 'user']} )
   sender: SenderType;
 
   @Column({ nullable: true })

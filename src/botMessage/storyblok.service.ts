@@ -18,7 +18,6 @@ export class StoryblokService {
         'starts_with': lang ? `${lang}/${slug}` : slug,
         version,
       });
-
       return responses.data.stories;
     } catch (err) {
       throw err;

@@ -86,7 +86,6 @@ export class BotMessageService {
     if (!response) {
       throw 'No response found error';
     }
-
     [...prefixMessages, response, ...suffixMessages].forEach(
       (messageGroup, i, arr) => {
         messageGroup.content.speech.items.forEach(message => {
@@ -323,6 +322,8 @@ export class BotMessageService {
 
     let setupBotResponse = {};
     const prefixMessages = [];
+
+
 
     const [botResponses, isLanguageSet, isGDPRSet] = await Promise.all([
       this.storyblokService.getBotResponsesBySlug('setup', language),

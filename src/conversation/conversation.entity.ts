@@ -11,10 +11,12 @@ export class Conversation {
   @Column({ nullable: true })
   gdpr: boolean;
 
-  @Column({ nullable: true })
+  @Column({type: "enum",
+        enum: ["fr", "en"], nullable: true })
   language: SupportedLanguagesType;
 
-  @Column()
+  @Column({ type: "enum",
+        enum: ["setup", "support", "feedback"]})
   stage: StageType;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
