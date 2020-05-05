@@ -42,14 +42,18 @@ const messages = (state = [], action) => {
         };
         if (arr.length - 1 === i) {
           let nextUserAction = 'input';
-          if ((item.checkBoxOptions && item.checkBoxOptions.length) || (item.radioButtonOptions && item.radioButtonOptions.length) ){
-            nextUserAction = 'option'
-          } else if (item.endOfConversation === true){
+          if (
+            (item.checkBoxOptions && item.checkBoxOptions.length)
+            || (item.radioButtonOptions && item.radioButtonOptions.length)
+          ) {
+            nextUserAction = 'option';
+          } else if (item.endOfConversation === true) {
             nextUserAction = 'none';
           }
+
           message = {
             ...message,
-            nextUserAction: nextUserAction,
+            nextUserAction,
             checkBoxOptions: item.checkBoxOptions,
             radioButtonOptions: item.radioButtonOptions,
           };

@@ -39,8 +39,8 @@ describe('ConversationController', () => {
         },
         {
           provide: RollbarLogger,
-          useFactory:rollbarMockFactory
-        }
+          useFactory: rollbarMockFactory,
+        },
       ],
     }).compile();
 

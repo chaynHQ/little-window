@@ -21,7 +21,8 @@ export class ConversationService {
       .save(conversation)
       .then(conversation => {
         return conversation.id;
-      }).catch(error => {
+      })
+      .catch(error => {
         this.rollbarLogger.error(error, 'Save Conversation');
         return null;
       });
@@ -34,12 +35,18 @@ export class ConversationService {
     conversationId: string,
     column?: string,
   ): Promise<string | { language; stage }> {
-    const conversation = await this.conversationRepository.findOne(
-      conversationId,
-    ).catch(error => this.rollbarLogger.error(error, 'Get Conversation'));
+    const conversation = await this.conversationRepository
+      .findOne(conversationId)
+      .catch(error => this.rollbarLogger.error(error, 'Get Conversation'));
 
     if (!conversation) {
-      this.rollbarLogger.error({message: 'Cannot find a conversation with id: ' + conversationId, name: 'No ConversationId'}, 'Get Conversation');
+      this.rollbarLogger.error(
+        {
+          message: 'Cannot find a conversation with id: ' + conversationId,
+          name: 'No ConversationId',
+        },
+        'Get Conversation',
+      );
     }
 
     return column ? conversation[column] : conversation;
@@ -51,8 +58,8 @@ export class ConversationService {
     conversation.id = conversationId;
 
     return await this.conversationRepository.save(conversation).catch(error => {
-      this.rollbarLogger.error(error, 'Update Conversation')
-    return null
-  });
+      this.rollbarLogger.error(error, 'Update Conversation');
+      return null;
+    });
   }
 }

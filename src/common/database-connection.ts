@@ -1,10 +1,12 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as url from 'url';
+import { Message } from '../message/message.entity';
+import { Conversation } from '../conversation/conversation.entity';
 
 const params = url.parse(process.env.DATABASE_URL);
 const [username, password] = params.auth.split(':');
 
-export const databaseConfig: TypeOrmModuleOptions = {
+const databaseConfig: TypeOrmModuleOptions = {
   type: 'postgres',
   host: params.hostname,
   port: parseInt(params.port),
@@ -15,4 +17,12 @@ export const databaseConfig: TypeOrmModuleOptions = {
   logging: process.env.NODE_ENV === 'dev' ? true : false,
   autoLoadEntities: true,
   synchronize: false,
+  cli: {
+    migrationsDir: 'dist/migration',
+  },
+  migrations: ['dist/migration/*.js'],
+  migrationsRun: true,
+  entities: [Message, Conversation],
 };
+
+module.exports = databaseConfig;

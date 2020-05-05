@@ -13,9 +13,11 @@ describe('DialogFlowService', () => {
 
   describe('getDialogflowIntent', () => {
     test('should return a string', () => {
-      return dialogFlowService.getDialogflowIntent('123456', 'I want to get a divorce').then(data => {
-        expect(data).toBe("Divorce");
-      });
+      return dialogFlowService
+        .getDialogflowIntent('123456', 'I want to get a divorce')
+        .then(data => {
+          expect(data).toBe('Divorce');
+        });
     });
   });
 });

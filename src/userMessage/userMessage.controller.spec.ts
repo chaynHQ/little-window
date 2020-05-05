@@ -6,7 +6,7 @@ import { UserMessageDto } from './userMessage.dto';
 import { ConversationService } from '../conversation/conversation.service';
 import { StoryblokService } from '../botMessage/storyblok.service';
 import { MessageService } from '../message/message.service';
-import { DialogFlowService } from '../botMessage/dialogFlow.service'
+import { DialogFlowService } from '../botMessage/dialogFlow.service';
 import { Conversation } from '../conversation/conversation.entity';
 import { Message } from '../message/message.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -14,7 +14,6 @@ import { conversationRepositoryMockFactory } from '../spec/factories/conversatio
 import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
 import { RollbarLogger } from 'nestjs-rollbar';
 import { rollbarMockFactory } from '../spec/factories/rollbar';
-
 
 describe('UserMessageController', () => {
   let userMessageController: UserMessageController;
@@ -43,8 +42,8 @@ describe('UserMessageController', () => {
         },
         {
           provide: RollbarLogger,
-          useFactory:rollbarMockFactory
-        }
+          useFactory: rollbarMockFactory,
+        },
       ],
     }).compile();
 

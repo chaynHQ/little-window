@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-rollbar';
 
-import { databaseConfig } from './common/database-connection';
+import * as databaseConfig from './common/database-connection';
 import { ConversationModule } from './conversation/conversation.module';
 import { UserMessageModule } from './userMessage/userMessage.module';
 import { MessageModule } from './message/message.module';
@@ -21,9 +21,9 @@ import { MessageModule } from './message/message.module';
     UserMessageModule,
     MessageModule,
     LoggerModule.forRoot({
-           accessToken: process.env.ROLLBAR_TOKEN,
-           environment: process.env.NODE_ENV,
-       }),
+      accessToken: process.env.ROLLBAR_TOKEN,
+      environment: process.env.NODE_ENV,
+    }),
   ],
 })
 export class AppModule {}

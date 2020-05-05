@@ -30,25 +30,20 @@ export class UserMessageService {
       const isFormattedLikeSetupAnswer =
         splitUserResponse.length === 3 && splitUserResponse[0] === 'SETUP';
 
-        const column = splitUserResponse[1]
-        let value = splitUserResponse[2]
+      const column = splitUserResponse[1];
+      let value = splitUserResponse[2];
 
-        if (column === 'gdpr'){
-          try {
-              value = JSON.parse(splitUserResponse[2]);
-          }
-          catch (e) {
-            return
-          }
+      if (column === 'gdpr') {
+        try {
+          value = JSON.parse(splitUserResponse[2]);
+        } catch (e) {
+          return;
         }
+      }
 
       if (isFormattedLikeSetupAnswer) {
         try {
-          await this.conversationService.update(
-            column,
-            value,
-            conversationId,
-          );
+          await this.conversationService.update(column, value, conversationId);
         } catch (error) {
           throw error;
         }

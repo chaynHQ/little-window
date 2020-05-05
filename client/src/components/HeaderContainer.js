@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import Header from './Header';
 import {
-  refreshConversation, updateConversation, fetchBotResponse, setMinimiseState, startNewConversation
+  refreshConversation, setMinimiseState, startNewConversation,
 } from '../actions';
 
 const mapStateToProps = (state) => ({

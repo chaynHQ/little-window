@@ -13,5 +13,5 @@ export const singleStoryblokResponse = {
   slug: 'language',
   name: 'language',
   speech: 'foo',
-  radioButtonOptions: []
+  radioButtonOptions: [],
 };

@@ -84,20 +84,19 @@ export function fetchBotResponse(data) {
         return json;
       })
       .catch(() => dispatch(
-        fetchBotResponseFailure([{speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later", endOfConversation: true}]),
+        fetchBotResponseFailure([{ speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later", endOfConversation: true }]),
       ));
   };
 }
 
 export function startNewConversation() {
-  return (dispatch) => sendToServer({speech: "SETUP-NEWCONVERSATION"}, '/conversation/new')
+  return (dispatch) => sendToServer({ speech: 'SETUP-NEWCONVERSATION' }, '/conversation/new')
     .then((json) => {
       dispatch(updateConversation({ conversationId: json[0].conversationId }));
       dispatch(fetchBotResponseSuccess(json));
       return json;
     })
-    .catch(() =>
-    dispatch(
-      fetchBotResponseFailure([{speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later", endOfConversation: true}]),
+    .catch(() => dispatch(
+      fetchBotResponseFailure([{ speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later", endOfConversation: true }]),
     ));
 }

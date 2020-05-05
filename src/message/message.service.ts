@@ -9,7 +9,7 @@ export class MessageService {
   constructor(
     @InjectRepository(Message)
     private messageRepository: Repository<Message>,
-        private readonly rollbarLogger: RollbarLogger,
+    private readonly rollbarLogger: RollbarLogger,
   ) {}
 
   async save(data, sender): Promise<string> {
@@ -20,21 +20,26 @@ export class MessageService {
     message.sender = sender;
     message['storyblok_id'] = data.storyblokId;
 
-    return await this.messageRepository.save(message).then(message => {
-      return message.id;
-    }).catch(error => {
-      this.rollbarLogger.error(error, 'Save Message')
-      return null
-    });
+    return await this.messageRepository
+      .save(message)
+      .then(message => {
+        return message.id;
+      })
+      .catch(error => {
+        this.rollbarLogger.error(error, 'Save Message');
+        return null;
+      });
   }
 
   async getByConversationId(value: string): Promise<Array<object>> {
-    const messages = await this.messageRepository.find({
-      where: { "conversation_": value },
-    }).catch(error => {
-      this.rollbarLogger.error(error, 'Find Message')
-      return null
-    });
+    const messages = await this.messageRepository
+      .find({
+        where: { conversation_: value },
+      })
+      .catch(error => {
+        this.rollbarLogger.error(error, 'Find Message');
+        return null;
+      });
 
     return messages;
   }

@@ -8,5 +8,5 @@ export default {
   inputInputBoxText: { en: 'Type here...', fr: 'Écris ici' },
   submitButtonText: { en: 'Submit', fr: 'Envoyer' },
   resourcesViewText: { en: 'View', fr: 'Voir' },
-  noneInputBoxText: { en: 'Thank you', fr: 'Merci'}
+  noneInputBoxText: { en: 'Thank you', fr: 'Merci' },
 };

@@ -84,7 +84,7 @@ export class BotMessageService {
     // Check that response isn't empty
     const formattedResponse = [];
     if (!response) {
-      throw 'No response found error'
+      throw 'No response found error';
     }
 
     [...prefixMessages, response, ...suffixMessages].forEach(
@@ -160,7 +160,7 @@ export class BotMessageService {
       return false;
     });
 
-    if (feedbackBotResponse.uuid === process.env.finalMessageStoryblokId){
+    if (feedbackBotResponse.uuid === process.env.finalMessageStoryblokId) {
       feedbackBotResponse['endOfConversation'] = true;
     }
 
@@ -184,10 +184,12 @@ export class BotMessageService {
       data.language,
     );
 
-    const kickoffSupportMessageStoryblokId = process.env.kickoffSupportMessageStoryblokId;
+    const kickoffSupportMessageStoryblokId =
+      process.env.kickoffSupportMessageStoryblokId;
     const freeTextSupportRequestStoryblokId =
       process.env.freeTextSupportRequestStoryblokId;
-    const radioButtonSupportRequestStoryblokId = process.env.radioButtonSupportRequestStoryblokId;
+    const radioButtonSupportRequestStoryblokId =
+      process.env.radioButtonSupportRequestStoryblokId;
     const resourceStoryblokId = process.env.resourceStoryblokId;
     const additionalResourcesStoryblokId =
       process.env.additionalResourcesStoryblokId;
@@ -231,12 +233,12 @@ export class BotMessageService {
         dialogFlowResponse === 'Emergency' ||
         dialogFlowResponse === 'Fallback'
       ) {
-        supportBotResponse[
-          'checkBoxOptions'
-        ] = botTopicResponses.map(response => ({
-          postback: `TOPIC-${response.name}`,
-          text: response.name,
-        }));
+        supportBotResponse['checkBoxOptions'] = botTopicResponses.map(
+          response => ({
+            postback: `TOPIC-${response.name}`,
+            text: response.name,
+          }),
+        );
       }
     } else if (userMessage.startsWith('TOPIC-')) {
       const topic = userMessage.slice('TOPIC-'.length);
@@ -295,12 +297,12 @@ export class BotMessageService {
         [supportBotResponse] = botResponses.filter(
           response => response.uuid === radioButtonSupportRequestStoryblokId,
         );
-        supportBotResponse[
-          'checkBoxOptions'
-        ] = botTopicResponses.map(response => ({
-          postback: `TOPIC-${response.name}`,
-          text: response.name,
-        }));
+        supportBotResponse['checkBoxOptions'] = botTopicResponses.map(
+          response => ({
+            postback: `TOPIC-${response.name}`,
+            text: response.name,
+          }),
+        );
       }
     } else {
       [supportBotResponse] = botResponses.filter(
