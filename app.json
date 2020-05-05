@@ -1,6 +1,12 @@
 {
 	"name": "little-window",
 	"env": {
+		"PORT": {
+			"required": true
+		},
+		"SKIP_PREFLIGHT_CHECK": {
+			"required": true
+		},
 		"DIALOGFLOW_PROJECT_ID": {
 			"required": true
 		},
@@ -32,6 +38,9 @@
 			"required": true
 		},
 		"anythingElseStoryblokId": {
+			"required": true
+		},
+		"ROLLBAR_TOKEN": {
 			"required": true
 		}
 	},
