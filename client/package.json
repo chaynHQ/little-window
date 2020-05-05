@@ -5,6 +5,7 @@
   "proxy": "http://localhost:3001/",
   "dependencies": {
     "babel-eslint": "^10.1.0",
+    "eslint-config-airbnb": "^18.1.0",
     "prop-types": "^15.7.2",
     "react": "^16.3.0",
     "react-device-detect": "^1.11.14",
