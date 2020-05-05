@@ -9,7 +9,8 @@ export class DialogFlowService {
   ): Promise<string> {
     const privateKey =
       process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'travis'
-        ? JSON.parse(process.env.DIALOGFLOW_PRIVATE_KEY)
+        // ? JSON.parse(process.env.DIALOGFLOW_PRIVATE_KEY)
+        ? process.env.DIALOGFLOW_PRIVATE_KEY.replace(/\\n/gm, '\n')
         : process.env.DIALOGFLOW_PRIVATE_KEY;
     const clientEmail = process.env.DIALOGFLOW_CLIENT_EMAIL;
     const config = {
