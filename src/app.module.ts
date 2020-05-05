@@ -10,6 +10,8 @@ import * as databaseConfig from './common/database-connection';
 import { ConversationModule } from './conversation/conversation.module';
 import { UserMessageModule } from './userMessage/userMessage.module';
 import { MessageModule } from './message/message.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   controllers: [],
@@ -23,6 +25,9 @@ import { MessageModule } from './message/message.module';
     LoggerModule.forRoot({
       accessToken: process.env.ROLLBAR_TOKEN,
       environment: process.env.NODE_ENV,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
     }),
   ],
 })
