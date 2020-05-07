@@ -7,11 +7,15 @@ export class DialogFlowService {
     conversationId: string,
     userMessage: string,
   ): Promise<string> {
-    const privateKey =
-      process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'travis'
-        // ? JSON.parse(process.env.DIALOGFLOW_PRIVATE_KEY)
-        ? process.env.DIALOGFLOW_PRIVATE_KEY.replace(/\\n/gm, '\n')
-        : process.env.DIALOGFLOW_PRIVATE_KEY;
+    let privateKey;
+    if (process.env.NODE_ENV === 'production'){
+      privateKey = JSON.parse(process.env.DIALOGFLOW_PRIVATE_KEY)
+    } else if (process.env.NODE_ENV === 'travis') {
+      privateKey = process.env.DIALOGFLOW_PRIVATE_KEY.replace(/\\n/gm, '\n')
+    } else {
+      process.env.DIALOGFLOW_PRIVATE_KEY
+    }
+
     const clientEmail = process.env.DIALOGFLOW_CLIENT_EMAIL;
     const config = {
       credentials: {
