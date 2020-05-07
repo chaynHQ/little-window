@@ -33,20 +33,19 @@ export class UserMessageService {
       const column = splitUserResponse[1];
       let value = splitUserResponse[2];
 
-      if (column === 'gdpr') {
-        try {
-          value = JSON.parse(splitUserResponse[2]);
-        } catch (e) {
+      if (isFormattedLikeSetupAnswer) {
+        if (column === 'gdpr') {
+          try {
+            value = JSON.parse(splitUserResponse[2]);
+          } catch (e) {
+            return;
+          }
+        } else if (column === 'language' && value === 'None'){
           return;
         }
-      }
 
-      if (isFormattedLikeSetupAnswer) {
-        try {
-          await this.conversationService.update(column, value, conversationId);
-        } catch (error) {
-          throw error;
-        }
+        await this.conversationService.update(column, value, conversationId);
+
       } else if (
         botResponses.filter(response => response['name'] === 'new-language')[0][
           'uuid'
