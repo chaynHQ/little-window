@@ -76,7 +76,7 @@ const messages = (state = [], action) => {
 const language = (state = 'en', action) => {
   switch (action.type) {
     case SET_LANGUAGE:
-      return action.lang;
+      return action.lang === 'None' ? 'en' : action.lang;
     case REFRESH_CONVERSATION:
       return 'en';
     default:
