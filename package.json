@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A chatbot featured on Chayn websites, which quickly directs users to Chayn’s relevant internal or external resources",
   "author": "Chayn",
-  "license": "ISC",
+  "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
     "postinstall": "nest build",
