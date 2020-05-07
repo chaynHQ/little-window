@@ -42,6 +42,9 @@
 		},
 		"ROLLBAR_TOKEN": {
 			"required": true
+		},
+		"ROLLBAR_ENV": {
+			"required": false
 		}
 	},
 	"addons": [

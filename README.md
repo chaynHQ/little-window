@@ -24,6 +24,7 @@ You will need to create a .env file in both the root directory and the client di
 - DIALOGFLOW_CLIENT_EMAIL
 - DIALOGFLOW_PRIVATE_KEY
 - ROLLBAR_TOKEN
+- ROLLBAR_ENV
 - STORYBLOK_TOKEN
 - CONTENT_PREVIEW_MODE
 - kickoffSupportMessageStoryblokId
