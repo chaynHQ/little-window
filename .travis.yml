@@ -11,5 +11,5 @@ script:
   - npm run lint
   - npm run testtravis
   - cd client && npm install
-  - npm run test --passWithNoTests
+  - npm run test
   - npm run lint
