@@ -1,20 +1,21 @@
 import { Injectable } from '@nestjs/common';
 const dialogflow = require('dialogflow'); // eslint-disable-line
 
+let privateKey;
+if (process.env.NODE_ENV === 'production'){
+  privateKey = JSON.parse(process.env.DIALOGFLOW_PRIVATE_KEY)
+} else if (process.env.NODE_ENV === 'travis') {
+  privateKey = process.env.DIALOGFLOW_PRIVATE_KEY.replace(/\\n/gm, '\n')
+} else {
+  privateKey = process.env.DIALOGFLOW_PRIVATE_KEY
+}
+
 @Injectable()
 export class DialogFlowService {
   async getDialogflowIntent(
     conversationId: string,
     userMessage: string,
   ): Promise<string> {
-    let privateKey;
-    if (process.env.NODE_ENV === 'production'){
-      privateKey = JSON.parse(process.env.DIALOGFLOW_PRIVATE_KEY)
-    } else if (process.env.NODE_ENV === 'travis') {
-      privateKey = process.env.DIALOGFLOW_PRIVATE_KEY.replace(/\\n/gm, '\n')
-    } else {
-      process.env.DIALOGFLOW_PRIVATE_KEY
-    }
 
     const clientEmail = process.env.DIALOGFLOW_CLIENT_EMAIL;
     const config = {
