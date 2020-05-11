@@ -13,77 +13,76 @@ import {
   updateConversation,
   refreshConversation,
   setMinimiseState,
-  setLanguage
+  setLanguage,
 } from '../actions';
 
 describe('actions', () => {
   it('should create an action to add a user input to the stack', () => {
-    const text = "Lorum Ipsum"
+    const text = 'Lorum Ipsum';
     const expectedAction = {
       type: ADD_USER_INPUT,
-      text
-    }
+      text,
+    };
 
-    expect(addUserInputToStack(text)).toEqual(expectedAction)
+    expect(addUserInputToStack(text)).toEqual(expectedAction);
   });
 
   it('should create an action to add a user bot to stack on success', () => {
-    const data = {}
+    const data = {};
     const expectedAction = {
       type: ADD_BOT_MESSAGE,
-      data
-    }
-    expect(fetchBotResponseSuccess(data)).toEqual(expectedAction)
-  })
+      data,
+    };
+    expect(fetchBotResponseSuccess(data)).toEqual(expectedAction);
+  });
 
   it('should create an action to add a user bot to stack on failure', () => {
-    const data = {}
+    const data = {};
     const expectedAction = {
       type: ADD_BOT_MESSAGE,
-      data
-    }
-    expect(fetchBotResponseFailure(data)).toEqual(expectedAction)
-  })
+      data,
+    };
+    expect(fetchBotResponseFailure(data)).toEqual(expectedAction);
+  });
 
   it('should create an action to update a bot message', () => {
-    const data = {}
+    const data = {};
     const expectedAction = {
       type: UPDATE_BOT_MESSAGE,
-      data
-    }
-    expect(updateBotMessage(data)).toEqual(expectedAction)
-  })
+      data,
+    };
+    expect(updateBotMessage(data)).toEqual(expectedAction);
+  });
 
   it('should create an action to update the conversation', () => {
-    const data = {}
+    const data = {};
     const expectedAction = {
       type: SET_CONVERSATION_DATA,
-      data
-    }
-    expect(updateConversation(data)).toEqual(expectedAction)
-  })
+      data,
+    };
+    expect(updateConversation(data)).toEqual(expectedAction);
+  });
 
   it('should create an action to refresh the conversation', () => {
     const expectedAction = {
       type: REFRESH_CONVERSATION,
-    }
-    expect(refreshConversation()).toEqual(expectedAction)
-  })
+    };
+    expect(refreshConversation()).toEqual(expectedAction);
+  });
 
   it('should create an action to minimise the conversation', () => {
     const expectedAction = {
       type: SET_MINIMISE_STATE,
-    }
-    expect(setMinimiseState()).toEqual(expectedAction)
-  })
+    };
+    expect(setMinimiseState()).toEqual(expectedAction);
+  });
 
   it('should create an action to minimise the conversation', () => {
-    const lang = "en"
+    const lang = 'en';
     const expectedAction = {
       type: SET_LANGUAGE,
-      lang
-    }
-    expect(setLanguage(lang)).toEqual(expectedAction)
-  })
-
-})
+      lang,
+    };
+    expect(setLanguage(lang)).toEqual(expectedAction);
+  });
+});

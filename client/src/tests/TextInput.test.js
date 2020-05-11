@@ -4,8 +4,8 @@ import TextInput from '../components/TextInput';
 
 it('renders without crashing', () => {
   shallow(<TextInput
-    inputHandler={() => {return null;}}
+    inputHandler={() => null}
     lang="en"
     status="wait"
-     />);
+  />);
 });

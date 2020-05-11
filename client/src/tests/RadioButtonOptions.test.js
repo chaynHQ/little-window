@@ -4,10 +4,10 @@ import RadioButtonOptions from '../components/RadioButtonOptions';
 
 it('renders without crashing', () => {
   shallow(<RadioButtonOptions
-    inputHandler={() => {return null;}}
-    radioButtonSelector={() => {return null;}}
+    inputHandler={() => null}
+    radioButtonSelector={() => null}
     options={[]}
     selectedOptions={[]}
     selectedOptionsText={[]}
-    />);
+  />);
 });

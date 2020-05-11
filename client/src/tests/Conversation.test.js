@@ -4,10 +4,10 @@ import Conversation from '../components/Conversation';
 
 it('renders without crashing', () => {
   shallow(<Conversation
-    inputHandler={() => {return null;}}
-    initialBotMessageHandler={() => {return null;}}
-    queueNextMessage={() => {return null;}}
+    inputHandler={() => null}
+    initialBotMessageHandler={() => null}
+    queueNextMessage={() => null}
     displayedMessages={[]}
     lang="en"
-    />);
+  />);
 });

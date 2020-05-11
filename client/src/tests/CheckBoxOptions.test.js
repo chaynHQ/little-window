@@ -4,7 +4,7 @@ import CheckBoxOptions from '../components/CheckBoxOptions';
 
 it('renders without crashing', () => {
   shallow(<CheckBoxOptions
-    inputHandler={() => {return null;}}
+    inputHandler={() => null}
     options={[]}
-    />);
+  />);
 });
