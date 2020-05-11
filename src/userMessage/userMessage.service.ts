@@ -22,9 +22,9 @@ export class UserMessageService {
     );
 
     const previousMessageWasSetupMessage =
-      botResponses.filter(
+      botResponses.some(
         response => response['uuid'] === previousMessageStoryblokId,
-      ).length > 0;
+      );
 
     if (previousMessageWasSetupMessage) {
       const isFormattedLikeSetupAnswer =
