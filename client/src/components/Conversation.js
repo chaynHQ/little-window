@@ -18,10 +18,7 @@ class Conversation extends Component {
   componentDidMount() {
     const { initialBotMessageHandler } = this.props;
 
-    initialBotMessageHandler({
-      speech: 'SETUP-NEWCONVERSATION',
-      lang: 'en',
-    });
+    initialBotMessageHandler();
   }
 
   componentDidUpdate() {
@@ -86,7 +83,7 @@ class Conversation extends Component {
 
   render() {
     const {
-      displayedMessages, inputHandler, lang, minimised,
+      displayedMessages, inputHandler, minimised, lang,
     } = this.props;
     const nextUserAction = displayedMessages.slice(-1)[0]
       ? displayedMessages.slice(-1)[0].nextUserAction : 'wait';
@@ -123,8 +120,8 @@ Conversation.propTypes = {
   initialBotMessageHandler: PropTypes.func.isRequired,
   queueNextMessage: PropTypes.func.isRequired,
   displayedMessages: PropTypes.arrayOf(PropTypes.object).isRequired,
-  lang: PropTypes.string.isRequired,
   minimised: PropTypes.bool,
+  lang: PropTypes.string.isRequired,
 };
 
 Conversation.defaultProps = {

@@ -3,29 +3,29 @@ env:
   es6: true
   node: true
   jest: true
+root: true
 extends:
-  - 'plugin:react/recommended'
-  - airbnb
+  - 'plugin:@typescript-eslint/eslint-recommended'
+  - 'plugin:@typescript-eslint/recommended'
+  - 'prettier'
+  - 'prettier/@typescript-eslint'
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
-parser: "babel-eslint"
+parser: '@typescript-eslint/parser'
 parserOptions:
-  ecmaFeatures:
-    jsx: true
-  ecmaVersion: 7
+  project: tsconfig.json
   sourceType: module
 plugins:
-  - react
+  - '@typescript-eslint/eslint-plugin'
 ignorePatterns:
   - 'node_modules/'
   - 'build/'
   - 'src/db/init.js'
 rules:
-  react/jsx-filename-extension: 0
   no-underscore-dangle: 0
   no-restricted-syntax: 1
-  no-await-in-loop: 1
-settings:
-  react:
-    version: 'latest'
+  no-await-in-loop: 0
+  typescript-eslint/interface-name-prefix: 0
+  typescript-eslint/explicit-function-return-type: 0
+  typescript-eslint/no-explicit-any: 0

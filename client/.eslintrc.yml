@@ -1,0 +1,31 @@
+env:
+  browser: true
+  es6: true
+  node: true
+  jest: true
+root: true
+extends:
+  - 'plugin:react/recommended'
+  - airbnb
+globals:
+  Atomics: readonly
+  SharedArrayBuffer: readonly
+parser: "babel-eslint"
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: 7
+  sourceType: module
+plugins:
+  - react
+ignorePatterns:
+  - 'node_modules/'
+  - 'build/'
+rules:
+  react/jsx-filename-extension: 0
+  no-underscore-dangle: 0
+  no-restricted-syntax: 1
+  no-await-in-loop: 1
+settings:
+  react:
+    version: 'latest'

@@ -3,12 +3,9 @@ import Conversation from './Conversation';
 import {
   fetchBotResponse,
   addUserInputToStack,
-  setLanguage,
   updateBotMessage,
-  updateConversation,
+  startNewConversation,
 } from '../actions';
-
-const uuidv4 = require('uuid/v4');
 
 function addMessageToDisplayList(displayedMessages, hiddenMessages, dispatch) {
   const speed = {
@@ -37,32 +34,17 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  initialBotMessageHandler: (data) => {
-    const conversationId = uuidv4();
-    dispatch(updateConversation({ conversationId }));
-    dispatch(fetchBotResponse({ ...data, conversationId }));
+  initialBotMessageHandler: () => {
+    dispatch(startNewConversation());
   },
-  inputHandler: (data, lang, conversationId, previousMessageId, previousMessageStoryblokId) => {
-    // TODO: this lang bit might be redundant now.
-    if (data.lang) {
-      dispatch(setLanguage(data.lang));
-      dispatch(fetchBotResponse({
-        speech: data.postback,
-        lang: data.lang,
-        conversationId,
-        previousMessageId,
-        previousMessageStoryblokId,
-      }));
-    } else {
-      dispatch(fetchBotResponse({
-        speech: data.postback,
-        lang,
-        conversationId,
-        selectedTags: data.selectedTags,
-        previousMessageId,
-        previousMessageStoryblokId,
-      }));
-    }
+  inputHandler: (data, conversationId, previousMessageId, previousMessageStoryblokId) => {
+    dispatch(fetchBotResponse({
+      speech: data.postback,
+      conversationId,
+      selectedTags: data.selectedTags,
+      previousMessageId,
+      previousMessageStoryblokId,
+    }));
 
     data.text.forEach((text) => {
       dispatch(addUserInputToStack(text));
@@ -80,7 +62,6 @@ const mergeProps = (propsFromState, propsFromDispatch) => ({
   ...propsFromDispatch,
   inputHandler: (data) => propsFromDispatch.inputHandler(
     data,
-    propsFromState.lang,
     propsFromState.conversationId,
     propsFromState.displayedMessages.slice(-1)[0].previousMessageId,
     propsFromState.displayedMessages.slice(-1)[0].previousMessageStoryblokId,

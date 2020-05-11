@@ -34,6 +34,7 @@ build/Release
 
 # Dependency directories
 node_modules/
+/dist
 jspm_packages/
 
 # Typescript v1 declaration files
@@ -55,7 +56,11 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-*.env
+.env.local
+.env
+.env.development.local
+.env.test.local
+.env.production.local
 
 #files related to api setup
 client_secret.json

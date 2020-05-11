@@ -41,9 +41,19 @@ const messages = (state = [], action) => {
           timeDelay: timedelay,
         };
         if (arr.length - 1 === i) {
+          let nextUserAction = 'input';
+          if (
+            (item.checkBoxOptions && item.checkBoxOptions.length)
+            || (item.radioButtonOptions && item.radioButtonOptions.length)
+          ) {
+            nextUserAction = 'option';
+          } else if (item.endOfConversation === true) {
+            nextUserAction = 'none';
+          }
+
           message = {
             ...message,
-            nextUserAction: (item.checkBoxOptions && item.checkBoxOptions.length) || (item.radioButtonOptions && item.radioButtonOptions.length) ? 'option' : 'input',
+            nextUserAction,
             checkBoxOptions: item.checkBoxOptions,
             radioButtonOptions: item.radioButtonOptions,
           };
@@ -66,7 +76,7 @@ const messages = (state = [], action) => {
 const language = (state = 'en', action) => {
   switch (action.type) {
     case SET_LANGUAGE:
-      return action.lang;
+      return action.lang === 'None' ? 'en' : action.lang;
     case REFRESH_CONVERSATION:
       return 'en';
     default:

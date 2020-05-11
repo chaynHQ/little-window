@@ -22,9 +22,9 @@ export const fetchBotResponseSuccess = (data) => ({
   data,
 });
 
-export const fetchBotResponseFailure = (errorMessage) => ({
-  type: UPDATE_BOT_MESSAGE,
-  errorMessage,
+export const fetchBotResponseFailure = (data) => ({
+  type: ADD_BOT_MESSAGE,
+  data,
 });
 
 export const updateBotMessage = (data) => ({
@@ -60,24 +60,43 @@ function handleErrors(response) {
   return response;
 }
 
-function sendToServer(data) {
-  return fetch('/usermessage', {
+function sendToServer(data, url) {
+  return fetch(url, {
     method: 'POST',
     headers: new Headers({ 'Content-Type': 'application/json' }),
     credentials: 'same-origin',
     body: JSON.stringify(data),
   })
     .then(handleErrors)
-    .then((res) => res.json());
+    .then((res) => res.json())
+    .catch();
 }
 
 export function fetchBotResponse(data) {
-  return (dispatch) => sendToServer(data)
+  return (dispatch) => {
+    if (data.speech.startsWith('SETUP-language-')) {
+      dispatch(setLanguage(data.speech.slice('SETUP-language-'.length)));
+    }
+
+    sendToServer(data, '/usermessage')
+      .then((json) => {
+        dispatch(fetchBotResponseSuccess(json));
+        return json;
+      })
+      .catch(() => dispatch(
+        fetchBotResponseFailure([{ speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later", endOfConversation: true }]),
+      ));
+  };
+}
+
+export function startNewConversation() {
+  return (dispatch) => sendToServer({ speech: 'SETUP-NEWCONVERSATION' }, '/conversation/new')
     .then((json) => {
+      dispatch(updateConversation({ conversationId: json[0].conversationId }));
       dispatch(fetchBotResponseSuccess(json));
       return json;
     })
     .catch(() => dispatch(
-      fetchBotResponseFailure("I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later"),
+      fetchBotResponseFailure([{ speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later", endOfConversation: true }]),
     ));
 }

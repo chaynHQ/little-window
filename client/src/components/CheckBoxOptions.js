@@ -14,7 +14,6 @@ const CheckBoxOptions = ({ options, hasBeenAnswered, inputHandler }) => (
         onClick={() => inputHandler({
           text: [option.text],
           postback: option.postback,
-          lang: option.lang,
         })}
         key={uuidv4()}
         type="button"

@@ -4,6 +4,10 @@
   "private": true,
   "proxy": "http://localhost:3001/",
   "dependencies": {
+    "babel-eslint": "^10.1.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "eslint-config-airbnb": "^18.1.0",
     "prop-types": "^15.7.2",
     "react": "^16.3.0",
     "react-device-detect": "^1.11.14",
@@ -11,15 +15,18 @@
     "react-redux": "^7.1.3",
     "react-scripts": "^3.4.1",
     "react-scrollable-feed": "^1.1.2",
+    "react-test-renderer": "^16.13.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "uuid": "^3.4.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "node_modules/.bin/react-scripts start",
+    "build": "node_modules/.bin/react-scripts build",
+    "test": "node_modules/.bin/react-scripts test --env=jsdom --passWithNoTests",
+    "eject": "node_modules/.bin/react-scripts eject",
+    "lint": "eslint '**/*.js'",
+    "lint:fix": "eslint '**/*.js' --fix"
   },
   "devDependencies": {},
   "browserslist": {
