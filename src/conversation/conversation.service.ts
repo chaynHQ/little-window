@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, HttpException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Conversation } from './conversation.entity';
@@ -47,6 +47,7 @@ export class ConversationService {
         },
         'Get Conversation',
       );
+      throw new NotFoundException();
     }
 
     return column ? conversation[column] : conversation;
