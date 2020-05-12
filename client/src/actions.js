@@ -78,7 +78,7 @@ export function fetchBotResponse(data) {
       dispatch(setLanguage(data.speech.slice('SETUP-language-'.length)));
     }
 
-    sendToServer(data, '/usermessage')
+    return sendToServer(data, '/usermessage')
       .then((json) => {
         dispatch(fetchBotResponseSuccess(json));
         return json;
