@@ -1,4 +1,4 @@
-import littleWindowApp from '../reducers.js';
+import littleWindowApp from '../reducers';
 
 import {
   ADD_USER_INPUT,
@@ -240,7 +240,10 @@ describe('messages reducer', () => {
 
   it('should handle REFRESH_CONVERSATION', () => {
     expect(
-      littleWindowApp({ messages: [firstUserMessage, secondUserMessage] }, { type: REFRESH_CONVERSATION }).messages,
+      littleWindowApp(
+        { messages: [firstUserMessage, secondUserMessage] },
+        { type: REFRESH_CONVERSATION },
+      ).messages,
     ).toEqual([]);
   });
 });
@@ -253,22 +256,22 @@ describe('language reducer', () => {
 
   it('should handle REFRESH_CONVERSATION', () => {
     expect(
-      littleWindowApp({ language: "en"}, { type: REFRESH_CONVERSATION }).language,
+      littleWindowApp({ language: 'en' }, { type: REFRESH_CONVERSATION }).language,
     ).toEqual('en');
   });
 
   it('should handle REFRESH_CONVERSATION', () => {
     expect(
-      littleWindowApp({ language: null}, { type: SET_LANGUAGE, lang: 'None' }).language,
+      littleWindowApp({ language: null }, { type: SET_LANGUAGE, lang: 'None' }).language,
     ).toEqual('en');
   });
 
   it('should handle SET_LANGUAGE', () => {
     expect(
-      littleWindowApp({language: null}, { type: SET_LANGUAGE, lang: 'fr' }).language,
+      littleWindowApp({ language: null }, { type: SET_LANGUAGE, lang: 'fr' }).language,
     ).toEqual('fr');
   });
-})
+});
 
 describe('conversation reducer', () => {
   it('should return the initial state', () => {
@@ -277,16 +280,16 @@ describe('conversation reducer', () => {
 
   it('should handle REFRESH_CONVERSATION', () => {
     expect(
-      littleWindowApp({conversation:{ conversationId: '1234'}}, { type: REFRESH_CONVERSATION }).conversation,
+      littleWindowApp({ conversation: { conversationId: '1234' } }, { type: REFRESH_CONVERSATION }).conversation,
     ).toEqual({});
   });
 
   it('should handle SET_CONVERSATION_DATA', () => {
     expect(
-      littleWindowApp({conversation: null}, { type: SET_CONVERSATION_DATA, data: {conversationId: '1234'}}).conversation,
-    ).toEqual({conversationId: '1234'});
+      littleWindowApp({ conversation: null }, { type: SET_CONVERSATION_DATA, data: { conversationId: '1234' } }).conversation,
+    ).toEqual({ conversationId: '1234' });
   });
-})
+});
 
 describe('minimised reducer', () => {
   it('should return the initial state', () => {
@@ -295,10 +298,10 @@ describe('minimised reducer', () => {
 
   it('should handle SET_MINIMISE_STATE', () => {
     expect(
-      littleWindowApp({minimised: true}, { type: SET_MINIMISE_STATE }).minimised,
+      littleWindowApp({ minimised: true }, { type: SET_MINIMISE_STATE }).minimised,
     ).toEqual(false);
     expect(
-      littleWindowApp({minimised: false}, { type: SET_MINIMISE_STATE }).minimised,
+      littleWindowApp({ minimised: false }, { type: SET_MINIMISE_STATE }).minimised,
     ).toEqual(true);
   });
-})
+});
