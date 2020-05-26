@@ -15,7 +15,6 @@ const mapDispatchToProps = (dispatch) => ({
   },
   refreshHandler: () => {
     dispatch(refreshConversation());
-
     dispatch(startNewConversation());
   },
 });

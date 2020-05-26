@@ -17,7 +17,7 @@ const RadioButtonOptions = ({
   <div className={styles.container} key={uuidv4()}>
     {options.map((option) => (
       <button
-        className={`${styles.option} ${option.selected ? styles.selected : ''}`}
+        className={`${styles.option} ${option.selected ? styles.selected : ''} radio-button-option`}
         value={option.postback}
         onClick={() => radioButtonSelector(option.text)}
         key={uuidv4()}
@@ -29,7 +29,7 @@ const RadioButtonOptions = ({
     ))}
   </div>,
   <button
-    className={`${styles.option} ${styles.submit} ${hasSelectedAnswers ? styles.canBeSubmitted : ''}`}
+    className={`${styles.option} ${styles.submit} ${hasSelectedAnswers ? styles.canBeSubmitted : ''} radio-button-submit`}
     onClick={() => inputHandler({
       text: selectedOptionsText,
       postback: selectedOptions[0].postback,
