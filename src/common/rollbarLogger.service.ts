@@ -8,7 +8,7 @@ export class RollbarLoggerService {
   ) {}
 
   error(data, name): void{
-    if (!(process.env.ROLLBAR_ENV === 'dev' || process.env.ROLLBAR_ENV === 'test')) {
+    if (process.env.NODE_ENV === 'production') {
       this.rollbarLogger.error(data, name)
     }
   }
