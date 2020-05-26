@@ -14,6 +14,7 @@ import { conversationRepositoryMockFactory } from '../spec/factories/conversatio
 import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
 import { RollbarLogger } from 'nestjs-rollbar';
 import { rollbarMockFactory } from '../spec/factories/rollbar';
+import { RollbarLoggerService } from '../common/rollbarLogger.service';
 
 describe('UserMessageController', () => {
   let userMessageController: UserMessageController;
@@ -44,6 +45,7 @@ describe('UserMessageController', () => {
           provide: RollbarLogger,
           useFactory: rollbarMockFactory,
         },
+        RollbarLoggerService
       ],
     }).compile();
 

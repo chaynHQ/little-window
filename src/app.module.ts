@@ -24,7 +24,7 @@ import { join } from 'path';
     MessageModule,
     LoggerModule.forRoot({
       accessToken: process.env.ROLLBAR_TOKEN,
-      environment: 'pr-' + process.env.HEROKU_PR_NUMBER || process.env.ROLLBAR_ENV,
+      environment: process.env.HEROKU_PR_NUMBER ? 'pr-' + process.env.HEROKU_PR_NUMBER : process.env.ROLLBAR_ENV
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'client', 'build'),

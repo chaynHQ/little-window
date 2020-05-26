@@ -1,8 +1,8 @@
-import { Injectable, Logger, HttpException, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Conversation } from './conversation.entity';
-import { RollbarLogger } from 'nestjs-rollbar';
+import { RollbarLoggerService } from '../common/rollbarLogger.service';
 
 @Injectable()
 export class ConversationService {
@@ -10,7 +10,7 @@ export class ConversationService {
   constructor(
     @InjectRepository(Conversation)
     private conversationRepository: Repository<Conversation>,
-    private readonly rollbarLogger: RollbarLogger,
+    private readonly rollbarLoggerService: RollbarLoggerService,
   ) {}
 
   async create(): Promise<string> {
@@ -23,7 +23,7 @@ export class ConversationService {
         return conversation.id;
       })
       .catch(error => {
-        this.rollbarLogger.error(error, 'Save Conversation');
+        this.rollbarLoggerService.error(error, 'Save Conversation');
         return null;
       });
   }
@@ -37,10 +37,10 @@ export class ConversationService {
   ): Promise<string | { language; stage }> {
     const conversation = await this.conversationRepository
       .findOne(conversationId)
-      .catch(error => this.rollbarLogger.error(error, 'Get Conversation'));
+      .catch(error => this.rollbarLoggerService.error(error, 'Get Conversation'));
 
     if (!conversation) {
-      this.rollbarLogger.error(
+      this.rollbarLoggerService.error(
         {
           message: 'Cannot find a conversation with id: ' + conversationId,
           name: 'No ConversationId',
@@ -59,7 +59,7 @@ export class ConversationService {
     conversation.id = conversationId;
 
     return await this.conversationRepository.save(conversation).catch(error => {
-      this.rollbarLogger.error(error, 'Update Conversation');
+      this.rollbarLoggerService.error(error, 'Update Conversation');
       return null;
     });
   }

@@ -11,7 +11,8 @@ import { messageRepositoryMockFactory } from '../spec/factories/messageRepositor
 import { singleStoryblokResponse } from '../spec/data/singleStoryblokResponse';
 import { MessageService } from '../message/message.service';
 import { Message } from '../message/message.entity';
-import { RollbarLogger } from 'nestjs-rollbar';
+import { RollbarLogger } from 'nestjs-rollbar'
+import { RollbarLoggerService } from '../common/rollbarLogger.service';
 import { rollbarMockFactory } from '../spec/factories/rollbar';
 
 jest.mock('../botMessage/storyblok.service');
@@ -41,7 +42,8 @@ describe('ConversationController', () => {
           provide: RollbarLogger,
           useFactory: rollbarMockFactory,
         },
-      ],
+        RollbarLoggerService
+      ]
     }).compile();
 
     conversationController = app.get<ConversationController>(

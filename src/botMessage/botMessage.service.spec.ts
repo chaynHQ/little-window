@@ -13,6 +13,7 @@ import { Message } from '../message/message.entity';
 import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
 import { RollbarLogger } from 'nestjs-rollbar';
 import { rollbarMockFactory } from '../spec/factories/rollbar';
+import { RollbarLoggerService } from '../common/rollbarLogger.service';
 
 jest.mock('../botMessage/storyblok.service');
 
@@ -44,6 +45,7 @@ describe('BotMessageService', () => {
           provide: RollbarLogger,
           useFactory: rollbarMockFactory,
         },
+        RollbarLoggerService
       ],
     }).compile();
 

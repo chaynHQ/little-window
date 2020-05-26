@@ -4,7 +4,8 @@ import { MessageService } from './message.service';
 import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
 import { rollbarMockFactory } from '../spec/factories/rollbar';
 import { Message } from './message.entity';
-import { RollbarLogger } from 'nestjs-rollbar';
+import {RollbarLogger} from 'nestjs-rollbar'
+import { RollbarLoggerService } from '../common/rollbarLogger.service';
 
 describe('MessageService', () => {
   let messageService: MessageService;
@@ -18,6 +19,7 @@ describe('MessageService', () => {
           provide: getRepositoryToken(Message),
           useFactory: messageRepositoryMockFactory,
         },
+        RollbarLoggerService,
         {
           provide: RollbarLogger,
           useFactory: rollbarMockFactory,

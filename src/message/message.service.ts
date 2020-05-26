@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Message } from './message.entity';
-import { RollbarLogger } from 'nestjs-rollbar';
+import { RollbarLoggerService } from '../common/rollbarLogger.service';
 
 @Injectable()
 export class MessageService {
   constructor(
     @InjectRepository(Message)
     private messageRepository: Repository<Message>,
-    private readonly rollbarLogger: RollbarLogger,
+    private readonly rollbarLoggerService: RollbarLoggerService,
   ) {}
 
   async save(data, sender): Promise<string> {
@@ -26,7 +26,7 @@ export class MessageService {
         return message.id;
       })
       .catch(error => {
-        this.rollbarLogger.error(error, 'Save Message');
+        this.rollbarLoggerService.error(error, 'Save Message');
         return null;
       });
   }
@@ -37,7 +37,7 @@ export class MessageService {
         where: { conversation_: value },
       })
       .catch(error => {
-        this.rollbarLogger.error(error, 'Find Message');
+        this.rollbarLoggerService.error(error, 'Find Message');
         return null;
       });
 
