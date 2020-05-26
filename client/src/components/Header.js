@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import '../styles/App.css';
 import styles from '../styles/header.module.css';
 
-import Maximise from '../assets/maximise.svg';
-import Minimise from '../assets/minimise.svg';
+import Maximise from '../assets/maximise.png';
+import Minimise from '../assets/minimise.png';
 import Refresh from '../assets/refresh.svg';
 
 const Header = ({ minimised, minimiseHandler, refreshHandler }) => (
