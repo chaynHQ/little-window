@@ -14,11 +14,16 @@
 
 .icon {
   background: white;
-  padding: 5px;
+  padding: 7px;
   border-radius: 100%;
   border: none;
   margin: 15px;
   cursor: pointer;
+}
+
+.icon img {
+  height: 24px;
+  width: 24px;
 }
 
 .minimised {
