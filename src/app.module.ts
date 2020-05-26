@@ -23,7 +23,7 @@ import { join } from 'path';
     UserMessageModule,
     MessageModule,
     LoggerModule.forRoot({
-      accessToken: process.env.ROLLBAR_TOKEN,
+      accessToken: process.env.NODE_ENV === 'production' ? process.env.ROLLBAR_TOKEN : null,
       environment: process.env.HEROKU_PR_NUMBER ? 'pr-' + process.env.HEROKU_PR_NUMBER : process.env.ROLLBAR_ENV
     }),
     ServeStaticModule.forRoot({
