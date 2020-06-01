@@ -49,6 +49,5 @@
 	},
 	"addons": [
 		"heroku-postgresql"
-	],
-	"postdeploy": "npm run typeorm:run"
+	]
 }
