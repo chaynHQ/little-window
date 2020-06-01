@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, HttpModule } from '@nestjs/common';
 
 import { UserMessageController } from './userMessage.controller';
 import { UserMessageService } from './userMessage.service';
@@ -10,6 +10,6 @@ import { MessageModule } from '../message/message.module';
 @Module({
   controllers: [UserMessageController],
   providers: [UserMessageService],
-  imports: [ConversationModule, BotMessageModule, MessageModule],
+  imports: [ConversationModule, BotMessageModule, MessageModule, HttpModule],
 })
 export class UserMessageModule {}

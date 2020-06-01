@@ -1,18 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpService  } from '@nestjs/common';
 import { StoryblokService } from '../botMessage/storyblok.service';
 import { ConversationService } from '../conversation/conversation.service';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class UserMessageService {
   constructor(
     private conversationService: ConversationService,
     private storyblokService: StoryblokService,
+    private httpService: HttpService
   ) {}
 
   setupConversation = async (
     userResponse,
     conversationId,
     previousMessageStoryblokId,
+    userIpAddress
   ): Promise<void> => {
     // TODO: Can we do something nice with the getBotResponsesBySlug
     // so we don't have to filter afterwards.
@@ -40,6 +43,13 @@ export class UserMessageService {
           } catch (e) {
             return;
           }
+
+          if (value === true){
+            const location = await this.httpService.get("http://ip-api.com/json/" + userIpAddress).pipe(map(response => response.data)).toPromise();
+            await this.conversationService.update('city', location.city, conversationId);
+            await this.conversationService.update('country', location.regionName, conversationId);
+          }
+
         } else if (column === 'language' && value === 'None'){
           return;
         }

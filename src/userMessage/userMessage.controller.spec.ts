@@ -58,7 +58,7 @@ describe('UserMessageController', () => {
 
   describe('root', () => {
     it('should return array', () => {
-      return userMessageController.userMessage(userMessageDto).then(data => {
+      return userMessageController.userMessage(12345, userMessageDto).then(data => {
         expect(Array.isArray(data)).toBe(true);
       });
     });

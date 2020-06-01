@@ -1,4 +1,4 @@
-import { Module, forwardRef, HttpModule } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConversationController } from './conversation.controller';
 import { ConversationService } from './conversation.service';
@@ -11,7 +11,6 @@ import { BotMessageModule } from '../botMessage/botMessage.module';
   imports: [
     TypeOrmModule.forFeature([Conversation]),
     forwardRef(() => BotMessageModule),
-    HttpModule
   ],
   exports: [ConversationService],
 })

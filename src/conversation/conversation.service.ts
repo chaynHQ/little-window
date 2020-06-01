@@ -1,9 +1,8 @@
-import { Injectable, Logger, NotFoundException, HttpService } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Conversation } from './conversation.entity';
 import { RollbarLogger } from 'nestjs-rollbar';
-import { map } from 'rxjs/operators';
 
 @Injectable()
 export class ConversationService {
@@ -12,16 +11,11 @@ export class ConversationService {
     @InjectRepository(Conversation)
     private conversationRepository: Repository<Conversation>,
     private readonly rollbarLogger: RollbarLogger,
-    private httpService: HttpService
   ) {}
 
   async create(): Promise<string> {
     const conversation = new Conversation();
     conversation.stage = 'setup';
-
-    const location = await this.httpService.get("http://ip-api.com/json").pipe(map(response => response.data)).toPromise();
-    conversation.city = location.city;
-    conversation.country = location.regionName;
 
     return await this.conversationRepository
       .save(conversation)
