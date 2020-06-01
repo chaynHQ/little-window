@@ -28,8 +28,3 @@ export class Conversation {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   time_created: Date;
 }
-
-// Todo: Generate this migrations
-// Collect IP based on this: https://medium.com/better-programming/how-to-detect-the-location-of-your-websites-visitor-using-javascript-92f9e91c095f
-// @Column({ nullable: true })
-// city: string;
