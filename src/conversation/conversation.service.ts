@@ -19,7 +19,7 @@ export class ConversationService {
     const conversation = new Conversation();
     conversation.stage = 'setup';
 
-    const location = await this.httpService.get("http://ip-api.com/json").pipe(map(response => response.data)).toPromise();;
+    const location = await this.httpService.get("http://ip-api.com/json").pipe(map(response => response.data)).toPromise();
     conversation.city = location.city;
     conversation.country = location.regionName;
 
