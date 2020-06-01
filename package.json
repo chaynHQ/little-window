@@ -54,7 +54,8 @@
     "storyblok-js-client": "^2.1.0",
     "typeorm": "^0.2.24",
     "ts-node": "^8.6.2",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.4",
+    "tsconfig-paths": "^3.9.0"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
@@ -72,8 +73,7 @@
     "prettier": "^1.19.1",
     "supertest": "^4.0.2",
     "ts-jest": "25.2.1",
-    "ts-loader": "^6.2.1",
-    "tsconfig-paths": "^3.9.0"
+    "ts-loader": "^6.2.1"
   },
   "engines": {
     "node": "12.x"
