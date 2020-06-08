@@ -5,6 +5,10 @@ import configureMockStore from 'redux-mock-store';
 import HeaderContainer from '../components/HeaderContainer';
 import Header from '../components/Header';
 
+import getNewConversationMessage from '../storyblok';
+
+jest.mock('../storyblok.js');
+
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
@@ -50,14 +54,16 @@ describe('Header Minimised', () => {
 
   it('calls correct actions on refresh click', () => {
     wrapper.find(Header).find('.refresh-button').simulate('click');
+    getNewConversationMessage.mockResolvedValue(newConversationMessage);
     const actions = store.getActions();
-    expect(actions).toEqual([{ type: 'REFRESH_CONVERSATION' }, { type: 'ADD_BOT_MESSAGE', data: newConversationMessage }]);
+    expect(actions).toEqual([{ type: 'REFRESH_CONVERSATION' }]);
   });
 
   it('calls correct actions on refresh keydown', () => {
     wrapper.find(Header).find('.refresh-button').simulate('keyDown');
+    getNewConversationMessage.mockResolvedValue(newConversationMessage);
     const actions = store.getActions();
-    expect(actions).toEqual([{ type: 'REFRESH_CONVERSATION' }, { type: 'ADD_BOT_MESSAGE', data: newConversationMessage }]);
+    expect(actions).toEqual([{ type: 'REFRESH_CONVERSATION' }]);
   });
 });
 
