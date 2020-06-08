@@ -1,3 +1,4 @@
+import getNewConversationMessage from './storyblok';
 /*
  * action types
  */
@@ -100,18 +101,18 @@ export function fetchBotResponse(data) {
 }
 
 export function startNewConversation() {
-  const newConversationMessage = [{
-    speech: "Hi there, I'm Little Window. I’m glad you’re here. It took real strength to reach out today.  I'm a confidential chatbot and I'm here to support you.",
-  },
-  {
-    checkBoxOptions: [
-      { text: 'English', postback: 'SETUP-language-en' },
-      { text: 'Français', postback: 'SETUP-language-fr' },
-      { text: 'A different language', postback: 'SETUP-language-None' },
-    ],
-    speech: 'What language would you like to talk to me in?',
-  }];
+  return async (dispatch) => {
+    try {
+      const newConversationMessage = await getNewConversationMessage();
 
-
-  return (dispatch) => dispatch(fetchBotResponseSuccess(newConversationMessage));
+      dispatch(fetchBotResponseSuccess(newConversationMessage));
+    } catch {
+      dispatch(
+        fetchBotResponseFailure([{
+          speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later",
+          endOfConversation: true,
+        }]),
+      );
+    }
+  };
 }
