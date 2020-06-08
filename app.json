@@ -45,7 +45,14 @@
 		},
 		"ROLLBAR_ENV": {
 			"required": false
+<<<<<<< HEAD
 		}
+=======
+		},
+		"REACT_APP_STORYBLOK_TOKEN" {
+			"required": true
+		},
+>>>>>>> parent of 9bc1b8e... App.json update
 	},
 	"addons": [
 		"heroku-postgresql"
