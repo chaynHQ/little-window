@@ -46,7 +46,7 @@
 		"ROLLBAR_ENV": {
 			"required": false
 		},
-		"REACT_APP_STORYBLOK_TOKEN" {
+		"REACT_APP_STORYBLOK_TOKEN": {
 			"required": true
 		},
 	},
