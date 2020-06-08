@@ -73,30 +73,45 @@ function sendToServer(data, url) {
 }
 
 export function fetchBotResponse(data) {
-  return (dispatch) => {
-    if (data.speech.startsWith('SETUP-language-')) {
-      dispatch(setLanguage(data.speech.slice('SETUP-language-'.length)));
-    }
+  return async (dispatch) => {
+    try {
+      let req = data;
+      if (data.speech.startsWith('SETUP-language-')) {
+        dispatch(setLanguage(data.speech.slice('SETUP-language-'.length)));
+      }
 
-    return sendToServer(data, '/usermessage')
-      .then((json) => {
-        dispatch(fetchBotResponseSuccess(json));
-        return json;
-      })
-      .catch(() => dispatch(
-        fetchBotResponseFailure([{ speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later", endOfConversation: true }]),
-      ));
+      if (!data.conversationId) {
+        const { conversationId } = await sendToServer({ speech: 'SETUP-NEWCONVERSATION' }, '/conversation/new');
+        dispatch(updateConversation({ conversationId }));
+        req = { ...data, conversationId };
+      }
+
+      const response = await sendToServer(req, '/usermessage');
+      dispatch(fetchBotResponseSuccess(response));
+    } catch {
+      dispatch(
+        fetchBotResponseFailure([{
+          speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later",
+          endOfConversation: true,
+        }]),
+      );
+    }
   };
 }
 
 export function startNewConversation() {
-  return (dispatch) => sendToServer({ speech: 'SETUP-NEWCONVERSATION' }, '/conversation/new')
-    .then((json) => {
-      dispatch(updateConversation({ conversationId: json[0].conversationId }));
-      dispatch(fetchBotResponseSuccess(json));
-      return json;
-    })
-    .catch(() => dispatch(
-      fetchBotResponseFailure([{ speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later", endOfConversation: true }]),
-    ));
+  const newConversationMessage = [{
+    speech: "Hi there, I'm Little Window. I’m glad you’re here. It took real strength to reach out today.  I'm a confidential chatbot and I'm here to support you.",
+  },
+  {
+    checkBoxOptions: [
+      { text: 'English', postback: 'SETUP-language-en' },
+      { text: 'Français', postback: 'SETUP-language-fr' },
+      { text: 'A different language', postback: 'SETUP-language-None' },
+    ],
+    speech: 'What language would you like to talk to me in?',
+  }];
+
+
+  return (dispatch) => dispatch(fetchBotResponseSuccess(newConversationMessage));
 }

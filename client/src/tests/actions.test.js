@@ -145,7 +145,6 @@ describe('async actions', () => {
     const expectedActions = [
       { type: SET_LANGUAGE, lang: 'en' },
       { type: ADD_BOT_MESSAGE, data: responseData },
-
     ];
 
     const store = mockStore({});
@@ -155,19 +154,30 @@ describe('async actions', () => {
     });
   });
 
-  it('creates ADD_BOT_MESSAGE when fetching new conversation has been done and botMessage returned', () => {
-    fetchMock.mock('/conversation/new', responseData);
+  it('creates ADD_BOT_MESSAGE and sets conversationId when fetching userMessage and conversationId is missing', () => {
+    fetchMock.mock('/usermessage', responseData);
+    fetchMock.mock('/conversation/new', { conversationId: 1234 });
+
+    const requestData = {
+      speech: 'blah blah',
+      previousMessageStoryblokId: '1234',
+    };
 
     const expectedActions = [
-      { type: SET_CONVERSATION_DATA, data: { conversationId: responseData[0].conversationId } },
+      { type: SET_CONVERSATION_DATA, data: { conversationId: 1234 } },
       { type: ADD_BOT_MESSAGE, data: responseData },
-
     ];
 
     const store = mockStore({});
 
-    return store.dispatch(startNewConversation()).then(() => {
+    return store.dispatch(fetchBotResponse(requestData)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
+  });
+
+  it('creates ADD_BOT_MESSAGE when fetching new conversation', () => {
+    const store = mockStore({});
+
+    expect(store.dispatch(startNewConversation()).type).toEqual('ADD_BOT_MESSAGE');
   });
 });
