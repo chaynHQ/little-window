@@ -1,7 +1,6 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock-jest';
-import getNewConversationMessage from '../storyblok';
 
 import {
   ADD_USER_INPUT,
@@ -22,8 +21,6 @@ import {
   fetchBotResponse,
   startNewConversation,
 } from '../actions';
-
-jest.mock('../storyblok.js');
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -181,25 +178,6 @@ describe('async actions', () => {
   it('creates ADD_BOT_MESSAGE when fetching new conversation', () => {
     const store = mockStore({});
 
-    const newConversationMessage = [{
-      speech: "Hi there, I'm Little Window. I’m glad you’re here. It took real strength to reach out today.  I'm a confidential chatbot and I'm here to support you.",
-    },
-    {
-      checkBoxOptions: [
-        { text: 'English', postback: 'SETUP-language-en' },
-        { text: 'Français', postback: 'SETUP-language-fr' },
-        { text: 'A different language', postback: 'SETUP-language-None' },
-      ],
-      speech: 'What language would you like to talk to me in?',
-    }];
-    getNewConversationMessage.mockResolvedValue(newConversationMessage);
-
-    const expectedActions = [
-      { type: ADD_BOT_MESSAGE, data: newConversationMessage },
-    ];
-
-    return store.dispatch(startNewConversation()).then(() => {
-      expect(store.getActions()).toEqual(expectedActions);
-    });
+    expect(store.dispatch(startNewConversation()).type).toEqual('ADD_BOT_MESSAGE');
   });
 });
