@@ -1,16 +1,17 @@
-import Rollbar from "rollbar";
+import Rollbar from 'rollbar';
+
 const StoryblokClient = require('storyblok-js-client');
 
 
-const RollbarInstance = new Rollbar({
-        accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,
-        captureUncaught: true,
-        captureUnhandledRejections: true,
-        payload: {
-          environment: process.env.REACT_APP_ROLLBAR_ENV
-        },
-        enabled: ('%NODE_ENV%' === 'production')
-      })
+const RollbarInstance = new Rollbar({ // eslint-disable-line
+  accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+  payload: {
+    environment: process.env.REACT_APP_ROLLBAR_ENV,
+  },
+  enabled: ('%NODE_ENV%' === 'production'),
+});
 
 const Storyblok = new StoryblokClient({
   accessToken: process.env.REACT_APP_STORYBLOK_TOKEN,
@@ -31,7 +32,7 @@ async function getNewConversationMessage() {
     message[message.length - 1].checkBoxOptions = storyblokResponseContent.content.checkBoxOptions;
 
     return message;
-  } catch (error){
+  } catch (error) {
     throw new Error(error);
   }
 }
