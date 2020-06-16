@@ -48,6 +48,12 @@
 		},
 		"REACT_APP_STORYBLOK_TOKEN": {
 			"required": true
+		},
+		"REACT_APP_ROLLBAR_TOKEN": {
+			"required": true
+		},
+		"ROLLBAR_ENV": {
+			"required": true
 		}
 	},
 	"addons": [
