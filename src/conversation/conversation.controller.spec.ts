@@ -57,11 +57,9 @@ describe('ConversationController', () => {
         .mockResolvedValue([singleStoryblokResponse]);
 
       return conversationController.newConversation().then(data => {
-        expect(data).toContainEqual(
-          expect.objectContaining({
-            storyblokId: '5b14ea35-3a29-493e-a10d-1ba7bd10c6ca',
-          }),
-        );
+        expect(data).toEqual({
+            conversationId: '123456789'
+        });
       });
     });
   });

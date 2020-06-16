@@ -1,6 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock-jest';
+import getNewConversationMessage from '../storyblok';
 
 import {
   ADD_USER_INPUT,
@@ -21,6 +22,8 @@ import {
   fetchBotResponse,
   startNewConversation,
 } from '../actions';
+
+jest.mock('../storyblok.js');
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -145,7 +148,6 @@ describe('async actions', () => {
     const expectedActions = [
       { type: SET_LANGUAGE, lang: 'en' },
       { type: ADD_BOT_MESSAGE, data: responseData },
-
     ];
 
     const store = mockStore({});
@@ -155,16 +157,46 @@ describe('async actions', () => {
     });
   });
 
-  it('creates ADD_BOT_MESSAGE when fetching new conversation has been done and botMessage returned', () => {
-    fetchMock.mock('/conversation/new', responseData);
+  it('creates ADD_BOT_MESSAGE and sets conversationId when fetching userMessage and conversationId is missing', () => {
+    fetchMock.mock('/usermessage', responseData);
+    fetchMock.mock('/conversation/new', { conversationId: 1234 });
+
+    const requestData = {
+      speech: 'blah blah',
+      previousMessageStoryblokId: '1234',
+    };
 
     const expectedActions = [
-      { type: SET_CONVERSATION_DATA, data: { conversationId: responseData[0].conversationId } },
+      { type: SET_CONVERSATION_DATA, data: { conversationId: 1234 } },
       { type: ADD_BOT_MESSAGE, data: responseData },
-
     ];
 
     const store = mockStore({});
+
+    return store.dispatch(fetchBotResponse(requestData)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
+  it('creates ADD_BOT_MESSAGE when fetching new conversation', () => {
+    const store = mockStore({});
+
+    const newConversationMessage = [{
+      speech: "Hi there, I'm Little Window. I’m glad you’re here. It took real strength to reach out today.  I'm a confidential chatbot and I'm here to support you.",
+    },
+    {
+      checkBoxOptions: [
+        { text: 'English', postback: 'SETUP-language-en' },
+        { text: 'Français', postback: 'SETUP-language-fr' },
+        { text: 'A different language', postback: 'SETUP-language-None' },
+      ],
+      speech: 'What language would you like to talk to me in?',
+    }];
+    getNewConversationMessage.mockResolvedValue(newConversationMessage);
+
+    const expectedActions = [
+      { type: ADD_BOT_MESSAGE, data: newConversationMessage },
+    ];
 
     return store.dispatch(startNewConversation()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);

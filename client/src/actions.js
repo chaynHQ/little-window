@@ -1,3 +1,4 @@
+import getNewConversationMessage from './storyblok';
 /*
  * action types
  */
@@ -73,30 +74,45 @@ function sendToServer(data, url) {
 }
 
 export function fetchBotResponse(data) {
-  return (dispatch) => {
-    if (data.speech.startsWith('SETUP-language-')) {
-      dispatch(setLanguage(data.speech.slice('SETUP-language-'.length)));
-    }
+  return async (dispatch) => {
+    try {
+      let req = data;
+      if (data.speech.startsWith('SETUP-language-')) {
+        dispatch(setLanguage(data.speech.slice('SETUP-language-'.length)));
+      }
 
-    return sendToServer(data, '/usermessage')
-      .then((json) => {
-        dispatch(fetchBotResponseSuccess(json));
-        return json;
-      })
-      .catch(() => dispatch(
-        fetchBotResponseFailure([{ speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later", endOfConversation: true }]),
-      ));
+      if (!data.conversationId) {
+        const { conversationId } = await sendToServer({ speech: 'SETUP-NEWCONVERSATION' }, '/conversation/new');
+        dispatch(updateConversation({ conversationId }));
+        req = { ...data, conversationId };
+      }
+
+      const response = await sendToServer(req, '/usermessage');
+      dispatch(fetchBotResponseSuccess(response));
+    } catch {
+      dispatch(
+        fetchBotResponseFailure([{
+          speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later",
+          endOfConversation: true,
+        }]),
+      );
+    }
   };
 }
 
 export function startNewConversation() {
-  return (dispatch) => sendToServer({ speech: 'SETUP-NEWCONVERSATION' }, '/conversation/new')
-    .then((json) => {
-      dispatch(updateConversation({ conversationId: json[0].conversationId }));
-      dispatch(fetchBotResponseSuccess(json));
-      return json;
-    })
-    .catch(() => dispatch(
-      fetchBotResponseFailure([{ speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later", endOfConversation: true }]),
-    ));
+  return async (dispatch) => {
+    try {
+      const newConversationMessage = await getNewConversationMessage();
+
+      dispatch(fetchBotResponseSuccess(newConversationMessage));
+    } catch {
+      dispatch(
+        fetchBotResponseFailure([{
+          speech: "I'm really sorry but I can't chat right now due to technical problems, please check the Chayn website for any information you are looking for or try again later",
+          endOfConversation: true,
+        }]),
+      );
+    }
+  };
 }

@@ -61,6 +61,7 @@ describe('Conversation with messages', () => {
         <ConversationContainer />
       </Provider>,
     );
+    store.clearActions();
   });
 
   it('renders with the right number and type of messages', () => {
@@ -101,6 +102,7 @@ describe('Conversation without messages', () => {
         <ConversationContainer />
       </Provider>,
     );
+    store.clearActions();
   });
 
   it('renders with the right number of messages', () => {
@@ -128,6 +130,7 @@ describe('Text Input', () => {
         <ConversationContainer />
       </Provider>,
     );
+    store.clearActions();
   });
   it('text submit dispatches correct actions', () => {
     wrapper.find(TextInput).find('form').simulate('submit');
