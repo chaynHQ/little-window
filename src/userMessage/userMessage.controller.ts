@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Ip } from '@nestjs/common';
 import { BotMessageService } from '../botMessage/botMessage.service';
 import { UserMessageDto } from './userMessage.dto';
 import { ConversationService } from '../conversation/conversation.service';
@@ -17,6 +17,7 @@ export class UserMessageController {
 
   @Post()
   async userMessage(
+    @Ip() userIpAddress,
     @Body() userMessageDto: UserMessageDto,
   ): Promise<Array<BotMessageDto>> {
     const conversationId: string = userMessageDto.conversationId;
@@ -34,6 +35,7 @@ export class UserMessageController {
         userResponse,
         conversationId,
         previousMessageStoryblokId,
+        userIpAddress
       );
     }
 

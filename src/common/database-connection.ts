@@ -21,7 +21,7 @@ const databaseConfig: TypeOrmModuleOptions = {
     migrationsDir: 'src/migration',
   },
   migrations: ['dist/src/migration/*.js'],
-  migrationsRun: true,
+  migrationsRun: false,
   entities: [Message, Conversation],
 };
 

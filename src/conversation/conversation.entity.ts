@@ -19,6 +19,12 @@ export class Conversation {
         enum: ["setup", "support", "feedback"]})
   stage: StageType;
 
+  @Column({ nullable: true })
+  city: string;
+
+  @Column({ nullable: true })
+  country: string;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   time_created: Date;
 }

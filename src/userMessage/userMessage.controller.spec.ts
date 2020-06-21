@@ -14,6 +14,7 @@ import { conversationRepositoryMockFactory } from '../spec/factories/conversatio
 import { messageRepositoryMockFactory } from '../spec/factories/messageRepository';
 import { RollbarLogger } from 'nestjs-rollbar';
 import { rollbarMockFactory } from '../spec/factories/rollbar';
+import { HttpModule } from '@nestjs/common';
 
 describe('UserMessageController', () => {
   let userMessageController: UserMessageController;
@@ -43,8 +44,11 @@ describe('UserMessageController', () => {
         {
           provide: RollbarLogger,
           useFactory: rollbarMockFactory,
-        },
+        }
       ],
+      imports: [
+        HttpModule
+      ]
     }).compile();
 
     userMessageController = app.get<UserMessageController>(
@@ -54,7 +58,7 @@ describe('UserMessageController', () => {
 
   describe('root', () => {
     it('should return array', () => {
-      return userMessageController.userMessage(userMessageDto).then(data => {
+      return userMessageController.userMessage(12345, userMessageDto).then(data => {
         expect(Array.isArray(data)).toBe(true);
       });
     });
