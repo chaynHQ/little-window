@@ -21,7 +21,7 @@
     "redux-mock-store": "^1.5.4",
     "redux-thunk": "^2.3.0",
     "rollbar": "^2.16.2",
-    "storyblok-js-client": "^2.5.0",
+    "storyblok-js-client": "^3.0.0",
     "uuid": "^3.4.0"
   },
   "scripts": {
